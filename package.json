@@ -1,0 +1,27 @@
+{
+  "name": "midivis",
+  "version": "0.1.0",
+  "description": "Visualize MIDI notes",
+  "main": "main.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "electron .",
+    "pack": "electron-builder --dir",
+    "dist": "electron-builder",
+    "postinstall": "electron-builder install-app-deps"
+  },
+  "keywords": [],
+  "author": "Ryusei Yamaguchi",
+  "license": "MIT",
+  "dependencies": {
+    "midi": "^1.0.0"
+  },
+  "devDependencies": {
+    "electron": "^11.1.0",
+    "electron-builder": "^22.9.1",
+    "electron-rebuild": "^2.3.4"
+  },
+  "build": {
+    "appId": "dev.ryusei.midivis"
+  }
+}

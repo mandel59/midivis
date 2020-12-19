@@ -1,0 +1,23 @@
+html, body {
+    margin: 0;
+    padding: 0;
+}
+
+#config {
+    display: none;
+}
+
+#config.shown {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    margin: 1em;
+    padding: 1em;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
+#chordindicator {
+    text-align: center;
+}
