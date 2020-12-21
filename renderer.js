@@ -5,7 +5,7 @@ const { ChordVisualizer } = require("./chord-visualizer")
 /**
  * @typedef State
  * @property {boolean} sharp
- * @property {"monotone" | "axis" | "chromatic"} colorScheme
+ * @property {"monotone" | "axis" | "chromatic" | "quintave"} colorScheme
  */
  const state = /** @type {State} */ ({
     sharp: false,

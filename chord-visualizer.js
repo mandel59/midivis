@@ -10,7 +10,7 @@ class ChordVisualizer extends MidiDevice {
      * @param {ChordVisualizerOptions} param1
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
-     * @property {"monotone" | "chromatic" | "axis"} [colorScheme]
+     * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
      */
     constructor(element, { sharp = false, colorScheme = "monotone" } = {}) {
         super()
@@ -83,6 +83,8 @@ class ChordVisualizer extends MidiDevice {
                     div.style.backgroundColor = `hsla(${note * (360 / 12)}deg, 70%, 75%, ${maxVelocity})`
                 } else if (this.#colorScheme === "axis") {
                     div.style.backgroundColor = `hsla(${note * (360 / 3) + 240}deg, 70%, 75%, ${maxVelocity})`
+                } else if (this.#colorScheme === "quintave") {
+                    div.style.backgroundColor = `hsla(${note * (360 / 7)}deg, 70%, 75%, ${maxVelocity})`
                 } else {
                     div.style.backgroundColor = `hsla(240deg, 100%, 75%, ${maxVelocity})`
                 }

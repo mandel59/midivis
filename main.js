@@ -55,6 +55,14 @@ const template = [
                             browserWindow.webContents.send("update", { colorScheme: "axis" })
                         }
                     },
+                    {
+                        label: "Quintave",
+                        type: "radio",
+                        accelerator: "Alt+4",
+                        async click(menuItem, browserWindow, event) {
+                            browserWindow.webContents.send("update", { colorScheme: "quintave" })
+                        }
+                    },
                 ]
             },
             { type: "separator" },
