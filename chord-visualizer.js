@@ -3,21 +3,35 @@ const { MidiDevice } = require('./midi-device')
 
 class ChordVisualizer extends MidiDevice {
     #sharp
+    #colorScheme
     /**
      * 
      * @param {HTMLElement} element 
+     * @param {ChordVisualizerOptions} param1
+     * @typedef ChordVisualizerOptions
+     * @property {boolean} [sharp]
+     * @property {"monotone" | "chromatic" | "axis"} [colorScheme]
      */
-    constructor(element, { sharp = false } = {}) {
+    constructor(element, { sharp = false, colorScheme = "monotone" } = {}) {
         super()
         this.element = element
         this.#sharp = sharp
         this.prepareDOM()
+        /** @type {"monotone" | "chromatic" | "axis"} */
+        this.#colorScheme = colorScheme
     }
     get sharp() {
         return this.#sharp
     }
     set sharp(value) {
         this.#sharp = value
+        this.prepareDOM()
+    }
+    get colorScheme() {
+        return this.#colorScheme
+    }
+    set colorScheme(value) {
+        this.#colorScheme = value
         this.prepareDOM()
     }
     prepareDOM() {
@@ -64,8 +78,14 @@ class ChordVisualizer extends MidiDevice {
                 div.innerHTML = `${keyName}<sub>${octave}</sub>`
                 div.style.textAlign = `center`
                 const maxVelocity = `var(--v-max-${note}, 0)`
-                div.style.color = `rgba(0, 0, 0, calc(${maxVelocity} * 0.8 + 0.2))`
-                div.style.backgroundColor = `rgba(128, 128, 255, ${maxVelocity})`
+                div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
+                if (this.#colorScheme === "chromatic") {
+                    div.style.backgroundColor = `hsla(${note * (360 / 12)}deg, 70%, 75%, ${maxVelocity})`
+                } else if (this.#colorScheme === "axis") {
+                    div.style.backgroundColor = `hsla(${note * (360 / 3) + 240}deg, 70%, 75%, ${maxVelocity})`
+                } else {
+                    div.style.backgroundColor = `hsla(240deg, 100%, 75%, ${maxVelocity})`
+                }
                 div.style.transitionTimingFunction = `cubic-bezier(0, 1, 0.5, 1)`
                 div.style.transitionDuration = `calc((1 - ${maxVelocity}) * 1s)`
                 this.element.appendChild(div)

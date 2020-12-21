@@ -2,9 +2,15 @@ const { ipcRenderer } = require("electron")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
 
-const state = {
+/**
+ * @typedef State
+ * @property {boolean} sharp
+ * @property {"monotone" | "axis" | "chromatic"} colorScheme
+ */
+ const state = /** @type {State} */ ({
     sharp: false,
-}
+    colorScheme: "monotone"
+})
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
@@ -24,7 +30,12 @@ function update(newState) {
     console.log("update", newState)
     Object.assign(state, newState)
     printer.sharp = state.sharp
-    visualizer.sharp = state.sharp
+    if (visualizer.sharp !== state.sharp) {
+        visualizer.sharp = state.sharp
+    }
+    if (visualizer.colorScheme !== state.colorScheme) {
+        visualizer.colorScheme = state.colorScheme
+    }
 }
 
 ipcRenderer.on("update", (event, newState) => {

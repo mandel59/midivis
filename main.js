@@ -28,6 +28,35 @@ const template = [
                     browserWindow.webContents.send("update", { sharp: menuItem.checked })
                 }
             },
+            {
+                label: "Color scheme",
+                submenu: [
+                    {
+                        label: "Monotone",
+                        type: "radio",
+                        accelerator: "Alt+1",
+                        async click(menuItem, browserWindow, event) {
+                            browserWindow.webContents.send("update", { colorScheme: "monotone" })
+                        }
+                    },
+                    {
+                        label: "Chromatic",
+                        type: "radio",
+                        accelerator: "Alt+2",
+                        async click(menuItem, browserWindow, event) {
+                            browserWindow.webContents.send("update", { colorScheme: "chromatic" })
+                        }
+                    },
+                    {
+                        label: "Axis system",
+                        type: "radio",
+                        accelerator: "Alt+3",
+                        async click(menuItem, browserWindow, event) {
+                            browserWindow.webContents.send("update", { colorScheme: "axis" })
+                        }
+                    },
+                ]
+            },
             { type: "separator" },
             { role: "reload" },
             { role: "forceReload" },
