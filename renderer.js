@@ -26,18 +26,39 @@ const printer = new ChordPrinter(0, {
 
 const visualizer = new ChordVisualizer(element, { sharp: state.sharp })
 
-function update(newState) {
-    console.log("update", newState)
+const storageKey = "midivisAppState"
+
+function loadState() {
+    const json = localStorage.getItem(storageKey)
+    if (json) {
+        try {
+            updateState(JSON.parse(json))
+            return
+        } catch (error) {
+            console.error(error)
+        }
+    }
+}
+
+function saveState() {
+    localStorage.setItem(storageKey, JSON.stringify(state))
+}
+
+function updateState(newState) {
+    console.log("updateState", newState)
     Object.assign(state, newState)
     printer.sharp = state.sharp
     visualizer.updateOptions({
         sharp: state.sharp,
         colorScheme: state.colorScheme,
     })
+    saveState()
 }
 
+loadState()
+
 ipcRenderer.on("update", (event, newState) => {
-    update(newState)
+    updateState(newState)
 })
 
 ipcRenderer.on("midiMessage", (event, deltaTime, message) => {
