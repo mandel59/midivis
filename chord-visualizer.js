@@ -81,6 +81,8 @@ class ChordVisualizer extends MidiDevice {
                 div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
                 if (this.#colorScheme === "chromatic") {
                     div.style.backgroundColor = `hsla(${note * (360 / 12)}deg, 70%, 75%, ${maxVelocity})`
+                } else if (this.#colorScheme === "fifth") {
+                    div.style.backgroundColor = `hsla(${note * (360 / 12 * 7)}deg, 70%, 75%, ${maxVelocity})`
                 } else if (this.#colorScheme === "axis") {
                     div.style.backgroundColor = `hsla(${note * (360 / 3) + 240}deg, 70%, 75%, ${maxVelocity})`
                 } else if (this.#colorScheme === "quintave") {

@@ -48,9 +48,17 @@ const template = [
                         }
                     },
                     {
-                        label: "Axis system",
+                        label: "Circle of fifth",
                         type: "radio",
                         accelerator: "Alt+3",
+                        async click(menuItem, browserWindow, event) {
+                            browserWindow.webContents.send("update", { colorScheme: "fifth" })
+                        }
+                    },
+                    {
+                        label: "Axis system",
+                        type: "radio",
+                        accelerator: "Alt+4",
                         async click(menuItem, browserWindow, event) {
                             browserWindow.webContents.send("update", { colorScheme: "axis" })
                         }
@@ -58,7 +66,7 @@ const template = [
                     {
                         label: "Quintave",
                         type: "radio",
-                        accelerator: "Alt+4",
+                        accelerator: "Alt+5",
                         async click(menuItem, browserWindow, event) {
                             browserWindow.webContents.send("update", { colorScheme: "quintave" })
                         }
