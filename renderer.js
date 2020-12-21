@@ -7,7 +7,7 @@ const { ChordVisualizer } = require("./chord-visualizer")
  * @property {boolean} sharp
  * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave"} colorScheme
  */
- const state = /** @type {State} */ ({
+const state = /** @type {State} */ ({
     sharp: false,
     colorScheme: "monotone"
 })
@@ -30,12 +30,10 @@ function update(newState) {
     console.log("update", newState)
     Object.assign(state, newState)
     printer.sharp = state.sharp
-    if (visualizer.sharp !== state.sharp) {
-        visualizer.sharp = state.sharp
-    }
-    if (visualizer.colorScheme !== state.colorScheme) {
-        visualizer.colorScheme = state.colorScheme
-    }
+    visualizer.updateOptions({
+        sharp: state.sharp,
+        colorScheme: state.colorScheme,
+    })
 }
 
 ipcRenderer.on("update", (event, newState) => {

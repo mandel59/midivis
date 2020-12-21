@@ -7,7 +7,7 @@ class ChordVisualizer extends MidiDevice {
     /**
      * 
      * @param {HTMLElement} element 
-     * @param {ChordVisualizerOptions} param1
+     * @param {ChordVisualizerOptions} options
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
      * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
@@ -16,23 +16,22 @@ class ChordVisualizer extends MidiDevice {
         super()
         this.element = element
         this.#sharp = sharp
-        this.prepareDOM()
-        /** @type {"monotone" | "chromatic" | "axis"} */
         this.#colorScheme = colorScheme
+        this.prepareDOM()
+    }
+    /**
+     * @param {ChordVisualizerOptions} param1
+     */
+    updateOptions({ sharp, colorScheme }) {
+        if (sharp != null) this.#sharp = sharp
+        if (colorScheme != null) this.#colorScheme = colorScheme
+        this.prepareDOM()
     }
     get sharp() {
         return this.#sharp
     }
-    set sharp(value) {
-        this.#sharp = value
-        this.prepareDOM()
-    }
     get colorScheme() {
         return this.#colorScheme
-    }
-    set colorScheme(value) {
-        this.#colorScheme = value
-        this.prepareDOM()
     }
     prepareDOM() {
         this.element.innerHTML = ""
