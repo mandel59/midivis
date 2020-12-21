@@ -101,8 +101,11 @@ const input = new MidiInputPortSelector()
 ipcMain.handle("getInputPortOptions", (event) => {
     return input.portOptions()
 })
-ipcMain.handle("useInputPortByName", (event, name) => {
+ipcMain.handle("openInputPortByName", (event, name) => {
     return input.openPortByName(name)
+})
+ipcMain.handle("closeInputPort", (event) => {
+    input.closePort()
 })
 ipcMain.on("state-loaded", (event, state) => {
     if (typeof state.sharp === "boolean") {
@@ -112,6 +115,9 @@ ipcMain.on("state-loaded", (event, state) => {
     if (typeof state.colorScheme === "string") {
         const item = menu.getMenuItemById(`state-colorScheme-${state.colorScheme}`)
         if (item) item.checked = true
+    }
+    if (typeof state.midiInputPortName === "string") {
+        input.openPortByName(state.midiInputPortName)
     }
 })
 

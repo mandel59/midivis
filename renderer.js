@@ -1,19 +1,12 @@
 const { ipcRenderer } = require("electron")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
-
-/**
- * @typedef State
- * @property {boolean} sharp
- * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave"} colorScheme
- */
-const state = /** @type {State} */ ({
-    sharp: false,
-    colorScheme: "monotone"
-})
+const { getState, subscribeState, loadState, updateState } = require("./state")
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
+
+loadState()
 
 const printer = new ChordPrinter(0, {
     onChordChange: (chord) => {
@@ -21,43 +14,23 @@ const printer = new ChordPrinter(0, {
             indicator.innerText = chord
         }
     },
-    sharp: state.sharp
+    sharp: getState("sharp")
+})
+const visualizer = new ChordVisualizer(element, { sharp: getState("sharp") })
+
+subscribeState(() => {
+    const sharp = getState("sharp")
+    const colorScheme = getState("colorScheme")
+    printer.sharp = sharp
+    visualizer.updateOptions({
+        sharp,
+        colorScheme,
+    })
 })
 
-const visualizer = new ChordVisualizer(element, { sharp: state.sharp })
-
-const storageKey = "midivisAppState"
-
-function loadState() {
-    const json = localStorage.getItem(storageKey)
-    if (json) {
-        try {
-            const state = JSON.parse(json)
-            updateState(state)
-            ipcRenderer.send("state-loaded", state)
-            return
-        } catch (error) {
-            console.error(error)
-        }
-    }
+if (!getState("midiInputPortName")) {
+    showConfigDialog()
 }
-
-function saveState() {
-    localStorage.setItem(storageKey, JSON.stringify(state))
-}
-
-function updateState(newState) {
-    console.log("updateState", newState)
-    Object.assign(state, newState)
-    printer.sharp = state.sharp
-    visualizer.updateOptions({
-        sharp: state.sharp,
-        colorScheme: state.colorScheme,
-    })
-    saveState()
-}
-
-loadState()
 
 ipcRenderer.on("update", (event, newState) => {
     updateState(newState)
@@ -69,6 +42,7 @@ ipcRenderer.on("midiMessage", (event, deltaTime, message) => {
 })
 
 const config = document.getElementById("config")
+/** @type {HTMLSelectElement} */
 const midiInputPortSelector = document.getElementById("config-midi-input-port")
 
 async function showConfigDialog() {
@@ -95,9 +69,17 @@ ipcRenderer.on("showConfigDialog", (event) => {
 })
 
 midiInputPortSelector.addEventListener("change", () => {
-    const name = midiInputPortSelector.value
-    if (name) {
-        ipcRenderer.invoke("useInputPortByName", name)
+    const midiInputPortName = midiInputPortSelector.value
+    if (midiInputPortName) {
+        ipcRenderer.invoke("openInputPortByName", midiInputPortName)
+            .then(ok => {
+                if (ok) {
+                    updateState({ midiInputPortName })
+                }
+            })
+    } else {
+        ipcRenderer.invoke("closeInputPort")
+        updateState({ midiInputPortName: null })
     }
 })
 

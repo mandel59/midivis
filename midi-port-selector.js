@@ -1,14 +1,6 @@
 const midi = require("midi")
 const { EventEmitter } = require("events")
 
-function openFirstPort(midiio) {
-    const nPorts = midiio.getPortCount()
-    if (nPorts > 0) {
-        midiio.openPort(0)
-        return midiio
-    }
-}
-
 function portNames(midiio) {
     const nPorts = midiio.getPortCount()
     const portNames = []
@@ -39,7 +31,6 @@ class MidiInputPortSelector extends EventEmitter {
         this.#emitMessage = (deltaTime, message) => {
             return this.emit("message", deltaTime, message)
         }
-        this.openFirstPort()
     }
     #unconnect() {
         if (this.#input) {
@@ -63,11 +54,11 @@ class MidiInputPortSelector extends EventEmitter {
         }
         return false
     }
-    openFirstPort() {
-        return this.#connect(0)
-    }
     openPortByName(name) {
         return this.#connect(findPortByName(name, new midi.Input()))
+    }
+    closePort() {
+        this.#unconnect()
     }
     portOptions() {
         return portNames(new midi.Input()).map(name => ({
