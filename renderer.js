@@ -32,7 +32,9 @@ function loadState() {
     const json = localStorage.getItem(storageKey)
     if (json) {
         try {
-            updateState(JSON.parse(json))
+            const state = JSON.parse(json)
+            updateState(state)
+            ipcRenderer.send("state-loaded", state)
             return
         } catch (error) {
             console.error(error)

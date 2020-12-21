@@ -22,6 +22,7 @@ const template = [
         submenu: [
             {
                 label: "Use sharp notes",
+                id: "state-sharp",
                 type: "checkbox",
                 accelerator: "Alt+S",
                 async click(menuItem, browserWindow, event) {
@@ -33,6 +34,7 @@ const template = [
                 submenu: [
                     {
                         label: "Monotone",
+                        id: "state-colorScheme-monotone",
                         type: "radio",
                         accelerator: "Alt+1",
                         async click(menuItem, browserWindow, event) {
@@ -41,6 +43,7 @@ const template = [
                     },
                     {
                         label: "Chromatic",
+                        id: "state-colorScheme-chromatic",
                         type: "radio",
                         accelerator: "Alt+2",
                         async click(menuItem, browserWindow, event) {
@@ -49,6 +52,7 @@ const template = [
                     },
                     {
                         label: "Circle of fifth",
+                        id: "state-colorScheme-fifth",
                         type: "radio",
                         accelerator: "Alt+3",
                         async click(menuItem, browserWindow, event) {
@@ -57,6 +61,7 @@ const template = [
                     },
                     {
                         label: "Axis system",
+                        id: "state-colorScheme-axis",
                         type: "radio",
                         accelerator: "Alt+4",
                         async click(menuItem, browserWindow, event) {
@@ -65,6 +70,7 @@ const template = [
                     },
                     {
                         label: "Quintave",
+                        id: "state-colorScheme-quintave",
                         type: "radio",
                         accelerator: "Alt+5",
                         async click(menuItem, browserWindow, event) {
@@ -97,6 +103,16 @@ ipcMain.handle("getInputPortOptions", (event) => {
 })
 ipcMain.handle("useInputPortByName", (event, name) => {
     return input.openPortByName(name)
+})
+ipcMain.on("state-loaded", (event, state) => {
+    if (typeof state.sharp === "boolean") {
+        const item = menu.getMenuItemById("state-sharp")
+        if (item) item.checked = true
+    }
+    if (typeof state.colorScheme === "string") {
+        const item = menu.getMenuItemById(`state-colorScheme-${state.colorScheme}`)
+        if (item) item.checked = true
+    }
 })
 
 function createWindow() {
