@@ -2,6 +2,7 @@
   "name": "midivis",
   "version": "0.1.0",
   "description": "Visualize MIDI notes",
+  "homepage": "https://midivis.ryusei.dev/",
   "repository": "github:mandel59/midivis",
   "main": "main.js",
   "scripts": {
