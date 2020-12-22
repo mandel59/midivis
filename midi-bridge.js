@@ -1,79 +1,36 @@
-const { useElectron } = require("./env")
+const { MidiInputPortSelector } = require("./midi-port-selector-webmidi")
+const input = new MidiInputPortSelector()
+/**
+ * @returns {Promise<Array<{name: string, selected: boolean}>>}
+ */
+function getInputPortOptions() {
+    return input.portOptions()
+}
 
-if (useElectron) {
-    const { ipcRenderer } = require("electron")
+/**
+ * 
+ * @param {(deltaTime: number, message: number[]) => void} callback 
+ */
+function subscribeMIDIMessage(callback) {
+    input.on("message", callback)
+}
 
-    /**
-     * @returns {Promise<Array<{name: string, selected: boolean}>>}
-     */
-    function getInputPortOptions() {
-        return ipcRenderer.invoke("getInputPortOptions")
-    }
+/**
+ * 
+ * @param {string} midiInputPortName 
+ * @returns {Promise<boolean>}
+ */
+function openInputPortByName(midiInputPortName) {
+    return input.openPortByName(midiInputPortName)
+}
 
-    /**
-     * 
-     * @param {(deltaTime: number, message: number[]) => void} callback 
-     */
-    function subscribeMIDIMessage(callback) {
-        ipcRenderer.on("midiMessage", (event, deltaTime, message) => {
-            callback(deltaTime, message)
-        })
-    }
+function closeInputPort() {
+    return input.closePort()
+}
 
-    /**
-     * 
-     * @param {string} midiInputPortName 
-     * @returns {Promise<boolean>}
-     */
-    function openInputPortByName(midiInputPortName) {
-        return ipcRenderer.invoke("openInputPortByName", midiInputPortName)
-    }
-
-    function closeInputPort() {
-        return ipcRenderer.invoke("closeInputPort")
-    }
-
-    module.exports = {
-        getInputPortOptions,
-        subscribeMIDIMessage,
-        openInputPortByName,
-        closeInputPort,
-    }
-} else {
-    const { MidiInputPortSelector } = require("./midi-port-selector-webmidi")
-    const input = new MidiInputPortSelector()
-    /**
-     * @returns {Promise<Array<{name: string, selected: boolean}>>}
-     */
-    function getInputPortOptions() {
-        return input.portOptions()
-    }
-
-    /**
-     * 
-     * @param {(deltaTime: number, message: number[]) => void} callback 
-     */
-    function subscribeMIDIMessage(callback) {
-        input.on("message", callback)
-    }
-
-    /**
-     * 
-     * @param {string} midiInputPortName 
-     * @returns {Promise<boolean>}
-     */
-    function openInputPortByName(midiInputPortName) {
-        return input.openPortByName(midiInputPortName)
-    }
-
-    function closeInputPort() {
-        return input.closePort()
-    }
-
-    module.exports = {
-        getInputPortOptions,
-        subscribeMIDIMessage,
-        openInputPortByName,
-        closeInputPort,
-    }
+module.exports = {
+    getInputPortOptions,
+    subscribeMIDIMessage,
+    openInputPortByName,
+    closeInputPort,
 }

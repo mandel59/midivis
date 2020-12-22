@@ -1,5 +1,4 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron")
-const { MidiInputPortSelector } = require("./midi-port-selector")
 
 const isMac = process.platform === "darwin"
 const template = [
@@ -96,17 +95,6 @@ const template = [
 const menu = Menu.buildFromTemplate(template)
 Menu.setApplicationMenu(menu)
 
-const input = new MidiInputPortSelector()
-
-ipcMain.handle("getInputPortOptions", (event) => {
-    return input.portOptions()
-})
-ipcMain.handle("openInputPortByName", (event, name) => {
-    return input.openPortByName(name)
-})
-ipcMain.handle("closeInputPort", (event) => {
-    input.closePort()
-})
 ipcMain.on("state-loaded", (event, state) => {
     if (typeof state.sharp === "boolean") {
         const item = menu.getMenuItemById("state-sharp")
@@ -129,17 +117,6 @@ function createWindow() {
         }
     })
     win.loadFile("index.html")
-    win.webContents.on("did-finish-load", () => {
-        const onMessage = (deltaTime, message) => {
-            win.webContents.send("midiMessage", deltaTime, message)
-        }
-        input.on("message", onMessage)
-        const off = () => {
-            input.off("message", onMessage)
-        }
-        win.webContents.once("did-navigate", off)
-        win.webContents.once("destroyed", off)
-    })
 }
 
 app.whenReady().then(createWindow)

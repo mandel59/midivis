@@ -13,9 +13,7 @@
   "keywords": [],
   "author": "Ryusei Yamaguchi",
   "license": "MIT",
-  "dependencies": {
-    "midi": "^1.0.0"
-  },
+  "dependencies": {},
   "devDependencies": {
     "electron": "^11.1.0",
     "electron-builder": "^22.9.1"
