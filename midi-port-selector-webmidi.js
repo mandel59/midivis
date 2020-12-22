@@ -8,51 +8,49 @@ function requestMIDIAccess() {
 }
 
 class MidiInputPortSelector extends EventEmitter {
-    #emitMessage
-    #input
     constructor(options) {
         super(options)
-        this.#emitMessage = (event) => {
+        this._emitMessage = (event) => {
             const deltaTime = undefined
             const message = event.data
             return this.emit("message", deltaTime, message)
         }
     }
-    async #unconnect() {
-        if (this.#input) {
-            const input = this.#input
-            this.#input = undefined
-            input.removeEventListener("midimessage", this.#emitMessage)
+    async _unconnect() {
+        if (this._input) {
+            const input = this._input
+            this._input = undefined
+            input.removeEventListener("midimessage", this._emitMessage)
             await input.close()
         }
     }
-    async #connect(port) {
+    async _connect(port) {
         const midiAccess = await requestMIDIAccess()
         for (const input of midiAccess.inputs.values()) {
             if (port === (input.name || input.id)) {
                 await input.open()
-                while (this.#input) {
-                    await this.#unconnect()
+                while (this._input) {
+                    await this._unconnect()
                 }
-                this.#input = input
-                this.#input.addEventListener("midimessage", this.#emitMessage)
+                this._input = input
+                this._input.addEventListener("midimessage", this._emitMessage)
                 return true
             }
         }
         return false
     }
     async openPortByName(name) {
-        return this.#connect(name)
+        return this._connect(name)
     }
     async closePort() {
-        return this.#unconnect()
+        return this._unconnect()
     }
     async portOptions() {
         const midiAccess = await requestMIDIAccess()
         const ports = Array.from(midiAccess.inputs.values())
         return ports.map(port => ({
             name: port.name || port.id,
-            selected: this.#input != null && port.id === this.#input.id
+            selected: this._input != null && port.id === this._input.id
         }))
     }
 }

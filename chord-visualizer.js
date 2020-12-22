@@ -2,8 +2,6 @@ const { noteName, chordName } = require('./chord')
 const { MidiDevice } = require('./midi-device')
 
 class ChordVisualizer extends MidiDevice {
-    #sharp
-    #colorScheme
     /**
      * 
      * @param {HTMLElement} element 
@@ -15,30 +13,30 @@ class ChordVisualizer extends MidiDevice {
     constructor(element, { sharp = false, colorScheme = "monotone" } = {}) {
         super()
         this.element = element
-        this.#sharp = sharp
-        this.#colorScheme = colorScheme
+        this._sharp = sharp
+        this._colorScheme = colorScheme
         this.prepareDOM()
     }
     /**
      * @param {ChordVisualizerOptions} param1
      */
     updateOptions({ sharp, colorScheme }) {
-        if (sharp != null) this.#sharp = sharp
-        if (colorScheme != null) this.#colorScheme = colorScheme
+        if (sharp != null) this._sharp = sharp
+        if (colorScheme != null) this._colorScheme = colorScheme
         this.prepareDOM()
     }
     get sharp() {
-        return this.#sharp
+        return this._sharp
     }
     get colorScheme() {
-        return this.#colorScheme
+        return this._colorScheme
     }
     prepareDOM() {
         this.element.innerHTML = ""
         this.element.style.userSelect = "none"
         this.element.style.display = "grid"
         this.element.style.gridTemplateColumns = "repeat(12, 1fr)"
-        const keyNames = this.#sharp
+        const keyNames = this._sharp
             ? [
                 "C",
                 "C<sup>♯</sup>",
@@ -78,13 +76,13 @@ class ChordVisualizer extends MidiDevice {
                 div.style.textAlign = `center`
                 const maxVelocity = `var(--v-max-${note}, 0)`
                 div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
-                if (this.#colorScheme === "chromatic") {
+                if (this._colorScheme === "chromatic") {
                     div.style.backgroundColor = `hsla(${note * (360 / 12)}deg, 70%, 75%, ${maxVelocity})`
-                } else if (this.#colorScheme === "fifth") {
+                } else if (this._colorScheme === "fifth") {
                     div.style.backgroundColor = `hsla(${note * (360 / 12 * 7)}deg, 70%, 75%, ${maxVelocity})`
-                } else if (this.#colorScheme === "axis") {
+                } else if (this._colorScheme === "axis") {
                     div.style.backgroundColor = `hsla(${note * (360 / 3) + 240}deg, 70%, 75%, ${maxVelocity})`
-                } else if (this.#colorScheme === "quintave") {
+                } else if (this._colorScheme === "quintave") {
                     div.style.backgroundColor = `hsla(${note * (360 / 7)}deg, 70%, 75%, ${maxVelocity})`
                 } else {
                     div.style.backgroundColor = `hsla(240deg, 100%, 75%, ${maxVelocity})`
