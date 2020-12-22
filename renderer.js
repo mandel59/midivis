@@ -12,6 +12,7 @@ const {
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
 const { getState, getStateAll, subscribeState, loadState, updateState } = require("./state")
+const { colorSchemes } = require("./color-scheme")
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
@@ -26,26 +27,45 @@ const printer = new ChordPrinter(0, {
 })
 const visualizer = new ChordVisualizer(element, { sharp: getState("sharp") })
 
+document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
+    updateState({ sharp: ev.target.checked })
+})
+
+const configColorScheme = document.getElementById("config-colorScheme")
+
+colorSchemes.forEach(({ id, label, key }) => {
+    const e = document.createElement("input")
+    e.type = "radio"
+    e.id = `state-colorScheme-${id}`
+    e.name = "state-colorScheme"
+    e.value = id
+    e.addEventListener("change", (ev) => {
+        updateState({ colorScheme: ev.target.value })
+    })
+    const l = document.createElement("label")
+    l.appendChild(e)
+    l.appendChild(document.createTextNode(label))
+    configColorScheme.appendChild(l)
+})
+
 function reflectState() {
+    sendStateLoaded(getStateAll())
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
+    const midiInputPortName = getState("midiInputPortName")
     printer.sharp = sharp
     visualizer.updateOptions({
         sharp,
         colorScheme,
     })
-    if (typeof state.sharp === "boolean") {
-        /** @type {HTMLInputElement} */
-        const item = document.getElementById("state-sharp")
-        if (item) item.checked = true
-    }
-    if (typeof state.colorScheme === "string") {
-        /** @type {HTMLInputElement} */
-        const item = document.getElementById(`state-colorScheme-${state.colorScheme}`)
-        if (item) item.checked = true
-    }
-    if (typeof state.midiInputPortName === "string") {
-        openInputPortByName(state.midiInputPortName).then(ok => {
+    /** @type {HTMLInputElement} */
+    const inputSharp = document.getElementById("state-sharp")
+    if (inputSharp) inputSharp.checked = sharp
+    /** @type {HTMLInputElement} */
+    const inputColorScheme = document.getElementById(`state-colorScheme-${colorScheme}`)
+    if (inputColorScheme) inputColorScheme.checked = true
+    if (midiInputPortName) {
+        openInputPortByName(midiInputPortName).then(ok => {
             if (!ok) {
                 showConfigDialog()
             }
@@ -59,7 +79,7 @@ subscribeState(() => {
 subscribeMenuUpdateState(updateState)
 
 loadState().then(() => {
-    sendStateLoaded(getStateAll())
+    reflectState()
     const midiInputPortName = getState("midiInputPortName")
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
@@ -68,7 +88,6 @@ loadState().then(() => {
             }
         })
     }
-    reflectState()
 })
 
 if (!getState("midiInputPortName")) {
@@ -123,4 +142,20 @@ midiInputPortSelector.addEventListener("change", () => {
 const closeConfigButton = document.getElementById("config-close")
 closeConfigButton.addEventListener("click", () => {
     config.classList.remove("shown")
+})
+
+window.addEventListener("keydown", (ev) => {
+    if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && ev.key === ",") {
+        showConfigDialog()
+    }
+    if (!(ev.ctrlKey || ev.metaKey) && ev.altKey) {
+        if (ev.key === "s") {
+            updateState({ sharp: !getState("sharp") })
+        } else {
+            const colorScheme = colorSchemes.find(({ key }) => key === ev.key)
+            if (colorScheme) {
+                updateState({ colorScheme: colorScheme.id })
+            }
+        }
+    }
 })

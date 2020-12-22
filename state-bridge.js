@@ -31,11 +31,6 @@ if (useElectron) {
     }
 
     function subscribeMenuShowConfigDialog(showConfigDialog) {
-        window.addEventListener("keydown", (ev) => {
-            if (ev.ctrlKey && ev.code === "Comma") {
-                showConfigDialog()
-            }
-        })
     }
 
     function sendStateLoaded(state) {

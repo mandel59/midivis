@@ -7,9 +7,17 @@ html, body {
     display: none;
 }
 
+#config h2 {
+    margin: 0 0 0.5em;
+}
+
+#config h3 {
+    margin: 0 0 0.5em;
+}
+
 #config.shown {
     display: block;
-    position: fixed;
+    position: absolute;
     top: 0;
     left: 0;
     margin: 1em;
@@ -20,4 +28,8 @@ html, body {
 
 #chordindicator {
     text-align: center;
+}
+
+#config-colorScheme>label {
+    display: block;
 }

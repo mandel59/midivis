@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron")
+const { colorSchemes } = require("./color-scheme")
 
 const isMac = process.platform === "darwin"
 const template = [
@@ -30,53 +31,15 @@ const template = [
             },
             {
                 label: "Color scheme",
-                submenu: [
-                    {
-                        label: "Monotone",
-                        id: "state-colorScheme-monotone",
-                        type: "radio",
-                        accelerator: "Alt+1",
-                        async click(menuItem, browserWindow, event) {
-                            browserWindow.webContents.send("update", { colorScheme: "monotone" })
-                        }
-                    },
-                    {
-                        label: "Chromatic",
-                        id: "state-colorScheme-chromatic",
-                        type: "radio",
-                        accelerator: "Alt+2",
-                        async click(menuItem, browserWindow, event) {
-                            browserWindow.webContents.send("update", { colorScheme: "chromatic" })
-                        }
-                    },
-                    {
-                        label: "Circle of fifth",
-                        id: "state-colorScheme-fifth",
-                        type: "radio",
-                        accelerator: "Alt+3",
-                        async click(menuItem, browserWindow, event) {
-                            browserWindow.webContents.send("update", { colorScheme: "fifth" })
-                        }
-                    },
-                    {
-                        label: "Axis system",
-                        id: "state-colorScheme-axis",
-                        type: "radio",
-                        accelerator: "Alt+4",
-                        async click(menuItem, browserWindow, event) {
-                            browserWindow.webContents.send("update", { colorScheme: "axis" })
-                        }
-                    },
-                    {
-                        label: "Quintave",
-                        id: "state-colorScheme-quintave",
-                        type: "radio",
-                        accelerator: "Alt+5",
-                        async click(menuItem, browserWindow, event) {
-                            browserWindow.webContents.send("update", { colorScheme: "quintave" })
-                        }
-                    },
-                ]
+                submenu: colorSchemes.map(({ id, label, key }) => ({
+                    label,
+                    id: `state-colorScheme-${id}`,
+                    type: "radio",
+                    accelerator: `Alt+${key}`,
+                    async click(menuItem, browserWindow, event) {
+                        browserWindow.webContents.send("update", { colorScheme: id })
+                    }
+                }))
             },
             { type: "separator" },
             { role: "reload" },

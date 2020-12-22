@@ -59,6 +59,10 @@ function saveState() {
     localStorage.setItem(storageKey, JSON.stringify(state))
 }
 
+/**
+ * 
+ * @param {Partial<State>} newState 
+ */
 function updateState(newState) {
     Object.assign(state, newState)
     emitter.emit("change")
