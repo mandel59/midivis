@@ -18,6 +18,13 @@ if (useElectron) {
 
     function sendStateLoaded(state) {
         ipcRenderer.send("state-loaded", state)
+        if (typeof state.midiInputPortName === "string") {
+            openInputPortByName(state.midiInputPortName).then(ok => {
+                if (!ok) {
+                    showConfigDialog()
+                }
+            })
+        }
     }
 
     module.exports = {

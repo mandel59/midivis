@@ -116,9 +116,6 @@ ipcMain.on("state-loaded", (event, state) => {
         const item = menu.getMenuItemById(`state-colorScheme-${state.colorScheme}`)
         if (item) item.checked = true
     }
-    if (typeof state.midiInputPortName === "string") {
-        input.openPortByName(state.midiInputPortName)
-    }
 })
 
 function createWindow() {
