@@ -7,15 +7,14 @@ const {
 const {
     subscribeMenuUpdateState,
     subscribeMenuShowConfigDialog,
+    sendStateLoaded
 } = require("./state-bridge")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
-const { getState, subscribeState, loadState, updateState } = require("./state")
+const { getState, getStateAll, subscribeState, loadState, updateState } = require("./state")
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
-
-loadState()
 
 const printer = new ChordPrinter(0, {
     onChordChange: (chord) => {
@@ -27,7 +26,7 @@ const printer = new ChordPrinter(0, {
 })
 const visualizer = new ChordVisualizer(element, { sharp: getState("sharp") })
 
-subscribeState(() => {
+function reflectState() {
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
     printer.sharp = sharp
@@ -35,13 +34,46 @@ subscribeState(() => {
         sharp,
         colorScheme,
     })
+    if (typeof state.sharp === "boolean") {
+        /** @type {HTMLInputElement} */
+        const item = document.getElementById("state-sharp")
+        if (item) item.checked = true
+    }
+    if (typeof state.colorScheme === "string") {
+        /** @type {HTMLInputElement} */
+        const item = document.getElementById(`state-colorScheme-${state.colorScheme}`)
+        if (item) item.checked = true
+    }
+    if (typeof state.midiInputPortName === "string") {
+        openInputPortByName(state.midiInputPortName).then(ok => {
+            if (!ok) {
+                showConfigDialog()
+            }
+        })
+    }
+}
+
+subscribeState(() => {
+    reflectState()
+})
+subscribeMenuUpdateState(updateState)
+
+loadState().then(() => {
+    sendStateLoaded(getStateAll())
+    const midiInputPortName = getState("midiInputPortName")
+    if (midiInputPortName) {
+        openInputPortByName(midiInputPortName).then(ok => {
+            if (!ok) {
+                showConfigDialog()
+            }
+        })
+    }
+    reflectState()
 })
 
 if (!getState("midiInputPortName")) {
     showConfigDialog()
 }
-
-subscribeMenuUpdateState(updateState)
 
 subscribeMIDIMessage((deltaTime, message) => {
     printer.midiMessageHandler(deltaTime, message)

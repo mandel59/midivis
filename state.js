@@ -1,4 +1,3 @@
-const { sendStateLoaded } = require("./state-bridge")
 const { EventEmitter } = require("events")
 const storageKey = "midivisAppState"
 
@@ -25,6 +24,10 @@ function getState(key) {
     return state[key]
 }
 
+function getStateAll() {
+    return Object.assign({}, state)
+}
+
 /**
  * @param {() => void} callback 
  */
@@ -39,13 +42,12 @@ function unsubscribeState(key, callback) {
     emitter.off("change", callback)
 }
 
-function loadState() {
+async function loadState() {
     const json = localStorage.getItem(storageKey)
     if (json) {
         try {
             const newState = JSON.parse(json)
             Object.assign(state, newState)
-            sendStateLoaded(state)
             return
         } catch (error) {
             console.error(error)
@@ -65,6 +67,7 @@ function updateState(newState) {
 
 module.exports = {
     getState,
+    getStateAll,
     subscribeState,
     unsubscribeState,
     updateState,

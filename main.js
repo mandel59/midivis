@@ -98,7 +98,7 @@ Menu.setApplicationMenu(menu)
 ipcMain.on("state-loaded", (event, state) => {
     if (typeof state.sharp === "boolean") {
         const item = menu.getMenuItemById("state-sharp")
-        if (item) item.checked = true
+        if (item) item.checked = state.sharp
     }
     if (typeof state.colorScheme === "string") {
         const item = menu.getMenuItemById(`state-colorScheme-${state.colorScheme}`)
