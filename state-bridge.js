@@ -1,5 +1,4 @@
 const { useElectron } = require("./env")
-const { openInputPortByName } = require("./midi-bridge")
 
 if (useElectron) {
     const { ipcRenderer } = require("electron")
@@ -25,7 +24,6 @@ if (useElectron) {
         subscribeMenuShowConfigDialog,
         sendStateLoaded,
     }
-
 } else {
     function subscribeMenuUpdateState(updateState) {
     }
