@@ -1,6 +1,6 @@
 {
   "name": "midivis",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Visualize MIDI notes",
   "homepage": "https://midivis.ryusei.dev/",
   "repository": "github:mandel59/midivis",
