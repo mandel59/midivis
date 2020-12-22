@@ -16,11 +16,13 @@
   "author": "Ryusei Yamaguchi",
   "license": "MIT",
   "dependencies": {
-    "is-electron": "^2.2.0"
+    "is-electron": "^2.2.0",
+    "open": "^7.3.0"
   },
   "devDependencies": {
     "electron": "^11.1.0",
     "electron-builder": "^22.9.1",
+    "raw-loader": "^4.0.2",
     "vercel": "^21.0.1",
     "webpack": "^5.11.0",
     "webpack-cli": "^4.2.0"

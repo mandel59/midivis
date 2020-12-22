@@ -34,15 +34,20 @@ menu {
     padding: 0;
     height: max-content;
     display: flex;
-    flex-direction: column;
+    flex-direction: row;
 }
 
-button, select, label {
+button, select, label, a {
+    font-size: 1rem;
     padding: 0.5em;
 }
 
 menu>li {
     list-style-type: none;
+}
+
+menu>li>a {
+    display: inline-block;
 }
 
 #config {

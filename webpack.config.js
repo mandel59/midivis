@@ -1,14 +1,32 @@
 const path = require("path")
-module.exports = {
-    mode: "production",
-    entry: "./renderer",
-    output: {
-        path: path.join(__dirname, "public"),
-        filename: "bundle.js"
+module.exports = [
+    {
+        mode: "production",
+        entry: "./renderer",
+        output: {
+            path: path.join(__dirname, "public"),
+            filename: "bundle.js"
+        },
+        devtool: "source-map",
+        externals: {
+            electron: "electron"
+        },
+        externalsType: "commonjs",
     },
-    devtool: "source-map",
-    externals: {
-        electron: "electron"
+    {
+        mode: "production",
+        entry: "./show-licenses",
+        output: {
+            path: path.join(__dirname, "public"),
+            filename: "show-licenses.js"
+        },
+        module: {
+            rules: [
+                {
+                    test: /license$/i,
+                    use: 'raw-loader',
+                },
+            ],
+        },
     },
-    externalsType: "commonjs",
-}
+]

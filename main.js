@@ -1,4 +1,5 @@
 const { app, BrowserWindow, ipcMain, Menu } = require("electron")
+const open = require('open');
 const { colorSchemes } = require("./color-scheme")
 
 const isMac = process.platform === "darwin"
@@ -80,6 +81,10 @@ function createWindow() {
         }
     })
     win.loadFile("public/index.html")
+    win.webContents.on('new-window', function (event, url) {
+        event.preventDefault();
+        open(url);
+    })
 }
 
 app.whenReady().then(createWindow)
