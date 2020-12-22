@@ -1,5 +1,6 @@
 const { EventEmitter } = require("events")
 const storageKey = "midivisAppState"
+const { useElectron } = require("./env")
 
 const emitter = new EventEmitter()
 
@@ -8,11 +9,13 @@ const emitter = new EventEmitter()
  * @property {boolean} sharp
  * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave"} colorScheme
  * @property {string | null} midiInputPortName
+ * @property {boolean} showToolbar
  */
 const state = /** @type {State} */ ({
     sharp: false,
     colorScheme: "monotone",
-    midiInputPortName: null
+    midiInputPortName: null,
+    showToolbar: !useElectron,
 })
 
 /**

@@ -4,11 +4,19 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
+    <meta name="viewport" content="width=device-width" />
     <link rel="stylesheet" href="style.css">
     <script defer src="bundle.js"></script>
+    <title>Midivis</title>
 </head>
 
 <body>
+    <header id="toolbar">
+        <h1>Midivis</h1>
+        <menu>
+            <li><button id="menu-settings">Settings (Ctrl+,)</button></li>
+        </menu>
+    </header>
     <main>
         <div id="chordvis"></div>
         <div id="chordindicator">&nbsp;</div>
@@ -17,10 +25,12 @@
         <h2>Settings</h2>
         <label>MIDI input port: <select id="config-midi-input-port"></select></label>
         <hr>
-        <label><input id="state-sharp" type="checkbox" >Use sharp notes</label>
+        <label><input id="state-sharp" type="checkbox">Use sharp notes (Alt+S)</label>
         <hr>
         <h3>Color scheme</h3>
         <div id="config-colorScheme"></div>
+        <hr>
+        <label><input id="state-showToolbar" type="checkbox">Show toolbar</label>
         <hr>
         <button id="config-close">Close</button>
     </section>

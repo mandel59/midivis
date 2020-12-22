@@ -71,8 +71,8 @@ ipcMain.on("state-loaded", (event, state) => {
 
 function createWindow() {
     const win = new BrowserWindow({
-        width: 480,
-        height: 768,
+        width: 500,
+        height: 800,
         autoHideMenuBar: true,
         webPreferences: {
             nodeIntegration: true,

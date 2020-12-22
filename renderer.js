@@ -31,6 +31,10 @@ document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
     updateState({ sharp: ev.target.checked })
 })
 
+document.getElementById("state-showToolbar")?.addEventListener("change", (ev) => {
+    updateState({ showToolbar: ev.target.checked })
+})
+
 const configColorScheme = document.getElementById("config-colorScheme")
 
 colorSchemes.forEach(({ id, label, key }) => {
@@ -44,7 +48,7 @@ colorSchemes.forEach(({ id, label, key }) => {
     })
     const l = document.createElement("label")
     l.appendChild(e)
-    l.appendChild(document.createTextNode(label))
+    l.appendChild(document.createTextNode(`${label} (Alt+${key})`))
     configColorScheme.appendChild(l)
 })
 
@@ -53,6 +57,7 @@ function reflectState() {
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
     const midiInputPortName = getState("midiInputPortName")
+    const showToolbar = getState("showToolbar")
     printer.sharp = sharp
     visualizer.updateOptions({
         sharp,
@@ -70,6 +75,14 @@ function reflectState() {
                 showConfigDialog()
             }
         })
+    }
+    /** @type {HTMLInputElement} */
+    const inputShowToolbar = document.getElementById("state-showToolbar")
+    if (inputShowToolbar) inputShowToolbar.checked = showToolbar
+    if (showToolbar) {
+        document.getElementById("toolbar")?.classList.add("shown")
+    } else {
+        document.getElementById("toolbar")?.classList.remove("shown")
     }
 }
 
@@ -123,6 +136,10 @@ async function showConfigDialog() {
 }
 
 subscribeMenuShowConfigDialog(showConfigDialog)
+
+document.getElementById("menu-settings")?.addEventListener("click", () => {
+    showConfigDialog()
+})
 
 midiInputPortSelector.addEventListener("change", () => {
     const midiInputPortName = midiInputPortSelector.value
