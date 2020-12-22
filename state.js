@@ -1,3 +1,4 @@
+const { sendStateLoaded } = require("./state-bridge")
 const { EventEmitter } = require("events")
 const storageKey = "midivisAppState"
 
@@ -44,7 +45,7 @@ function loadState() {
         try {
             const newState = JSON.parse(json)
             Object.assign(state, newState)
-            ipcRenderer.send("state-loaded", state)
+            sendStateLoaded(state)
             return
         } catch (error) {
             console.error(error)

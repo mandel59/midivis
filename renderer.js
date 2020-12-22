@@ -1,4 +1,13 @@
-const { ipcRenderer } = require("electron")
+const {
+    getInputPortOptions,
+    subscribeMIDIMessage,
+    openInputPortByName,
+    closeInputPort,
+} = require("./midi-bridge")
+const {
+    subscribeMenuUpdateState,
+    subscribeMenuShowConfigDialog,
+} = require("./state-bridge")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
 const { getState, subscribeState, loadState, updateState } = require("./state")
@@ -32,11 +41,9 @@ if (!getState("midiInputPortName")) {
     showConfigDialog()
 }
 
-ipcRenderer.on("update", (event, newState) => {
-    updateState(newState)
-})
+subscribeMenuUpdateState(updateState)
 
-ipcRenderer.on("midiMessage", (event, deltaTime, message) => {
+subscribeMIDIMessage((deltaTime, message) => {
     printer.midiMessageHandler(deltaTime, message)
     visualizer.midiMessageHandler(deltaTime, message)
 })
@@ -46,7 +53,7 @@ const config = document.getElementById("config")
 const midiInputPortSelector = document.getElementById("config-midi-input-port")
 
 async function showConfigDialog() {
-    const portOptions = await ipcRenderer.invoke("getInputPortOptions")
+    const portOptions = await getInputPortOptions()
     midiInputPortSelector.innerHTML = ""
     const dummyOption = document.createElement("option")
     dummyOption.innerText = "Select MIDI input port"
@@ -64,21 +71,19 @@ async function showConfigDialog() {
     config.classList.add("shown")
 }
 
-ipcRenderer.on("showConfigDialog", (event) => {
-    showConfigDialog()
-})
+subscribeMenuShowConfigDialog(showConfigDialog)
 
 midiInputPortSelector.addEventListener("change", () => {
     const midiInputPortName = midiInputPortSelector.value
     if (midiInputPortName) {
-        ipcRenderer.invoke("openInputPortByName", midiInputPortName)
+        openInputPortByName(midiInputPortName)
             .then(ok => {
                 if (ok) {
                     updateState({ midiInputPortName })
                 }
             })
     } else {
-        ipcRenderer.invoke("closeInputPort")
+        closeInputPort()
         updateState({ midiInputPortName: null })
     }
 })
