@@ -79,7 +79,7 @@ function createWindow() {
             contextIsolation: false,
         }
     })
-    win.loadFile("index.html")
+    win.loadFile("public/index.html")
 }
 
 app.whenReady().then(createWindow)

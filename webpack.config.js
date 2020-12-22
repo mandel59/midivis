@@ -1,8 +1,9 @@
+const path = require("path")
 module.exports = {
     mode: "production",
     entry: "./renderer",
     output: {
-        path: __dirname,
+        path: path.join(__dirname, "public"),
         filename: "bundle.js"
     },
     devtool: "source-map",
