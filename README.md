@@ -1,5 +1,7 @@
 # Midivis - Visualize MIDI notes
 
+<img alt="Midivis screenshot" src="doc/screenshot-20201230.png" width="257" height="427">
+
 Try it out: https://midivis.ryusei.dev/
 
 Make sure to use browsers which support Web MIDI API, such as Google Chrome or Microsoft Edge.
