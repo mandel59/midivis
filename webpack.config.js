@@ -8,9 +8,6 @@ module.exports = [
             filename: "bundle.js"
         },
         devtool: "source-map",
-        externals: {
-            electron: "electron"
-        },
         externalsType: "commonjs",
     },
     {
