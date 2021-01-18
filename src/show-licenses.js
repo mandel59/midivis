@@ -4,7 +4,7 @@ git repository <https://github.com/mandel59/midivis>.
 
 ### Midivis License
 
-${require("../LICENSE").default}
+${require("../LICENSE")}
 
 ---
 
@@ -14,7 +14,7 @@ This application contains code available under the licenses listed here.
 
 This license applies to the module \`events\`.
 
-${require("events/LICENSE").default}
+${require("events/LICENSE")}
 `
 
 document.getElementById("licenses").innerText = licenses
