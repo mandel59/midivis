@@ -18,7 +18,7 @@ registerRoute(
 )
 
 registerRoute(
-    ({ request }) => ["style", "script", "worker", "image"].includes(request.destination),
+    ({ request }) => ["style", "script", "worker", "image", "manifest"].includes(request.destination),
     new StaleWhileRevalidate({
         cacheName: "assets",
         plugins: [
