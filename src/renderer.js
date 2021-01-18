@@ -1,4 +1,5 @@
 require("./assets")
+require("./register-service-worker")
 
 const {
     getInputPortOptions,

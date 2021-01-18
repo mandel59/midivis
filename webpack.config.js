@@ -87,4 +87,12 @@ module.exports = [
             })
         ],
     },
+    {
+        mode: "production",
+        entry: "./src/service-worker",
+        output: {
+            path: path.join(__dirname, "public"),
+            filename: "service-worker.js"
+        },
+    },
 ]
