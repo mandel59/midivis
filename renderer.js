@@ -4,11 +4,6 @@ const {
     openInputPortByName,
     closeInputPort,
 } = require("./midi-bridge")
-const {
-    subscribeMenuUpdateState,
-    subscribeMenuShowConfigDialog,
-    sendStateLoaded
-} = require("./state-bridge")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
 const { getState, getStateAll, subscribeState, loadState, updateState } = require("./state")
@@ -53,7 +48,6 @@ colorSchemes.forEach(({ id, label, key }) => {
 })
 
 function reflectState() {
-    sendStateLoaded(getStateAll())
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
     const midiInputPortName = getState("midiInputPortName")
@@ -89,7 +83,6 @@ function reflectState() {
 subscribeState(() => {
     reflectState()
 })
-subscribeMenuUpdateState(updateState)
 
 loadState().then(() => {
     reflectState()
@@ -134,8 +127,6 @@ async function showConfigDialog() {
     }
     config.classList.add("shown")
 }
-
-subscribeMenuShowConfigDialog(showConfigDialog)
 
 document.getElementById("menu-settings")?.addEventListener("click", () => {
     showConfigDialog()

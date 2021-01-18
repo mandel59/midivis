@@ -15,12 +15,6 @@ This application contains code available under the licenses listed here.
 This license applies to the module \`events\`.
 
 ${require("events/LICENSE").default}
-
-### is-electron License
-
-This license applies to the module \`is-electron\`.
-
-${require("is-electron/LICENSE").default}
 `
 
 document.getElementById("licenses").innerText = licenses
