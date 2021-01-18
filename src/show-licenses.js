@@ -4,7 +4,7 @@ git repository <https://github.com/mandel59/midivis>.
 
 ### Midivis License
 
-${require("./LICENSE").default}
+${require("../LICENSE").default}
 
 ---
 

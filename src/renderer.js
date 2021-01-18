@@ -1,3 +1,5 @@
+require("./assets")
+
 const {
     getInputPortOptions,
     subscribeMIDIMessage,

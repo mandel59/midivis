@@ -1,5 +1,4 @@
 dist
-public/*.js
-public/*.js.map
+public
 node_modules
 .vercel
