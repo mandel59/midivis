@@ -1,7 +1,11 @@
 const { EventEmitter } = require("events")
 
-function requestMIDIAccess() {
-    return navigator.requestMIDIAccess({
+async function requestMIDIAccess() {
+    if (!("requestMIDIAccess" in navigator)) {
+        const err = new Error("Web MIDI API is not available. See https://caniuse.com/midi for browsers supporting Web MIDI.")
+        throw err
+    }
+    return await navigator.requestMIDIAccess({
         sysex: false,
         software: false,
     })

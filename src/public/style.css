@@ -25,6 +25,21 @@ main {
     align-items: center;
 }
 
+#oops {
+    display: none;
+}
+
+#oops.shown {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    margin: 1em;
+    padding: 1em;
+    background-color: rgba(0, 0, 0, 0.8);
+    color: white;
+}
+
 h1 {
     margin: 0.15em 0.5em 0;
 }

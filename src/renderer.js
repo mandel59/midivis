@@ -92,9 +92,9 @@ function reflectState() {
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
             if (!ok) {
-                showConfigDialog()
+                return showConfigDialog()
             }
-        })
+        }).catch(handleError)
     }
     /** @type {HTMLInputElement} */
     const inputShowToolbar = document.getElementById("state-showToolbar")
@@ -116,14 +116,14 @@ loadState().then(() => {
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
             if (!ok) {
-                showConfigDialog()
+                return showConfigDialog()
             }
-        })
+        }).catch(handleError)
     }
 })
 
 if (!getState("midiInputPortName")) {
-    showConfigDialog()
+    showConfigDialog().catch(handleError)
 }
 
 subscribeMIDIMessage((deltaTime, message) => {
@@ -155,7 +155,7 @@ async function showConfigDialog() {
 }
 
 document.getElementById("menu-settings")?.addEventListener("click", () => {
-    showConfigDialog()
+    showConfigDialog().catch(handleError)
 })
 
 midiInputPortSelector.addEventListener("change", () => {
@@ -178,9 +178,35 @@ closeConfigButton.addEventListener("click", () => {
     config.classList.remove("shown")
 })
 
+const oops = document.getElementById("oops")
+
+/**
+ * @param {string} message 
+ */
+async function showOopsDialog(message) {
+    const messageBox = document.getElementById("oops-message")
+    if (messageBox) {
+        messageBox.innerText = message
+    }
+    oops.classList.add("shown")
+}
+
+const closeOopsButton = document.getElementById("oops-close")
+closeOopsButton.addEventListener("click", () => {
+    oops.classList.remove("shown")
+})
+
+function handleError(err) {
+    console.log(err)
+    if (err != null && "message" in err) {
+        const message = err.message
+        showOopsDialog(message)
+    }
+}
+
 window.addEventListener("keydown", (ev) => {
     if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && ev.key === ",") {
-        showConfigDialog()
+        showConfigDialog().catch(handleError)
     }
     if (!(ev.ctrlKey || ev.metaKey) && ev.altKey) {
         if (ev.key === "s") {
