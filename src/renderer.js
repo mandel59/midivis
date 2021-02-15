@@ -9,8 +9,9 @@ const {
 } = require("./midi-bridge")
 const { ChordPrinter } = require("./chord-printer")
 const { ChordVisualizer } = require("./chord-visualizer")
-const { getState, getStateAll, subscribeState, loadState, updateState } = require("./state")
+const { getState, subscribeState, loadState, updateState } = require("./state")
 const { colorSchemes } = require("./color-scheme")
+const { noteArrangements } = require("./note-arrangement")
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
@@ -50,15 +51,34 @@ colorSchemes.forEach(({ id, label, key }) => {
     configColorScheme.appendChild(l)
 })
 
+const configNoteArrangement = document.getElementById("config-noteArrangement")
+
+noteArrangements.forEach(({ id, label }) => {
+    const e = document.createElement("input")
+    e.type = "radio"
+    e.id = `state-noteArrangement-${id}`
+    e.name = "state-noteArrangement"
+    e.value = id
+    e.addEventListener("change", (ev) => {
+        updateState({ noteArrangement: ev.target.value })
+    })
+    const l = document.createElement("label")
+    l.appendChild(e)
+    l.appendChild(document.createTextNode(`${label}`))
+    configNoteArrangement.appendChild(l)
+})
+
 function reflectState() {
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
+    const noteArrangement = getState("noteArrangement")
     const midiInputPortName = getState("midiInputPortName")
     const showToolbar = getState("showToolbar")
     printer.sharp = sharp
     visualizer.updateOptions({
         sharp,
         colorScheme,
+        noteArrangement,
     })
     /** @type {HTMLInputElement} */
     const inputSharp = document.getElementById("state-sharp")
@@ -66,6 +86,9 @@ function reflectState() {
     /** @type {HTMLInputElement} */
     const inputColorScheme = document.getElementById(`state-colorScheme-${colorScheme}`)
     if (inputColorScheme) inputColorScheme.checked = true
+    /** @type {HTMLInputElement} */
+    const inputNoteArrangement = document.getElementById(`state-noteArrangement-${noteArrangement}`)
+    if (inputNoteArrangement) inputNoteArrangement.checked = true
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
             if (!ok) {

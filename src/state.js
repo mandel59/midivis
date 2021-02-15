@@ -9,12 +9,14 @@ const emitter = new EventEmitter()
  * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave"} colorScheme
  * @property {string | null} midiInputPortName
  * @property {boolean} showToolbar
+ * @property {"fourth" | "c-system"} noteArrangement
  */
 const state = /** @type {State} */ ({
     sharp: false,
     colorScheme: "monotone",
     midiInputPortName: null,
     showToolbar: true,
+    noteArrangement: "fourth",
 })
 
 /**
