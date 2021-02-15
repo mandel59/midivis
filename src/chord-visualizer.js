@@ -12,7 +12,7 @@ function tileSquare(column, row, element, callback) {
     element.style.userSelect = "none"
     element.style.display = "grid"
     element.style.gridTemplateColumns = `repeat(${column * 2}, 1fr)`
-    for (let y = row; y >= 0; y--) {
+    for (let y = row - 1; y >= 0; y--) {
         for (let x = 0; x < column; x++) {
             const div = callback(x, y)
             element.appendChild(div)
@@ -37,7 +37,7 @@ function tileHexagonal(column, row, element, callback) {
         div.style.gridColumnEnd = "span 1"
         element.appendChild(div)
     }
-    for (let y = row; y >= 0; y--) {
+    for (let y = row - 1; y >= 0; y--) {
         const even = y % 2 === 0
         if (even) insertPadding()
         for (let x = 0; x < (even ? column - 1 : column); x++) {
@@ -138,9 +138,9 @@ class ChordVisualizer extends MidiDevice {
             return div
         }
         if (this._noteArrangement === "c-system") {
-            tileHexagonal(32, 5, this.element, noteElement(3, 1))
+            tileHexagonal(32, 6, this.element, noteElement(3, 1))
         } else {
-            tileSquare(12, 22, this.element, noteElement(1, 5))
+            tileSquare(12, 23, this.element, noteElement(1, 5))
         }
     }
     setVariable(note, velocity, channel) {
