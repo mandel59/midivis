@@ -205,14 +205,14 @@ function handleError(err) {
 }
 
 window.addEventListener("keydown", (ev) => {
-    if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && ev.key === ",") {
+    if ((ev.ctrlKey || ev.metaKey) && !ev.altKey && (ev.key === "," || ev.code === "Comma")) {
         showConfigDialog().catch(handleError)
     }
     if (!(ev.ctrlKey || ev.metaKey) && ev.altKey) {
-        if (ev.key === "s") {
+        if (ev.key === "s" || ev.code === "KeyS") {
             updateState({ sharp: !getState("sharp") })
         } else {
-            const colorScheme = colorSchemes.find(({ key }) => key === ev.key)
+            const colorScheme = colorSchemes.find(({ key, code }) => key === ev.key || code === ev.code)
             if (colorScheme) {
                 updateState({ colorScheme: colorScheme.id })
             }
