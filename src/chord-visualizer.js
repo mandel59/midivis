@@ -186,7 +186,7 @@ class ChordVisualizer extends MidiDevice {
             }
             div.style.boxSizing = "border-box"
             if (istonic) {
-                div.style.border = "dotted 4px hsl(0deg, 0%, 50%)"
+                div.style.border = "solid 4px hsl(0deg, 0%, 90%)"
             } else if (inscale) {
                 div.style.border = "solid 4px hsl(0deg, 0%, 100%)"
             } else {
