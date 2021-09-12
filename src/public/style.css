@@ -8,7 +8,7 @@ html, body {
 
 main {
     margin: 0 auto;
-    padding: 0.5em 0;
+    padding: 0.5rem 0;
     display: flex;
     flex-direction: column;
     width: max-content;
@@ -34,14 +34,20 @@ main {
     position: absolute;
     top: 0;
     left: 0;
-    margin: 1em;
-    padding: 1em;
+    margin: 1rem;
+    padding: 1rem;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
 }
 
+header {
+    height: 4rem;
+}
+
 h1 {
-    margin: 0.15em 0.5em 0;
+    font-size: 2rem;
+    margin: 0.5rem 1rem 0;
+    line-height: 3rem;
 }
 
 menu {
@@ -65,10 +71,6 @@ menu>li>a {
     display: inline-block;
 }
 
-#config {
-    display: none;
-}
-
 #config h2 {
     margin: 0 0 0.5em;
 }
@@ -77,15 +79,26 @@ menu>li>a {
     margin: 0 0 0.5em;
 }
 
-#config.shown {
+#config {
     display: block;
-    position: absolute;
-    top: 0;
+    position: fixed;
+    top: 4rem;
     left: 0;
-    margin: 1em;
-    padding: 1em;
+    box-sizing: border-box;
+    margin: 0;
+    padding: 1rem;
+    width: 25rem;
+    max-height: calc(100% - 4rem);
+    overflow: scroll;
+    overscroll-behavior: contain;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
+
+    left: -25rem;
+}
+
+#config.shown {
+    left: 0;
 }
 
 #chordindicator {
