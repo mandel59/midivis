@@ -26,6 +26,14 @@ const printer = new ChordPrinter(0, {
 })
 const visualizer = new ChordVisualizer(element, { sharp: getState("sharp") })
 
+document.getElementById("state-key")?.addEventListener("change", (ev) => {
+    updateState({ key: Number(ev.target.value) })
+})
+
+document.getElementById("state-mode")?.addEventListener("change", (ev) => {
+    updateState({ mode: Number(ev.target.value) })
+})
+
 document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
     updateState({ sharp: ev.target.checked })
 })
@@ -69,6 +77,8 @@ noteArrangements.forEach(({ id, label }) => {
 })
 
 function reflectState() {
+    const key = getState("key")
+    const mode = getState("mode")
     const sharp = getState("sharp")
     const colorScheme = getState("colorScheme")
     const noteArrangement = getState("noteArrangement")
@@ -79,7 +89,14 @@ function reflectState() {
         sharp,
         colorScheme,
         noteArrangement,
+        key,
+        mode,
     })
+    /** @type {HTMLSelectElement} */
+    const selectKey = document.getElementById("state-key")
+    if (selectKey) selectKey.value = String(key)
+    const selectMode = document.getElementById("state-mode")
+    if (selectMode) selectMode.value = String(mode)
     /** @type {HTMLInputElement} */
     const inputSharp = document.getElementById("state-sharp")
     if (inputSharp) inputSharp.checked = sharp

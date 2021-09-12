@@ -10,6 +10,8 @@ const emitter = new EventEmitter()
  * @property {string | null} midiInputPortName
  * @property {boolean} showToolbar
  * @property {"fourth" | "c-system"} noteArrangement
+ * @property {number} key
+ * @property {number} mode
  */
 const state = /** @type {State} */ ({
     sharp: false,
@@ -17,6 +19,8 @@ const state = /** @type {State} */ ({
     midiInputPortName: null,
     showToolbar: true,
     noteArrangement: "fourth",
+    key: 0,
+    mode: 2741,
 })
 
 /**
@@ -42,7 +46,7 @@ function subscribeState(callback) {
 /**
  * @param {() => void} callback 
  */
-function unsubscribeState(key, callback) {
+function unsubscribeState(callback) {
     emitter.off("change", callback)
 }
 
