@@ -6,7 +6,8 @@
   "repository": "github:mandel59/midivis",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "webpack"
+    "build": "webpack",
+    "deploy": "vercel"
   },
   "keywords": [],
   "author": "Ryusei Yamaguchi",
