@@ -12,6 +12,7 @@ const emitter = new EventEmitter()
  * @property {"fourth" | "c-system"} noteArrangement
  * @property {number} key
  * @property {number} mode
+ * @property {boolean} useDegree
  */
 const state = /** @type {State} */ ({
     sharp: false,
@@ -21,6 +22,7 @@ const state = /** @type {State} */ ({
     noteArrangement: "fourth",
     key: 0,
     mode: 2741,
+    useDegree: false,
 })
 
 /**

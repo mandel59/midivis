@@ -166,7 +166,25 @@ const sharpKeyNames = [
     "B",
 ]
 
-function keyName(key, { sharp = false } = {}) {
+const chordDegreeNames = [
+    "I",
+    "#I",
+    "II",
+    "bIII",
+    "III",
+    "IV",
+    "#IV",
+    "V",
+    "bVI",
+    "VI",
+    "bVII",
+    "VII",
+]
+
+function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
+    if (useDegree) {
+        return chordDegreeNames[(key - scaleKey + 1200) % 12]
+    }
     if (sharp) {
         return sharpKeyNames[key]
     }
@@ -202,7 +220,11 @@ function quality(keys, rootKey) {
     return { degreesJoin, quality: qualityMap[degreesJoin] }
 }
 
-function chordName(notes, { sharp = false } = {}) {
+function chordName(notes, {
+    sharp = false,
+    useDegree = false,
+    scaleKey = 0,
+} = {}) {
     const noteList = [...notes]
     if (noteList.length === 0) return ""
 
@@ -211,7 +233,7 @@ function chordName(notes, { sharp = false } = {}) {
     const baseKey = keyOfNote(baseNote)
     const { degreesJoin, quality: q1 } = quality(keys, baseKey)
     if (q1 != null) {
-        return `${keyName(baseKey, { sharp })}${q1}`
+        return `${keyName(baseKey, { sharp, useDegree, scaleKey })}${q1}`
     }
     const rootNoteCandidates = findRootNote(noteList)
     for (const [rootNote, _score] of rootNoteCandidates) {
@@ -219,10 +241,11 @@ function chordName(notes, { sharp = false } = {}) {
         if (baseKey === rootKey) continue
         const { quality: q2 } = quality(keys, rootKey)
         if (q2 != null) {
-            return `${keyName(rootKey, { sharp })}${q2}/${keyName(baseKey, { sharp })}`
+            return `${keyName(rootKey, { sharp, useDegree, scaleKey })
+                }${q2}/${keyName(baseKey, { sharp, useDegree, scaleKey })}`
         }
     }
-    return `${keyName(baseKey, { sharp })}{${degreesJoin}}`
+    return `${keyName(baseKey, { sharp, useDegree, scaleKey })}{${degreesJoin}}`
 }
 
 module.exports = {

@@ -22,9 +22,15 @@ const printer = new ChordPrinter(0, {
             indicator.innerText = chord
         }
     },
-    sharp: getState("sharp")
+    sharp: getState("sharp"),
+    useDegree: getState("useDegree"),
+    scaleKey: getState("key"),
 })
-const visualizer = new ChordVisualizer(element, { sharp: getState("sharp") })
+
+const visualizer = new ChordVisualizer(element, {
+    sharp: getState("sharp"),
+    key: getState("key"),
+})
 
 document.getElementById("state-key")?.addEventListener("change", (ev) => {
     updateState({ key: Number(ev.target.value) })
@@ -36,6 +42,10 @@ document.getElementById("state-mode")?.addEventListener("change", (ev) => {
 
 document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
     updateState({ sharp: ev.target.checked })
+})
+
+document.getElementById("state-useDegree")?.addEventListener("change", (ev) => {
+    updateState({ useDegree: ev.target.checked })
 })
 
 document.getElementById("state-showToolbar")?.addEventListener("change", (ev) => {
@@ -80,11 +90,14 @@ function reflectState() {
     const key = getState("key")
     const mode = getState("mode")
     const sharp = getState("sharp")
+    const useDegree = getState("useDegree")
     const colorScheme = getState("colorScheme")
     const noteArrangement = getState("noteArrangement")
     const midiInputPortName = getState("midiInputPortName")
     const showToolbar = getState("showToolbar")
     printer.sharp = sharp
+    printer.useDegree = useDegree
+    printer.scaleKey = key
     visualizer.updateOptions({
         sharp,
         colorScheme,
@@ -100,6 +113,9 @@ function reflectState() {
     /** @type {HTMLInputElement} */
     const inputSharp = document.getElementById("state-sharp")
     if (inputSharp) inputSharp.checked = sharp
+    /** @type {HTMLInputElement} */
+    const inputUseDegree = document.getElementById("state-useDegree")
+    if (inputUseDegree) inputUseDegree.checked = useDegree
     /** @type {HTMLInputElement} */
     const inputColorScheme = document.getElementById(`state-colorScheme-${colorScheme}`)
     if (inputColorScheme) inputColorScheme.checked = true

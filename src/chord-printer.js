@@ -6,12 +6,16 @@ class ChordPrinter extends MidiDevice {
         console = undefined,
         onChordChange = undefined,
         sharp = false,
+        useDegree = false,
+        scaleKey = 0,
     } = {}) {
         super(channel)
         this.console = console
         this.onChordChange = onChordChange
         this.currentChord = undefined
         this.sharp = sharp
+        this.useDegree = useDegree
+        this.scaleKey = scaleKey
     }
     showNotes() {
         return this.notes()
@@ -19,7 +23,11 @@ class ChordPrinter extends MidiDevice {
             .join(" ")
     }
     showChord() {
-        return chordName(this.notes(), { sharp: this.sharp })
+        return chordName(this.notes(), {
+            sharp: this.sharp,
+            useDegree: this.useDegree,
+            scaleKey: this.scaleKey,
+        })
     }
     unknownMessage(message) {
         if (this.console && typeof this.console.log === "function") {
