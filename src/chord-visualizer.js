@@ -149,8 +149,8 @@ class ChordVisualizer extends MidiDevice {
         const keyNames = this._sharp
             ? keyNamesWithSharp
             : keyNamesWithFlat
-        const noteElement = (stepX, stepY) => (x, y) => {
-            const note = y * stepY + x * stepX
+        const noteElement = (stepX, stepY, base = 0) => (x, y) => {
+            const note = y * stepY + x * stepX + base
             const keyName = keyNames[(note + 1200) % 12]
             const octave = ((note / 12) | 0) - 1
             const inscale = inScale(this._key, this._mode, note)
@@ -197,7 +197,7 @@ class ChordVisualizer extends MidiDevice {
             return noteBgDiv
         }
         if (this._noteArrangement === "c-system") {
-            tileHexagonal(32, 5, this.element, noteElement(3, 1))
+            tileHexagonal(32, 5, this.element, noteElement(3, 1, 12))
         } else {
             tileSquare(12, 23, this.element, noteElement(1, 5))
         }
