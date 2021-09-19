@@ -89,7 +89,8 @@ menu>li>a {
     padding: 1rem;
     width: 25rem;
     max-height: calc(100% - 4rem);
-    overflow: scroll;
+    overflow-x: hidden;
+    overflow-y: auto;
     overscroll-behavior: contain;
     background-color: rgba(0, 0, 0, 0.8);
     color: white;
