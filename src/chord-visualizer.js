@@ -197,7 +197,7 @@ class ChordVisualizer extends MidiDevice {
             return noteBgDiv
         }
         if (this._noteArrangement === "c-system") {
-            tileHexagonal(32, 5, this.element, noteElement(3, 1, 12))
+            tileHexagonal(31, 5, this.element, noteElement(3, 1, 21))
         } else {
             tileSquare(12, 23, this.element, noteElement(1, 5))
         }
