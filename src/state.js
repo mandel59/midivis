@@ -13,6 +13,7 @@ const emitter = new EventEmitter()
  * @property {number} key
  * @property {number} mode
  * @property {boolean} useDegree
+ * @property {number[]} noteOffsets
  */
 const state = /** @type {State} */ ({
     sharp: false,
@@ -23,6 +24,7 @@ const state = /** @type {State} */ ({
     key: 0,
     mode: 2741,
     useDegree: false,
+    noteOffsets: [],
 })
 
 /**
@@ -31,7 +33,7 @@ const state = /** @type {State} */ ({
  * @returns {State[K]}
  */
 function getState(key) {
-    return state[key]
+    return structuredClone(state[key])
 }
 
 function getStateAll() {

@@ -52,6 +52,17 @@ document.getElementById("state-showToolbar")?.addEventListener("change", (ev) =>
     updateState({ showToolbar: ev.target.checked })
 })
 
+document.getElementById("state-channel")?.addEventListener("change", (ev) => {
+    reflectState()
+})
+
+document.getElementById("state-noteOffset")?.addEventListener("change", (ev) => {
+    const channel = Number(document.getElementById("state-channel").value)
+    const noteOffsets = getState("noteOffsets")
+    noteOffsets[channel - 1] = Number(ev.target.value)
+    updateState({ noteOffsets })
+})
+
 const configColorScheme = document.getElementById("config-colorScheme")
 
 colorSchemes.forEach(({ id, label, key }) => {
@@ -95,6 +106,7 @@ function reflectState() {
     const noteArrangement = getState("noteArrangement")
     const midiInputPortName = getState("midiInputPortName")
     const showToolbar = getState("showToolbar")
+    const noteOffsets = getState("noteOffsets")
     printer.sharp = sharp
     printer.useDegree = useDegree
     printer.scaleKey = key
@@ -105,6 +117,19 @@ function reflectState() {
         key,
         mode,
     })
+    for (let i = 0; i < 16; i++) {
+        const offset = noteOffsets[i] ?? 0
+        printer.setNoteOffset(offset, i + 1)
+        visualizer.setNoteOffset(offset, i + 1)
+    }
+    /** @type {HTMLSelectElement} */
+    const selectChannel = document.getElementById("state-channel")
+    /** @type {HTMLInputE} */
+    const inputNoteOffset = document.getElementById("state-noteOffset")
+    if (selectChannel && inputNoteOffset) {
+        const offset = noteOffsets[Number(selectChannel.value) - 1] ?? 0
+        inputNoteOffset.value = String(offset)
+    }
     /** @type {HTMLSelectElement} */
     const selectKey = document.getElementById("state-key")
     if (selectKey) selectKey.value = String(key)

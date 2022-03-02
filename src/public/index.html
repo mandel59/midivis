@@ -27,6 +27,30 @@
         <h2>Settings</h2>
         <label>MIDI input port: <select id="config-midi-input-port"></select></label>
         <hr>
+        <label>Channel
+            <select id="state-channel">
+                <option value="1">1</option>
+                <option value="2">2</option>
+                <option value="3">3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+                <option value="6">6</option>
+                <option value="7">7</option>
+                <option value="8">8</option>
+                <option value="9">9</option>
+                <option value="10" disabled>10</option>
+                <option value="11">11</option>
+                <option value="12">12</option>
+                <option value="13">13</option>
+                <option value="14">14</option>
+                <option value="15">15</option>
+                <option value="16">16</option>
+            </select>
+        </label><br>
+        <label>Note offset
+            <input id="state-noteOffset" type="number" value="0" min="-24" max="24">
+        </label>
+        <hr>
         <label>Key
             <select id="state-key">
                 <option value="0">C</option>

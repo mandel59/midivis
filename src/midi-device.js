@@ -22,9 +22,12 @@ class MidiDevice {
         this.noteVelocityMaps = []
         /** @type {number[]} */
         this.programs = []
+        /** @type {number[]} */
+        this.noteOffsets = []
         for (let i = 0; i < 16; i++) {
             this.noteVelocityMaps.push(new Map())
             this.programs.push(0)
+            this.noteOffsets.push(0)
         }
         this.channel = channel
     }
@@ -94,6 +97,12 @@ class MidiDevice {
     unknownMessage(message) {
         // console.log(message.map(x => x.toString(16)))
     }
+    setNoteOffset(offset, channel) {
+        this.noteOffsets[channel - 1] = offset
+    }
+    offsetNote(note, channel) {
+        return note + this.noteOffsets[channel - 1]
+    }
     midiMessageHandler(deltaTime, message) {
         const [m1, m2, m3] = message
         const channel = (m1 & 0x0F) + 1
@@ -103,14 +112,14 @@ class MidiDevice {
         const messageType = m1 & 0xF0
         switch (messageType) {
             case 0x80: {
-                this.noteOff(m2, m3, channel)
+                this.noteOff(this.offsetNote(m2, channel), m3, channel)
                 break
             }
             case 0x90: {
                 if (m3 === 0) {
-                    this.noteOff(m2, m3, channel)
+                    this.noteOff(this.offsetNote(m2, channel), m3, channel)
                 } else {
-                    this.noteOn(m2, m3, channel)
+                    this.noteOn(this.offsetNote(m2, channel), m3, channel)
                 }
                 break
             }
