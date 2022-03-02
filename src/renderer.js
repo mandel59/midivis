@@ -46,7 +46,6 @@ function isSharpKey(key, mode, sharp = false) {
     const offset = modeShapeCode.indexOf(key) - modeShapeBase
     const left = modeShapeCode.findIndex(key => (mode >> key) & 1) - modeShapeBase
     sharp = left + offset === -7 ? sharp : (left + offset < -7 || left + offset >= 0)
-    console.log({ key, mode, offset, left, sharp })
     return sharp
 }
 
