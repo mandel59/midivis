@@ -32,12 +32,36 @@ const visualizer = new ChordVisualizer(element, {
     key: getState("key"),
 })
 
+// Gb Db Ab Eb Bb F C G D A E B
+const modeShapeCode = [6, 1, 8, 3, 10, 5, 0, 7, 2, 9, 4, 11]
+const modeShapeBase = modeShapeCode.indexOf(0)
+
+/**
+ * @param {number} key 
+ * @param {number} mode 
+ * @param {boolean} [sharp]
+ * @returns {boolean}
+ */
+function isSharpKey(key, mode, sharp = false) {
+    const offset = modeShapeCode.indexOf(key) - modeShapeBase
+    const left = modeShapeCode.findIndex(key => (mode >> key) & 1) - modeShapeBase
+    sharp = left + offset === -7 ? sharp : left + offset < -7
+    console.log({ key, mode, offset, left, sharp })
+    return sharp
+}
+
 document.getElementById("state-key")?.addEventListener("change", (ev) => {
-    updateState({ key: Number(ev.target.value) })
+    const key = Number(ev.target.value)
+    const mode = getState("mode")
+    const sharp = isSharpKey(key, mode, getState("sharp"))
+    updateState({ key, sharp })
 })
 
 document.getElementById("state-mode")?.addEventListener("change", (ev) => {
-    updateState({ mode: Number(ev.target.value) })
+    const key = getState("key")
+    const mode = Number(ev.target.value)
+    const sharp = isSharpKey(key, mode, getState("sharp"))
+    updateState({ mode, sharp })
 })
 
 document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
