@@ -99,7 +99,7 @@ class ChordVisualizer extends MidiDevice {
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
      * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
-     * @property {"fourth" | "c-system"} [noteArrangement]
+     * @property {"fourth" | "c-system" | "wicki-hayden"} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
      */
@@ -108,7 +108,7 @@ class ChordVisualizer extends MidiDevice {
         {
             sharp = false,
             colorScheme = "monotone",
-            noteArrangement = "c-system",
+            noteArrangement = "fourth",
             key = 0,
             mode = 2741,
         } = {}
@@ -149,9 +149,26 @@ class ChordVisualizer extends MidiDevice {
         const keyNames = this._sharp
             ? keyNamesWithSharp
             : keyNamesWithFlat
+        /** @type {(note: number, x: number, y: number) => string} */
+        const getKeyName = this._noteArrangement === "wicki-hayden"
+            ? (_note, x, y, base) => {
+                const k = 2 * x + y + ((7 * base) % 12)
+                const n = "CGDAEBF"[(700 + k) % 7]
+                const acc = Math.floor((k + 1) / 7)
+                let s
+                if (acc < -2) s = `<sup>${-acc}♭</sup>`
+                else if (acc > 2) s = `<sup>${acc}♯</sup>`
+                else if (acc === -2) s = "<sup>𝄫</sup>"
+                else if (acc === -1) s = "<sup>♭</sup>"
+                else if (acc === 1) s = "<sup>♯</sup>"
+                else if (acc === 2) s = "<sup>𝄪</sup>"
+                else s = ""
+                return `${n}${s}`
+            }
+            : (note) => keyNames[(note + 1200) % 12]
         const noteElement = (stepX, stepY, base = 0) => (x, y) => {
             const note = y * stepY + x * stepX + base
-            const keyName = keyNames[(note + 1200) % 12]
+            const keyName = getKeyName(note, x, y, base)
             const octave = ((note / 12) | 0) - 1
             const inscale = inScale(this._key, this._mode, note)
             const istonic = isTonicNote(this._key, note)
@@ -198,8 +215,12 @@ class ChordVisualizer extends MidiDevice {
         }
         if (this._noteArrangement === "c-system") {
             tileHexagonal(33, 5, this.element, noteElement(3, 1, 18))
-        } else {
+        } else if (this._noteArrangement === "wicki-hayden") {
+            tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
+        } else if (this._noteArrangement === "fourth") {
             tileSquare(12, 23, this.element, noteElement(1, 5))
+        } else {
+            throw new Error("unknown note arrangement")
         }
     }
     setVariable(note, velocity, channel) {
