@@ -99,7 +99,7 @@ class ChordVisualizer extends MidiDevice {
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
      * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
-     * @property {"fourth" | "c-system" | "wicki-hayden"} [noteArrangement]
+     * @property {"fourth" | "c-system" | "wicki-hayden" | "tonnetz"} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
      */
@@ -219,6 +219,8 @@ class ChordVisualizer extends MidiDevice {
             tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
         } else if (this._noteArrangement === "fourth") {
             tileSquare(12, 23, this.element, noteElement(1, 5))
+        } else if (this._noteArrangement === "tonnetz") {
+            tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
         } else {
             throw new Error("unknown note arrangement")
         }

@@ -105,20 +105,19 @@ colorSchemes.forEach(({ id, label, key }) => {
 
 const configNoteArrangement = document.getElementById("config-noteArrangement")
 
-noteArrangements.forEach(({ id, label }) => {
-    const e = document.createElement("input")
-    e.type = "radio"
-    e.id = `state-noteArrangement-${id}`
-    e.name = "state-noteArrangement"
-    e.value = id
-    e.addEventListener("change", (ev) => {
-        updateState({ noteArrangement: ev.target.value })
-    })
-    const l = document.createElement("label")
-    l.appendChild(e)
-    l.appendChild(document.createTextNode(`${label}`))
-    configNoteArrangement.appendChild(l)
+const selectNoteArrangement = document.createElement("select")
+selectNoteArrangement.addEventListener("change", (ev) => {
+    updateState({ noteArrangement: ev.target.value })
 })
+
+noteArrangements.forEach(({ id, label }) => {
+    const opt = document.createElement("option")
+    opt.value = id
+    opt.appendChild(document.createTextNode(label))
+    selectNoteArrangement.appendChild(opt)
+})
+
+configNoteArrangement.appendChild(selectNoteArrangement)
 
 function reflectState() {
     const key = getState("key")
@@ -167,9 +166,9 @@ function reflectState() {
     /** @type {HTMLInputElement} */
     const inputColorScheme = document.getElementById(`state-colorScheme-${colorScheme}`)
     if (inputColorScheme) inputColorScheme.checked = true
-    /** @type {HTMLInputElement} */
-    const inputNoteArrangement = document.getElementById(`state-noteArrangement-${noteArrangement}`)
-    if (inputNoteArrangement) inputNoteArrangement.checked = true
+    /** @type {HTMLSelectElement} */
+    const inputNoteArrangement = document.getElementById(`state-noteArrangement`)
+    if (inputNoteArrangement) inputNoteArrangement.value = noteArrangement
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
             if (!ok) {
