@@ -106,6 +106,7 @@ colorSchemes.forEach(({ id, label, key }) => {
 const configNoteArrangement = document.getElementById("config-noteArrangement")
 
 const selectNoteArrangement = document.createElement("select")
+selectNoteArrangement.id = "state-noteArrangement"
 selectNoteArrangement.addEventListener("change", (ev) => {
     updateState({ noteArrangement: ev.target.value })
 })
