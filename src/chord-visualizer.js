@@ -99,7 +99,7 @@ class ChordVisualizer extends MidiDevice {
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
      * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
-     * @property {"fourth" | "c-system" | "wicki-hayden" | "tonnetz"} [noteArrangement]
+     * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "tonnetz" | "janko"} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
      */
@@ -215,10 +215,16 @@ class ChordVisualizer extends MidiDevice {
         }
         if (this._noteArrangement === "c-system") {
             tileHexagonal(33, 5, this.element, noteElement(3, 1, 18))
+        } else if (this._noteArrangement === "b-system") {
+            tileHexagonal(33, 5, this.element, noteElement(3, 2, 17))
+        } else if (this._noteArrangement === "janko") {
+            tileHexagonal(43, 6, this.element, noteElement(2, 1, 22))
         } else if (this._noteArrangement === "wicki-hayden") {
             tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
         } else if (this._noteArrangement === "fourth") {
             tileSquare(12, 23, this.element, noteElement(1, 5))
+        } else if (this._noteArrangement === "tritone") {
+            tileSquare(14, 22, this.element, noteElement(1, 6, -3))
         } else if (this._noteArrangement === "tonnetz") {
             tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
         } else {
