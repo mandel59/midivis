@@ -98,7 +98,7 @@ class ChordVisualizer extends MidiDevice {
      * @param {ChordVisualizerOptions} options
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
-     * @property {"monotone" | "chromatic" | "axis" | "quintave"} [colorScheme]
+     * @property {"monotone" | "chromatic" | "axis" | "quintave" | "third-major"} [colorScheme]
      * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "tonnetz" | "janko"} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
@@ -198,6 +198,8 @@ class ChordVisualizer extends MidiDevice {
                 div.style.backgroundColor = `hsla(${note * (360 / 3) + 240}deg, 70%, 75%, ${maxVelocity})`
             } else if (this._colorScheme === "quintave") {
                 div.style.backgroundColor = `hsla(${note * (360 / 7)}deg, 70%, 75%, ${maxVelocity})`
+            } else if (this._colorScheme === "third-major") {
+                div.style.backgroundColor = `hsla(${note * (360 / 4)}deg, 70%, 75%, ${maxVelocity})`
             } else {
                 div.style.backgroundColor = `hsla(240deg, 100%, 75%, ${maxVelocity})`
             }

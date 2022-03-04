@@ -6,7 +6,7 @@ const emitter = new EventEmitter()
 /**
  * @typedef State
  * @property {boolean} sharp
- * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave"} colorScheme
+ * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave" | "third-major"} colorScheme
  * @property {string | null} midiInputPortName
  * @property {boolean} showToolbar
  * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "tonnetz" | "janko"} noteArrangement

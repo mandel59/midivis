@@ -4,6 +4,7 @@ const colorSchemes = [
     { id: "fifth", label: "Circle of fifth", key: "3", code: "Digit3" },
     { id: "axis", label: "Axis system", key: "4", code: "Digit4" },
     { id: "quintave", label: "Quintave", key: "5", code: "Digit5" },
+    { id: "third-major", label: "Third major", key: "6", code: "Digit6" }
 ]
 
 module.exports = { colorSchemes }
