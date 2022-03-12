@@ -99,7 +99,7 @@ class ChordVisualizer extends MidiDevice {
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
      * @property {"monotone" | "chromatic" | "axis" | "quintave" | "third-major"} [colorScheme]
-     * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "tonnetz" | "janko"} [noteArrangement]
+     * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "wicki-hayden-wide" | "tonnetz" | "janko"} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
      */
@@ -149,23 +149,29 @@ class ChordVisualizer extends MidiDevice {
         const keyNames = this._sharp
             ? keyNamesWithSharp
             : keyNamesWithFlat
+        const isWickiHayden
+            = this._noteArrangement === "wicki-hayden"
+            || this._noteArrangement === "wicki-hayden-wide"
+        const isWide = this._noteArrangement === "wicki-hayden-wide"
         /** @type {(note: number, x: number, y: number) => string} */
-        const getKeyName = this._noteArrangement === "wicki-hayden"
-            ? (_note, x, y, base) => {
-                const k = 2 * x + y + ((7 * base) % 12)
-                const n = "CGDAEBF"[(700 + k) % 7]
-                const acc = Math.floor((k + 1) / 7)
-                let s
-                if (acc < -2) s = `<sup>${-acc}♭</sup>`
-                else if (acc > 2) s = `<sup>${acc}♯</sup>`
-                else if (acc === -2) s = "<sup>𝄫</sup>"
-                else if (acc === -1) s = "<sup>♭</sup>"
-                else if (acc === 1) s = "<sup>♯</sup>"
-                else if (acc === 2) s = "<sup>𝄪</sup>"
-                else s = ""
-                return `${n}${s}`
-            }
-            : (note) => keyNames[(note + 1200) % 12]
+        const getKeyName
+            = isWickiHayden
+                ? (_note, x, y, base) => {
+                    let k = 2 * x + y + ((7 * base) % 12)
+                    if (isWide) k -= 12
+                    const n = "CGDAEBF"[(700 + k) % 7]
+                    const acc = Math.floor((k + 1) / 7)
+                    let s
+                    if (acc < -2) s = `<sup>${-acc}♭</sup>`
+                    else if (acc > 2) s = `<sup>${acc}♯</sup>`
+                    else if (acc === -2) s = "<sup>𝄫</sup>"
+                    else if (acc === -1) s = "<sup>♭</sup>"
+                    else if (acc === 1) s = "<sup>♯</sup>"
+                    else if (acc === 2) s = "<sup>𝄪</sup>"
+                    else s = ""
+                    return `${n}${s}`
+                }
+                : (note) => keyNames[(note + 1200) % 12]
         const noteElement = (stepX, stepY, base = 0) => (x, y) => {
             const note = y * stepY + x * stepX + base
             const keyName = getKeyName(note, x, y, base)
@@ -223,6 +229,8 @@ class ChordVisualizer extends MidiDevice {
             tileHexagonal(43, 6, this.element, noteElement(2, 1, 22))
         } else if (this._noteArrangement === "wicki-hayden") {
             tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
+        } else if (this._noteArrangement === "wicki-hayden-wide") {
+            tileHexagonal(18, 22, this.element, noteElement(2, 7, -14))
         } else if (this._noteArrangement === "fourth") {
             tileSquare(12, 23, this.element, noteElement(1, 5))
         } else if (this._noteArrangement === "tritone") {

@@ -9,7 +9,7 @@ const emitter = new EventEmitter()
  * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave" | "third-major"} colorScheme
  * @property {string | null} midiInputPortName
  * @property {boolean} showToolbar
- * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "tonnetz" | "janko"} noteArrangement
+ * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "wicki-hayden-wide" | "tonnetz" | "janko"} noteArrangement
  * @property {number} key
  * @property {number} mode
  * @property {boolean} useDegree
