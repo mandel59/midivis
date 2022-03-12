@@ -91,6 +91,18 @@ function isTonicNote(key, note) {
     return (note + 1200) % 12 === key
 }
 
+function accidental(acc) {
+    let s
+    if (acc < -2) s = `<sup>${-acc}♭</sup>`
+    else if (acc > 2) s = `<sup>${acc}♯</sup>`
+    else if (acc === -2) s = "<sup>𝄫</sup>"
+    else if (acc === -1) s = "<sup>♭</sup>"
+    else if (acc === 1) s = "<sup>♯</sup>"
+    else if (acc === 2) s = "<sup>𝄪</sup>"
+    else s = ""
+    return s
+}
+
 class ChordVisualizer extends MidiDevice {
     /**
      * 
@@ -154,28 +166,27 @@ class ChordVisualizer extends MidiDevice {
             || this._noteArrangement === "wicki-hayden-wide"
         const isWide = this._noteArrangement === "wicki-hayden-wide"
         /** @type {(note: number, x: number, y: number) => string} */
-        const getKeyName
+        const getNoteName
             = isWickiHayden
-                ? (_note, x, y, base) => {
+                ? (note, x, y, base) => {
                     let k = 2 * x + y + ((7 * base) % 12)
                     if (isWide) k -= 12
                     const n = "CGDAEBF"[(700 + k) % 7]
                     const acc = Math.floor((k + 1) / 7)
-                    let s
-                    if (acc < -2) s = `<sup>${-acc}♭</sup>`
-                    else if (acc > 2) s = `<sup>${acc}♯</sup>`
-                    else if (acc === -2) s = "<sup>𝄫</sup>"
-                    else if (acc === -1) s = "<sup>♭</sup>"
-                    else if (acc === 1) s = "<sup>♯</sup>"
-                    else if (acc === 2) s = "<sup>𝄪</sup>"
-                    else s = ""
-                    return `${n}${s}`
+                    const octave = Math.floor((note - acc) / 12) - 1
+                    return `${n}${accidental(acc)}<sub>${octave}</sub>`
                 }
-                : (note) => keyNames[(note + 1200) % 12]
+                : (note) => {
+                    const shift = this._sharp ? -1 : -6;
+                    const k = (7 * note - shift) % 12 + shift;
+                    const n = "CGDAEBF"[(700 + k) % 7]
+                    const acc = Math.floor((k + 1) / 7)
+                    const octave = Math.floor((note - acc) / 12) - 1
+                    return `${n}${accidental(acc)}<sub>${octave}</sub>`
+                }
         const noteElement = (stepX, stepY, base = 0) => (x, y) => {
             const note = y * stepY + x * stepX + base
-            const keyName = getKeyName(note, x, y, base)
-            const octave = ((note / 12) | 0) - 1
+            const noteName = getNoteName(note, x, y, base)
             const inscale = inScale(this._key, this._mode, note)
             const istonic = isTonicNote(this._key, note)
             const noteBgDiv = document.createElement("div")
@@ -190,7 +201,7 @@ class ChordVisualizer extends MidiDevice {
             const div = document.createElement("div")
             noteBgDiv.appendChild(div)
             div.className = `note-fg`
-            div.innerHTML = `${keyName}<sub>${octave}</sub>`
+            div.innerHTML = noteName
             div.style.width = "100%"
             div.style.height = "100%"
             div.style.textAlign = "center"
