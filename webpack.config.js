@@ -47,6 +47,10 @@ module.exports = [
                     },
                 },
                 {
+                    test: /\.xpi$/,
+                    type: "asset/resource",
+                },
+                {
                     test: /\.webmanifest$/,
                     type: "asset/resource",
                 },
