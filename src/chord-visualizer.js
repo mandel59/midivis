@@ -198,8 +198,10 @@ class ChordVisualizer extends MidiDevice {
                     const octave = Math.floor((note - acc) / 12) - 1
                     return `${n}${accidental(acc)}<sub>${octave}</sub>`
                 }
-        const noteElement = (/** @type {number} */ stepX, /** @type {number} */ stepY, base = 0,) => (/** @type {number} */ x, /** @type {number} */ y) => {
-            const note = y * stepY + x * stepX + base
+        const noteElement = (/** @type {number | number[]} */ stepX, /** @type {number | number[]} */ stepY, base = 0,) => (/** @type {number} */ x, /** @type {number} */ y) => {
+            const xOffset = typeof stepX === "number" ? x * stepX : stepX[x]
+            const yOffset = typeof stepY === "number" ? y * stepY : stepY[y]
+            const note = yOffset + xOffset + base
             const noteName = getNoteName(note, x, y, base)
             const inscale = inScale(this._key, this._mode, note)
             const istonic = isTonicNote(this._key, note)
@@ -262,6 +264,8 @@ class ChordVisualizer extends MidiDevice {
             tileSquare(14, 22, this.element, noteElement(1, 6, -3))
         } else if (this._noteArrangement === "tonnetz") {
             tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
+        } else if (this._noteArrangement === "guitar") {
+            tileSquare(25, 6, this.element, noteElement(1, [0, 5, 10, 15, 19, 24], 40))
         } else {
             throw new Error("unknown note arrangement")
         }
