@@ -5,6 +5,7 @@ async function requestMIDIAccess() {
         const err = new Error("Web MIDI API is not available. See https://caniuse.com/midi for browsers supporting Web MIDI.")
         throw err
     }
+    // @ts-ignore
     return await navigator.requestMIDIAccess({
         sysex: false,
         software: false,
@@ -12,9 +13,12 @@ async function requestMIDIAccess() {
 }
 
 class MidiInputPortSelector extends EventEmitter {
+    /**
+     * @param {*} [options] 
+     */
     constructor(options) {
         super(options)
-        this._emitMessage = (event) => {
+        this._emitMessage = (/** @type {*} */ event) => {
             const deltaTime = undefined
             const message = event.data
             return this.emit("message", deltaTime, message)
@@ -28,6 +32,9 @@ class MidiInputPortSelector extends EventEmitter {
             await input.close()
         }
     }
+    /**
+     * @param {string} port 
+     */
     async _connect(port) {
         const midiAccess = await requestMIDIAccess()
         for (const input of midiAccess.inputs.values()) {
@@ -43,6 +50,9 @@ class MidiInputPortSelector extends EventEmitter {
         }
         return false
     }
+    /**
+     * @param {string} name 
+     */
     async openPortByName(name) {
         return this._connect(name)
     }

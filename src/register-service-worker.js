@@ -3,3 +3,5 @@ if (location.hostname !== "localhost" && "serviceWorker" in navigator) {
         navigator.serviceWorker.register("/service-worker.js")
     })
 }
+
+module.exports = {}

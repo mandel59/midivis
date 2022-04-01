@@ -9,7 +9,7 @@ function getInputPortOptions() {
 
 /**
  * 
- * @param {(deltaTime: number, message: number[]) => void} callback 
+ * @param {(deltaTime: number, message: [number, number, number]) => void} callback 
  */
 function subscribeMIDIMessage(callback) {
     input.on("message", callback)

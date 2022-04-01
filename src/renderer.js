@@ -15,6 +15,12 @@ const { noteArrangements } = require("./note-arrangement")
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")
+if (indicator == null) {
+    throw new Error("#chordindicator not found")
+}
+if (element == null) {
+    throw new Error("#chordvis not found")
+}
 
 const printer = new ChordPrinter(0, {
     onChordChange: (chord) => {
@@ -50,6 +56,7 @@ function isSharpKey(key, mode, sharp = false) {
 }
 
 document.getElementById("state-key")?.addEventListener("change", (ev) => {
+    // @ts-ignore
     const key = Number(ev.target.value)
     const mode = getState("mode")
     const sharp = isSharpKey(key, mode, getState("sharp"))
@@ -58,20 +65,24 @@ document.getElementById("state-key")?.addEventListener("change", (ev) => {
 
 document.getElementById("state-mode")?.addEventListener("change", (ev) => {
     const key = getState("key")
+    // @ts-ignore
     const mode = Number(ev.target.value)
     const sharp = isSharpKey(key, mode, getState("sharp"))
     updateState({ mode, sharp })
 })
 
 document.getElementById("state-sharp")?.addEventListener("change", (ev) => {
+    // @ts-ignore
     updateState({ sharp: ev.target.checked })
 })
 
 document.getElementById("state-useDegree")?.addEventListener("change", (ev) => {
+    // @ts-ignore
     updateState({ useDegree: ev.target.checked })
 })
 
 document.getElementById("state-showToolbar")?.addEventListener("change", (ev) => {
+    // @ts-ignore
     updateState({ showToolbar: ev.target.checked })
 })
 
@@ -80,13 +91,18 @@ document.getElementById("state-channel")?.addEventListener("change", (ev) => {
 })
 
 document.getElementById("state-noteOffset")?.addEventListener("change", (ev) => {
+    // @ts-ignore
     const channel = Number(document.getElementById("state-channel").value)
     const noteOffsets = getState("noteOffsets")
+    // @ts-ignore
     noteOffsets[channel - 1] = Number(ev.target.value)
     updateState({ noteOffsets })
 })
 
 const configColorScheme = document.getElementById("config-colorScheme")
+if (configColorScheme == null) {
+    throw new Error("#config-colorScheme is not found")
+}
 
 colorSchemes.forEach(({ id, label, key }) => {
     const e = document.createElement("input")
@@ -95,6 +111,7 @@ colorSchemes.forEach(({ id, label, key }) => {
     e.name = "state-colorScheme"
     e.value = id
     e.addEventListener("change", (ev) => {
+        // @ts-ignore
         updateState({ colorScheme: ev.target.value })
     })
     const l = document.createElement("label")
@@ -104,10 +121,14 @@ colorSchemes.forEach(({ id, label, key }) => {
 })
 
 const configNoteArrangement = document.getElementById("config-noteArrangement")
+if (configNoteArrangement == null) {
+    throw new Error("#config-noteArrangement is not found")
+}
 
 const selectNoteArrangement = document.createElement("select")
 selectNoteArrangement.id = "state-noteArrangement"
 selectNoteArrangement.addEventListener("change", (ev) => {
+    // @ts-ignore
     updateState({ noteArrangement: ev.target.value })
 })
 
@@ -145,30 +166,23 @@ function reflectState() {
         printer.setNoteOffset(offset, i + 1)
         visualizer.setNoteOffset(offset, i + 1)
     }
-    /** @type {HTMLSelectElement} */
-    const selectChannel = document.getElementById("state-channel")
-    /** @type {HTMLInputE} */
-    const inputNoteOffset = document.getElementById("state-noteOffset")
+    const selectChannel = /** @type {HTMLSelectElement} */ (document.getElementById("state-channel"))
+    const inputNoteOffset = /** @type {HTMLSelectElement} */ (document.getElementById("state-noteOffset"))
     if (selectChannel && inputNoteOffset) {
         const offset = noteOffsets[Number(selectChannel.value) - 1] ?? 0
         inputNoteOffset.value = String(offset)
     }
-    /** @type {HTMLSelectElement} */
-    const selectKey = document.getElementById("state-key")
+    const selectKey = /** @type {HTMLSelectElement} */ (document.getElementById("state-key"))
     if (selectKey) selectKey.value = String(key)
-    const selectMode = document.getElementById("state-mode")
+    const selectMode = /** @type {HTMLSelectElement} */ (document.getElementById("state-mode"))
     if (selectMode) selectMode.value = String(mode)
-    /** @type {HTMLInputElement} */
-    const inputSharp = document.getElementById("state-sharp")
+    const inputSharp = /** @type {HTMLInputElement} */ (document.getElementById("state-sharp"))
     if (inputSharp) inputSharp.checked = sharp
-    /** @type {HTMLInputElement} */
-    const inputUseDegree = document.getElementById("state-useDegree")
+    const inputUseDegree = /** @type {HTMLInputElement} */ (document.getElementById("state-useDegree"))
     if (inputUseDegree) inputUseDegree.checked = useDegree
-    /** @type {HTMLInputElement} */
-    const inputColorScheme = document.getElementById(`state-colorScheme-${colorScheme}`)
+    const inputColorScheme = /** @type {HTMLInputElement} */ (document.getElementById(`state-colorScheme-${colorScheme}`))
     if (inputColorScheme) inputColorScheme.checked = true
-    /** @type {HTMLSelectElement} */
-    const inputNoteArrangement = document.getElementById(`state-noteArrangement`)
+    const inputNoteArrangement = /** @type {HTMLSelectElement} */ (document.getElementById(`state-noteArrangement`))
     if (inputNoteArrangement) inputNoteArrangement.value = noteArrangement
     if (midiInputPortName) {
         openInputPortByName(midiInputPortName).then(ok => {
@@ -177,8 +191,7 @@ function reflectState() {
             }
         }).catch(handleError)
     }
-    /** @type {HTMLInputElement} */
-    const inputShowToolbar = document.getElementById("state-showToolbar")
+    const inputShowToolbar = /** @type {HTMLInputElement} */ (document.getElementById("state-showToolbar"))
     if (inputShowToolbar) inputShowToolbar.checked = showToolbar
     if (showToolbar) {
         document.getElementById("toolbar")?.classList.add("shown")
@@ -213,10 +226,18 @@ subscribeMIDIMessage((deltaTime, message) => {
 })
 
 const config = document.getElementById("config")
-/** @type {HTMLSelectElement} */
-const midiInputPortSelector = document.getElementById("config-midi-input-port")
+if (config == null) {
+    throw new Error("#config not found")
+}
+const midiInputPortSelector = /** @type {HTMLSelectElement} */ (document.getElementById("config-midi-input-port"))
+if (midiInputPortSelector == null) {
+    throw new Error("#config-midi-input-port not found")
+}
 
 async function showConfigDialog() {
+    if (config == null) {
+        throw new Error("#config not found")
+    }
     const portOptions = await getInputPortOptions()
     midiInputPortSelector.innerHTML = ""
     const dummyOption = document.createElement("option")
@@ -255,6 +276,9 @@ midiInputPortSelector.addEventListener("change", () => {
 })
 
 const closeConfigButton = document.getElementById("config-close")
+if (closeConfigButton == null) {
+    throw new Error("#config-close not found")
+}
 closeConfigButton.addEventListener("click", () => {
     config.classList.remove("shown")
 })
@@ -265,6 +289,9 @@ const oops = document.getElementById("oops")
  * @param {string} message 
  */
 async function showOopsDialog(message) {
+    if (oops == null) {
+        throw new Error("#oops not found")
+    }
     const messageBox = document.getElementById("oops-message")
     if (messageBox) {
         messageBox.innerText = message
@@ -273,10 +300,19 @@ async function showOopsDialog(message) {
 }
 
 const closeOopsButton = document.getElementById("oops-close")
+if (closeOopsButton == null) {
+    throw new Error("#oops-close not found")
+}
 closeOopsButton.addEventListener("click", () => {
+    if (oops == null) {
+        throw new Error("#oops not found")
+    }
     oops.classList.remove("shown")
 })
 
+/**
+ * @param {*} err 
+ */
 function handleError(err) {
     console.log(err)
     if (err != null && "message" in err) {
