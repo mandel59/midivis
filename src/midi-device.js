@@ -1,3 +1,7 @@
+/**
+ * @param {number} a 
+ * @param {number} b 
+ */
 function compareNumber(a, b) {
     return a - b
 }
@@ -37,6 +41,9 @@ class MidiDevice {
         return unique(mergedNotes)
             .sort(compareNumber)
     }
+    /**
+     * @param {number} note 
+     */
     velocities(note) {
         /** @type {number[]} */
         const vs = []
@@ -94,15 +101,30 @@ class MidiDevice {
     programChange(program, channel) {
         this.programs[channel - 1] = program
     }
+    /**
+     * @param {[number, number, number]} message 
+     */
     unknownMessage(message) {
         // console.log(message.map(x => x.toString(16)))
     }
+    /**
+     * @param {number} offset 
+     * @param {number} channel 
+     */
     setNoteOffset(offset, channel) {
         this.noteOffsets[channel - 1] = offset
     }
+    /**
+     * @param {number} note 
+     * @param {number} channel 
+     */
     offsetNote(note, channel) {
         return note + this.noteOffsets[channel - 1]
     }
+    /**
+     * @param {unknown} deltaTime 
+     * @param {[number, number, number]} message 
+     */
     midiMessageHandler(deltaTime, message) {
         const [m1, m2, m3] = message
         const channel = (m1 & 0x0F) + 1

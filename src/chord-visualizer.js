@@ -87,10 +87,17 @@ function inScale(key, mode, note) {
     return (mode & (1 << ((note - key + 1200) % 12))) !== 0
 }
 
+/**
+ * @param {number} key
+ * @param {number} note
+ */
 function isTonicNote(key, note) {
     return (note + 1200) % 12 === key
 }
 
+/**
+ * @param {number} acc
+ */
 function accidental(acc) {
     let s
     if (acc < -2) s = `<sup>${-acc}♭</sup>`
@@ -110,8 +117,8 @@ class ChordVisualizer extends MidiDevice {
      * @param {ChordVisualizerOptions} options
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
-     * @property {"monotone" | "chromatic" | "axis" | "quintave" | "third-major"} [colorScheme]
-     * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "wicki-hayden-wide" | "tonnetz" | "janko"} [noteArrangement]
+     * @property {ColorScheme} [colorScheme]
+     * @property {NoteArrangement} [noteArrangement]
      * @property {number} [key]
      * @property {number} [mode]
      */
@@ -126,11 +133,17 @@ class ChordVisualizer extends MidiDevice {
         } = {}
     ) {
         super()
+        /** @type {HTMLElement} */
         this.element = element
+        /** @type {boolean} */
         this._sharp = sharp
+        /** @type {ColorScheme} */
         this._colorScheme = colorScheme
+        /** @type {NoteArrangement} */
         this._noteArrangement = noteArrangement
+        /** @type {number} */
         this._key = key
+        /** @type {number} */
         this._mode = mode
         this.prepareDOM()
     }
@@ -158,17 +171,18 @@ class ChordVisualizer extends MidiDevice {
         return this._colorScheme
     }
     prepareDOM() {
-        const keyNames = this._sharp
-            ? keyNamesWithSharp
-            : keyNamesWithFlat
         const isWickiHayden
             = this._noteArrangement === "wicki-hayden"
             || this._noteArrangement === "wicki-hayden-wide"
         const isWide = this._noteArrangement === "wicki-hayden-wide"
-        /** @type {(note: number, x: number, y: number) => string} */
+        /** @type {(note: number, x: number, y: number, base: number) => string} */
         const getNoteName
             = isWickiHayden
-                ? (note, x, y, base) => {
+                ? (
+                    /** @type {number} */ note,
+                    /** @type {number} */ x,
+                    /** @type {number} */ y,
+                    /** @type {number} */ base) => {
                     let k = 2 * x + y + ((7 * base) % 12)
                     if (isWide) k -= 12
                     const n = "CGDAEBF"[(700 + k) % 7]
@@ -176,7 +190,7 @@ class ChordVisualizer extends MidiDevice {
                     const octave = Math.floor((note - acc) / 12) - 1
                     return `${n}${accidental(acc)}<sub>${octave}</sub>`
                 }
-                : (note) => {
+                : (/** @type {number} */ note) => {
                     const shift = this._sharp ? -1 : -6;
                     const k = (7 * note - shift) % 12 + shift;
                     const n = "CGDAEBF"[(700 + k) % 7]
@@ -184,7 +198,7 @@ class ChordVisualizer extends MidiDevice {
                     const octave = Math.floor((note - acc) / 12) - 1
                     return `${n}${accidental(acc)}<sub>${octave}</sub>`
                 }
-        const noteElement = (stepX, stepY, base = 0) => (x, y) => {
+        const noteElement = (/** @type {number} */ stepX, /** @type {number} */ stepY, base = 0,) => (/** @type {number} */ x, /** @type {number} */ y) => {
             const note = y * stepY + x * stepX + base
             const noteName = getNoteName(note, x, y, base)
             const inscale = inScale(this._key, this._mode, note)
@@ -252,16 +266,31 @@ class ChordVisualizer extends MidiDevice {
             throw new Error("unknown note arrangement")
         }
     }
+    /**
+     * @param {number} note 
+     * @param {number} velocity 
+     * @param {number} channel 
+     */
     setVariable(note, velocity, channel) {
         // this.element.style.setProperty(`--v-${channel}-${note}`, String(velocity / 127))
         const vs = this.velocities(note)
-        const vMax = String(Math.max(0, ...vs) / 127)
-        this.element.style.setProperty(`--v-max-${note}`, vMax > 0 ? 1 : 0)
+        const vMax = Math.max(0, ...vs) / 127
+        this.element.style.setProperty(`--v-max-${note}`, String(vMax > 0 ? 1 : 0))
     }
+    /**
+     * @param {number} note 
+     * @param {number} velocity 
+     * @param {number} channel 
+     */
     noteOn(note, velocity, channel) {
         super.noteOn(note, velocity, channel)
         this.setVariable(note, velocity, channel)
     }
+    /**
+     * @param {number} note 
+     * @param {number} velocity 
+     * @param {number} channel 
+     */
     noteOff(note, velocity, channel) {
         super.noteOff(note, velocity, channel)
         this.setVariable(note, 0, channel)

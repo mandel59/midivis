@@ -1,3 +1,4 @@
+/** @type {{ id: ColorScheme; label: string; key: string; code: string; }[]} */
 const colorSchemes = [
     { id: "monotone", label: "Monotone", key: "1", code: "Digit1" },
     { id: "chromatic", label: "Chromatic", key: "2", code: "Digit2" },

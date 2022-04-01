@@ -2,6 +2,15 @@ const { noteName, chordName } = require('./chord')
 const { MidiDevice } = require('./midi-device')
 
 class ChordPrinter extends MidiDevice {
+    /**
+     * @param {number} [channel]
+     * @param {object} [options]
+     * @param {Console} [options.console]
+     * @param {(chord: string) => void} [options.onChordChange]
+     * @param {boolean} [options.sharp]
+     * @param {boolean} [options.useDegree]
+     * @param {number} [options.scaleKey]
+     */
     constructor(channel, {
         console = undefined,
         onChordChange = undefined,
@@ -12,6 +21,7 @@ class ChordPrinter extends MidiDevice {
         super(channel)
         this.console = console
         this.onChordChange = onChordChange
+        /** @type {string | undefined} */
         this.currentChord = undefined
         this.sharp = sharp
         this.useDegree = useDegree
@@ -29,6 +39,9 @@ class ChordPrinter extends MidiDevice {
             scaleKey: this.scaleKey,
         })
     }
+    /**
+     * @param {[number, number, number]} message 
+     */
     unknownMessage(message) {
         if (this.console && typeof this.console.log === "function") {
             this.console.log(message.map(x => x.toString(16)))
@@ -36,6 +49,11 @@ class ChordPrinter extends MidiDevice {
             console.log(message.map(x => x.toString(16)))
         }
     }
+    /**
+     * @param {number} note 
+     * @param {number} velocity 
+     * @param {number} channel 
+     */
     noteOn(note, velocity, channel) {
         super.noteOn(note, velocity, channel)
         const notes = this.showNotes()

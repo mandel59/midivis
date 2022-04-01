@@ -6,10 +6,10 @@ const emitter = new EventEmitter()
 /**
  * @typedef State
  * @property {boolean} sharp
- * @property {"monotone" | "chromatic" | "fifth" | "axis" | "quintave" | "third-major"} colorScheme
+ * @property {ColorScheme} colorScheme
  * @property {string | null} midiInputPortName
  * @property {boolean} showToolbar
- * @property {"fourth" | "tritone" | "c-system" | "b-system" | "wicki-hayden" | "wicki-hayden-wide" | "tonnetz" | "janko"} noteArrangement
+ * @property {NoteArrangement} noteArrangement
  * @property {number} key
  * @property {number} mode
  * @property {boolean} useDegree
@@ -33,6 +33,7 @@ const state = /** @type {State} */ ({
  * @returns {State[K]}
  */
 function getState(key) {
+    // @ts-ignore
     return structuredClone(state[key])
 }
 

@@ -1,3 +1,4 @@
+// @ts-nocheck
 const licenses = `All of the source code to this application is available under licenses
 which are both free and open source. The source code can be found on the
 git repository <https://github.com/mandel59/midivis>.

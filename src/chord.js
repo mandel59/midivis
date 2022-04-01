@@ -1,7 +1,16 @@
+/**
+ * @param {number} a 
+ * @param {number} b 
+ * @returns {number}
+ */
 function compareNumber(a, b) {
     return a - b
 }
 
+/**
+ * @param {...number} nums 
+ * @returns {number}
+ */
 function sum(...nums) {
     if (nums.length === 0) return 0
     return nums.reduce((x, y) => x + y)
@@ -22,6 +31,7 @@ const degreeNames = [
     "M7",
 ]
 
+/** @type {Partial<Record<string, string>>} */
 const qualityMap = {
     "1,2,5": "sus2",
     "1,2,5,6": "6sus2",
@@ -50,7 +60,6 @@ const qualityMap = {
     "1,m2,m3,5,m7": "m7(-9)",
     "1,2,m3,5,m7": "m7(9)",
     "1,2,m3,m7": "m7(9)(omit5)",
-    "1,2,m3,5,m7": "m7(9)",
     "1,2,m3,4,m7": "m7(9,11)(omit5)",
     "1,2,m3,4,5,m7": "m7(9,11)",
     "1,2,m3,5,6,m7": "m7(9,13)",
@@ -129,14 +138,26 @@ const qualityMap = {
     "1,m3,o5,5,6,M7": "mM7(+11,13)",
 }
 
+/**
+ * @param {number} semitone 
+ * @returns {string}
+ */
 function degreeName(semitone) {
     return degreeNames[(semitone + 12) % 12]
 }
 
+/**
+ * @param {number} note 
+ * @returns {number}
+ */
 function keyOfNote(note) {
     return (note % 12) | 0
 }
 
+/**
+ * @param {number} note 
+ * @returns {number}
+ */
 function octaveOfNote(note) {
     return ((note / 12) | 0) - 1
 }
@@ -186,6 +207,14 @@ const chordDegreeNames = [
     "VII",
 ]
 
+/**
+ * @param {number} key 
+ * @param {object} [options] 
+ * @param {boolean} [options.sharp] 
+ * @param {boolean} [options.useDegree]
+ * @param {number} [options.scaleKey]
+ * @returns {string}
+ */
 function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
     if (useDegree) {
         return chordDegreeNames[(key - scaleKey + 1200) % 12]
@@ -196,12 +225,23 @@ function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
     return keyNames[key]
 }
 
+/**
+ * @param {number} note 
+ * @param {object} [options] 
+ * @param {boolean} [options.sharp] 
+ * @returns {string}
+ */
+
 function noteName(note, { sharp = false } = {}) {
-    const key = keyOfNote(note, { sharp })
+    const key = keyOfNote(note)
     const octave = octaveOfNote(note)
-    return `${keyName(key)}${octave}`
+    return `${keyName(key, { sharp })}${octave}`
 }
 
+/**
+ * @param {number[]} notes 
+ * @returns 
+ */
 function findRootNote(notes) {
     const noteList = [...notes]
     if (noteList.length === 0) return undefined
@@ -213,11 +253,16 @@ function findRootNote(notes) {
         const score
             = sum(...noteScores) * 256
             + note
-        return [note, score]
+        return /** @type {[number, number]} */ ([note, score])
     }).sort((a, b) => a[1] - b[1])
     return scoreOfNotes
 }
 
+/**
+ * @param {Iterable<number>} keys 
+ * @param {number} rootKey 
+ * @returns 
+ */
 function quality(keys, rootKey) {
     const intervals = [...keys].map(k => (k - rootKey + 12) % 12).sort(compareNumber)
     const degrees = intervals.map(degreeName)
@@ -225,6 +270,14 @@ function quality(keys, rootKey) {
     return { degreesJoin, quality: qualityMap[degreesJoin] }
 }
 
+/**
+ * @param {number[]} notes 
+ * @param {object} [options] 
+ * @param {boolean} [options.sharp] 
+ * @param {boolean} [options.useDegree] 
+ * @param {number} [options.scaleKey] 
+ * @returns {string} 
+ */
 function chordName(notes, {
     sharp = false,
     useDegree = false,
@@ -241,13 +294,15 @@ function chordName(notes, {
         return `${keyName(baseKey, { sharp, useDegree, scaleKey })}${q1}`
     }
     const rootNoteCandidates = findRootNote(noteList)
-    for (const [rootNote, _score] of rootNoteCandidates) {
-        const rootKey = keyOfNote(rootNote)
-        if (baseKey === rootKey) continue
-        const { quality: q2 } = quality(keys, rootKey)
-        if (q2 != null) {
-            return `${keyName(rootKey, { sharp, useDegree, scaleKey })
-                }${q2}/${keyName(baseKey, { sharp, useDegree, scaleKey })}`
+    if (rootNoteCandidates != null) {
+        for (const [rootNote, _score] of rootNoteCandidates) {
+            const rootKey = keyOfNote(rootNote)
+            if (baseKey === rootKey) continue
+            const { quality: q2 } = quality(keys, rootKey)
+            if (q2 != null) {
+                return `${keyName(rootKey, { sharp, useDegree, scaleKey })
+                    }${q2}/${keyName(baseKey, { sharp, useDegree, scaleKey })}`
+            }
         }
     }
     return `${keyName(baseKey, { sharp, useDegree, scaleKey })}{${degreesJoin}}`
