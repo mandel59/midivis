@@ -2,6 +2,8 @@ type NoteArrangement =
   | "third"
   | "fourth"
   | "tritone"
+  | "fifth"
+  | "octave"
   | "c-system"
   | "b-system"
   | "wicki-hayden"

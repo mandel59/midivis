@@ -192,7 +192,7 @@ class ChordVisualizer extends MidiDevice {
                 }
                 : (/** @type {number} */ note) => {
                     const shift = this._sharp ? -1 : -6;
-                    const k = (7 * note - shift) % 12 + shift;
+                    const k = (7 * note - shift + 1200) % 12 + shift;
                     const n = "CGDAEBF"[(700 + k) % 7]
                     const acc = Math.floor((k + 1) / 7)
                     const octave = Math.floor((note - acc) / 12) - 1
@@ -264,6 +264,10 @@ class ChordVisualizer extends MidiDevice {
             tileSquare(12, 23, this.element, noteElement(1, 5))
         } else if (this._noteArrangement === "tritone") {
             tileSquare(14, 22, this.element, noteElement(1, 6, -3))
+        } else if (this._noteArrangement === "fifth") {
+            tileSquare(12, 23, this.element, noteElement(1, 7))
+        } else if (this._noteArrangement === "octave") {
+            tileSquare(16, 11, this.element, noteElement(1, 12, -3))
         } else if (this._noteArrangement === "tonnetz") {
             tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
         } else if (this._noteArrangement === "guitar") {

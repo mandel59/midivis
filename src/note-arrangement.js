@@ -3,6 +3,8 @@ const noteArrangements = [
     { id: "third", label: "Third" },
     { id: "fourth", label: "Fourth" },
     { id: "tritone", label: "Tritone" },
+    { id: "fifth", label: "Fifth" },
+    { id: "octave", label: "Octave" },
     { id: "wicki-hayden", label: "Wicki–Hayden" },
     { id: "wicki-hayden-wide", label: "Wicki–Hayden (Wide)" },
     { id: "tonnetz", label: "Tonnetz" },
