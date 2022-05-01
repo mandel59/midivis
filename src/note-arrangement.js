@@ -1,5 +1,6 @@
 /** @type {{ id: NoteArrangement; label: string; }[]} */
 const noteArrangements = [
+    { id: "third", label: "Third" },
     { id: "fourth", label: "Fourth" },
     { id: "tritone", label: "Tritone" },
     { id: "wicki-hayden", label: "Wicki–Hayden" },

@@ -258,6 +258,8 @@ class ChordVisualizer extends MidiDevice {
             tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
         } else if (this._noteArrangement === "wicki-hayden-wide") {
             tileHexagonal(18, 22, this.element, noteElement(2, 7, -14))
+        } else if (this._noteArrangement === "third") {
+            tileHexagonal(12, 23, this.element, noteElement(1, 4, 21))
         } else if (this._noteArrangement === "fourth") {
             tileSquare(12, 23, this.element, noteElement(1, 5))
         } else if (this._noteArrangement === "tritone") {

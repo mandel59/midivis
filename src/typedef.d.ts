@@ -1,4 +1,5 @@
 type NoteArrangement =
+  | "third"
   | "fourth"
   | "tritone"
   | "c-system"
