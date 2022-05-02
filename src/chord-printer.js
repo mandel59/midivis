@@ -26,6 +26,7 @@ class ChordPrinter extends MidiDevice {
         this.sharp = sharp
         this.useDegree = useDegree
         this.scaleKey = scaleKey
+        this.lastNoteOnAt = 0
     }
     showNotes() {
         return this.notes()
@@ -56,6 +57,23 @@ class ChordPrinter extends MidiDevice {
      */
     noteOn(note, velocity, channel) {
         super.noteOn(note, velocity, channel)
+        const t = performance.now()
+        this.updateChord()
+        this.lastNoteOnAt = t
+    }
+    /**
+     * @param {number} note 
+     * @param {number} velocity 
+     * @param {number} channel 
+     */
+    noteOff(note, velocity, channel) {
+        super.noteOff(note, velocity, channel)
+        const t = performance.now()
+        if (t - this.lastNoteOnAt < 200) {
+            this.updateChord()
+        }
+    }
+    updateChord() {
         const notes = this.showNotes()
         const chord = this.showChord()
         if (this.console && typeof this.console.log === "function") {
