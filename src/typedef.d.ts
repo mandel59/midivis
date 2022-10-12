@@ -11,6 +11,7 @@ type NoteArrangement =
   | "tonnetz"
   | "janko"
   | "guitar"
+  | "bass"
 
 type ColorScheme =
   | "monotone"

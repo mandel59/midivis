@@ -272,6 +272,8 @@ class ChordVisualizer extends MidiDevice {
             tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
         } else if (this._noteArrangement === "guitar") {
             tileSquare(25, 6, this.element, noteElement(1, [0, 5, 10, 15, 19, 24], 40))
+        } else if (this._noteArrangement === "bass") {
+            tileSquare(25, 4, this.element, noteElement(1, 5, 28))
         } else {
             throw new Error("unknown note arrangement")
         }

@@ -12,6 +12,7 @@ const noteArrangements = [
     { id: "c-system", label: "C-system" },
     { id: "b-system", label: "B-system" },
     { id: "guitar", label: "Guitar" },
+    { id: "bass", label: "Bass Guitar" },
 ]
 
 module.exports = { noteArrangements }
