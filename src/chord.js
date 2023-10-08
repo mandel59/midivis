@@ -211,7 +211,7 @@ const chordDegreeNames = [
 
 /**
  * @param {number} key 
- * @param {object} [options] 
+ * @param {object} options 
  * @param {boolean} [options.sharp] 
  * @param {boolean} [options.useDegree]
  * @param {number} [options.scaleKey]
@@ -229,7 +229,7 @@ function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
 
 /**
  * @param {number} note 
- * @param {object} [options] 
+ * @param {object} options 
  * @param {boolean} [options.sharp] 
  * @returns {string}
  */
@@ -274,7 +274,7 @@ function quality(keys, rootKey) {
 
 /**
  * @param {number[]} notes 
- * @param {object} [options] 
+ * @param {object} options 
  * @param {boolean} [options.sharp] 
  * @param {boolean} [options.useDegree] 
  * @param {number} [options.scaleKey] 
