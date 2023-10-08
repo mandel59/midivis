@@ -26,15 +26,22 @@ class ChordPrinter extends MidiDevice {
         this.sharp = sharp
         this.useDegree = useDegree
         this.scaleKey = scaleKey
-        this.lastNoteOnAt = 0
     }
-    showNotes() {
-        return this.notes()
+    /**
+     * @param {number[]} notes
+     * @returns 
+     */
+    showNotes(notes) {
+        return notes
             .map(note => noteName(note, { sharp: this.sharp }))
             .join(" ")
     }
-    showChord() {
-        return chordName(this.notes(), {
+    /**
+     * @param {number[]} notes
+     * @returns 
+     */
+    showChord(notes) {
+        return chordName(notes, {
             sharp: this.sharp,
             useDegree: this.useDegree,
             scaleKey: this.scaleKey,
@@ -57,9 +64,7 @@ class ChordPrinter extends MidiDevice {
      */
     noteOn(note, velocity, channel) {
         super.noteOn(note, velocity, channel)
-        const t = performance.now()
         this.updateChord()
-        this.lastNoteOnAt = t
     }
     /**
      * @param {number} note 
@@ -68,14 +73,11 @@ class ChordPrinter extends MidiDevice {
      */
     noteOff(note, velocity, channel) {
         super.noteOff(note, velocity, channel)
-        const t = performance.now()
-        if (t - this.lastNoteOnAt < 200) {
-            this.updateChord()
-        }
     }
     updateChord() {
-        const notes = this.showNotes()
-        const chord = this.showChord()
+        const noteNumbers = this.reverbNotes(200)
+        const notes = this.showNotes(noteNumbers)
+        const chord = this.showChord(noteNumbers)
         if (this.console && typeof this.console.log === "function") {
             this.console.log(`${notes} = ${chord}`)
         } else if (this.console === undefined) {

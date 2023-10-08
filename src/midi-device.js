@@ -24,12 +24,15 @@ class MidiDevice {
     constructor(channel) {
         /** @type {Map<number, number>[]} */
         this.noteVelocityMaps = []
+        /** @type {Map<number, number>[]} */
+        this.noteOnTimingMaps = []
         /** @type {number[]} */
         this.programs = []
         /** @type {number[]} */
         this.noteOffsets = []
         for (let i = 0; i < 16; i++) {
             this.noteVelocityMaps.push(new Map())
+            this.noteOnTimingMaps.push(new Map())
             this.programs.push(0)
             this.noteOffsets.push(0)
         }
@@ -38,6 +41,28 @@ class MidiDevice {
     notes() {
         /** @type {number[]} */
         const mergedNotes = [...this.noteVelocityMaps.map((m, i) => i + 1 === PERCUSSION_CHANNEL ? [] : [...m.keys()])].flat()
+        return unique(mergedNotes)
+            .sort(compareNumber)
+    }
+    /**
+     * @param {number} t 
+     * @returns 
+     */
+    reverbNotes(t) {
+        const now = performance.now()
+        /** @type {number[]} */
+        const mergedNotes = [
+            ...this.noteVelocityMaps.map((m, i) => i + 1 === PERCUSSION_CHANNEL ? [] : [...m.keys()]),
+            ...this.noteOnTimingMaps.map((m, i) => {
+                if (i + 1 === PERCUSSION_CHANNEL) return []
+                const a = []
+                for (const [note, value] of m.entries()) {
+                    if (value + t < now) continue
+                    a.push(note)
+                }
+                return a
+            })
+        ].flat()
         return unique(mergedNotes)
             .sort(compareNumber)
     }
@@ -61,6 +86,7 @@ class MidiDevice {
      */
     noteOn(note, velocity, channel) {
         this.noteVelocityMaps[channel - 1].set(note, velocity)
+        this.noteOnTimingMaps[channel - 1].set(note, performance.now())
     }
     /**
      * @param {number} note 
