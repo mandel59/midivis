@@ -92,7 +92,7 @@ class MidiDevice {
      * @param {number} channel 
      */
     resetAll(channel) {
-
+        this.allNoteOff(channel)
     }
     /**
      * @param {number} program
