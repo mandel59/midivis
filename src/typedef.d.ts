@@ -10,6 +10,8 @@ type NoteArrangement =
   | "wicki-hayden-wide"
   | "tonnetz"
   | "janko"
+  | "janko-tall"
+  | "janko-slanted"
   | "guitar"
   | "bass"
 

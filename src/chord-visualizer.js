@@ -1,5 +1,8 @@
 import { MidiDevice } from './midi-device'
 
+const cellWidth = 40
+const cellHeight = 32
+
 /**
  * @param {number} column
  * @param {number} row
@@ -10,7 +13,8 @@ function tileSquare(column, row, element, callback) {
     element.innerHTML = ""
     element.style.userSelect = "none"
     element.style.display = "grid"
-    element.style.gridTemplateColumns = `repeat(${column}, 1fr)`
+    element.style.gridTemplateColumns = `repeat(${column}, ${cellWidth}px)`
+    element.style.gridTemplateRows = `repeat(auto-fill, ${cellHeight}px)`
     for (let y = row - 1; y >= 0; y--) {
         for (let x = 0; x < column; x++) {
             const div = callback(x, y)
@@ -29,7 +33,8 @@ function tileHexagonal(column, row, element, callback) {
     element.innerHTML = ""
     element.style.userSelect = "none"
     element.style.display = "grid"
-    element.style.gridTemplateColumns = `repeat(${column * 2}, 1fr)`
+    element.style.gridTemplateColumns = `repeat(${column * 2}, ${cellWidth / 2}px)`
+    element.style.gridTemplateRows = `repeat(auto-fill, ${cellHeight}px)`
     function insertPadding() {
         const div = document.createElement("div")
         div.innerHTML = "&nbsp;"
@@ -177,8 +182,8 @@ export class ChordVisualizer extends MidiDevice {
             const istonic = isTonicNote(this._key, note)
             const noteBgDiv = document.createElement("div")
             noteBgDiv.className = `note-bg`
-            noteBgDiv.style.width = "2.5rem"
-            noteBgDiv.style.height = "2rem"
+            noteBgDiv.style.width = `${cellWidth}px`
+            noteBgDiv.style.height = `${cellHeight}px`
             if (inscale) {
                 noteBgDiv.style.background = `hsl(0deg, 0%, 100%)`
             } else {
@@ -190,6 +195,7 @@ export class ChordVisualizer extends MidiDevice {
             div.innerHTML = noteName
             div.style.width = "100%"
             div.style.height = "100%"
+            div.style.fontSize = `${Math.min(cellWidth / 2.5, cellHeight / 2)}px`
             div.style.textAlign = "center"
             const maxVelocity = `var(--v-max-${note}, 0)`
             div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
@@ -216,37 +222,70 @@ export class ChordVisualizer extends MidiDevice {
             }
             div.style.transitionTimingFunction = `cubic-bezier(0, 1, 0.5, 1)`
             div.style.transitionDuration = `calc((1 - ${maxVelocity}) * 1s)`
+            if (this._noteArrangement === "janko-slanted") {
+                const xx = x + y / 2
+                const w = 43, h = 24
+                if ((y - h) / 2 >= - xx / 6) {
+                    noteBgDiv.style.visibility = "hidden"
+                }
+                if (y / 2 <= - (xx - w) / 6) {
+                    noteBgDiv.style.visibility = "hidden"
+                }
+            }
             return noteBgDiv
         }
+        const keyboard = document.createElement("div")
         if (this._noteArrangement === "c-system") {
-            tileHexagonal(33, 5, this.element, noteElement(3, 1, 18))
+            tileHexagonal(33, 5, keyboard, noteElement(3, 1, 18))
         } else if (this._noteArrangement === "b-system") {
-            tileHexagonal(33, 5, this.element, noteElement(3, 2, 17))
+            tileHexagonal(33, 5, keyboard, noteElement(3, 2, 17))
         } else if (this._noteArrangement === "janko") {
-            tileHexagonal(43, 6, this.element, noteElement(2, 1, 22))
+            tileHexagonal(43, 6, keyboard, noteElement(2, 1, 22))
+        } else if (this._noteArrangement === "janko-tall") {
+            tileHexagonal(43, 9, keyboard, noteElement(2, 1, 22))
+        } else if (this._noteArrangement === "janko-slanted") {
+            tileHexagonal(43, 24, keyboard, noteElement(2, 1, 22))
         } else if (this._noteArrangement === "wicki-hayden") {
-            tileHexagonal(10, 22, this.element, noteElement(2, 7, -6))
+            tileHexagonal(10, 22, keyboard, noteElement(2, 7, -6))
         } else if (this._noteArrangement === "wicki-hayden-wide") {
-            tileHexagonal(18, 22, this.element, noteElement(2, 7, -14))
+            tileHexagonal(18, 22, keyboard, noteElement(2, 7, -14))
         } else if (this._noteArrangement === "third") {
-            tileHexagonal(12, 23, this.element, noteElement(1, 4, 21))
+            tileHexagonal(12, 23, keyboard, noteElement(1, 4, 21))
         } else if (this._noteArrangement === "fourth") {
-            tileSquare(12, 23, this.element, noteElement(1, 5))
+            tileSquare(12, 23, keyboard, noteElement(1, 5))
         } else if (this._noteArrangement === "tritone") {
-            tileSquare(14, 22, this.element, noteElement(1, 6, -3))
+            tileSquare(14, 22, keyboard, noteElement(1, 6, -3))
         } else if (this._noteArrangement === "fifth") {
-            tileSquare(12, 23, this.element, noteElement(1, 7))
+            tileSquare(12, 23, keyboard, noteElement(1, 7))
         } else if (this._noteArrangement === "octave") {
-            tileSquare(16, 11, this.element, noteElement(1, 12, -3))
+            tileSquare(16, 11, keyboard, noteElement(1, 12, -3))
         } else if (this._noteArrangement === "tonnetz") {
-            tileHexagonal(20, 15, this.element, noteElement(7, 3, 0))
+            tileHexagonal(20, 15, keyboard, noteElement(7, 3, 0))
         } else if (this._noteArrangement === "guitar") {
-            tileSquare(25, 6, this.element, noteElement(1, [0, 5, 10, 15, 19, 24], 40))
+            tileSquare(25, 6, keyboard, noteElement(1, [0, 5, 10, 15, 19, 24], 40))
         } else if (this._noteArrangement === "bass") {
-            tileSquare(25, 4, this.element, noteElement(1, 5, 28))
+            tileSquare(25, 4, keyboard, noteElement(1, 5, 28))
         } else {
             throw new Error("unknown note arrangement")
         }
+        const rotation = this._noteArrangement === "janko-slanted"
+            ? Math.atan2(-cellHeight * 2, cellWidth * 6)
+            : 0
+        if (this._noteArrangement === "janko-slanted") {
+            keyboard.style.transformOrigin = `top left`
+            keyboard.style.transform = `translateY(${cellHeight * 2}px) rotate(${rotation}rad)`
+        }
+        this.element.innerHTML = ""
+        this.element.style.overflow = "clip"
+        if (this._noteArrangement === "janko-slanted") {
+            this.element.style.height = `${cellHeight * 12}px`
+            // FIXME: this formula is not correct
+            this.element.style.width = `${Math.sqrt((cellWidth * 46) ** 2 + (cellHeight * (24 - 46 / 3)) ** 2)}px`
+        } else {
+            this.element.style.height = `fit-content`
+            this.element.style.width = `fit-content`
+        }
+        this.element.appendChild(keyboard)
     }
     /**
      * @param {number} note 

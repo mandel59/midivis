@@ -9,6 +9,8 @@ export const noteArrangements = [
     { id: "wicki-hayden-wide", label: "Wicki–Hayden (Wide)" },
     { id: "tonnetz", label: "Tonnetz" },
     { id: "janko", label: "Jankó" },
+    { id: "janko-tall", label: "Jankó (Tall)" },
+    { id: "janko-slanted", label: "Jankó (Slanted)" },
     { id: "c-system", label: "C-system" },
     { id: "b-system", label: "B-system" },
     { id: "guitar", label: "Guitar" },
