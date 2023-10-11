@@ -1,35 +1,5 @@
 import { MidiDevice } from './midi-device'
 
-const keyNamesWithSharp = [
-    "C",
-    "C<sup>♯</sup>",
-    "D",
-    "D<sup>♯</sup>",
-    "E",
-    "F",
-    "F<sup>♯</sup>",
-    "G",
-    "G<sup>♯</sup>",
-    "A",
-    "A<sup>♯</sup>",
-    "B",
-]
-
-const keyNamesWithFlat = [
-    "C",
-    "D<sup>♭</sup>",
-    "D",
-    "E<sup>♭</sup>",
-    "E",
-    "F",
-    "G<sup>♭</sup>",
-    "G",
-    "A<sup>♭</sup>",
-    "A",
-    "B<sup>♭</sup>",
-    "B",
-]
-
 /**
  * @param {number} column
  * @param {number} row
