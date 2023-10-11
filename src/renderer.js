@@ -1,17 +1,12 @@
-require("./assets")
-require("./register-service-worker")
+import "./assets"
+import "./register-service-worker"
 
-const {
-    getInputPortOptions,
-    subscribeMIDIMessage,
-    openInputPortByName,
-    closeInputPort,
-} = require("./midi-bridge")
-const { ChordPrinter } = require("./chord-printer")
-const { ChordVisualizer } = require("./chord-visualizer")
-const { getState, subscribeState, loadState, updateState } = require("./state")
-const { colorSchemes } = require("./color-scheme")
-const { noteArrangements } = require("./note-arrangement")
+import { getInputPortOptions, subscribeMIDIMessage, openInputPortByName, closeInputPort } from "./midi-bridge"
+import { ChordPrinter } from "./chord-printer"
+import { ChordVisualizer } from "./chord-visualizer"
+import { getState, subscribeState, loadState, updateState } from "./state"
+import { colorSchemes } from "./color-scheme"
+import { noteArrangements } from "./note-arrangement"
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")

@@ -16,7 +16,7 @@ function unique(values) {
 
 const PERCUSSION_CHANNEL = 10
 
-class MidiDevice {
+export class MidiDevice {
     /**
      * 
      * @param {number} [channel]
@@ -191,5 +191,3 @@ class MidiDevice {
         }
     }
 }
-
-module.exports = { MidiDevice }

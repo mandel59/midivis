@@ -1,4 +1,4 @@
-const { MidiDevice } = require('./midi-device')
+import { MidiDevice } from './midi-device'
 
 const keyNamesWithSharp = [
     "C",
@@ -110,7 +110,7 @@ function accidental(acc) {
     return s
 }
 
-class ChordVisualizer extends MidiDevice {
+export class ChordVisualizer extends MidiDevice {
     /**
      * 
      * @param {HTMLElement} element 
@@ -308,5 +308,3 @@ class ChordVisualizer extends MidiDevice {
         this.setVariable(note, 0, channel)
     }
 }
-
-module.exports = { ChordVisualizer }

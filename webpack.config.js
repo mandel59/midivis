@@ -17,22 +17,7 @@ module.exports = [
                 {
                     test: /\.html$/,
                     use: {
-                        loader: "html-loader",
-                        options: {
-                            attributes: {
-                                list: [
-                                    "...",
-                                    {
-                                        tag: "link",
-                                        attribute: "href",
-                                        type: "src",
-                                        filter: (tag, attribute, attributes, resourcePath) => {
-                                            return /\bmanifest\b/.test(attributes.rel)
-                                        }
-                                    }
-                                ]
-                            }
-                        }
+                        loader: "html-loader"
                     }
                 },
                 {

@@ -1,5 +1,5 @@
 /** @type {{ id: NoteArrangement; label: string; }[]} */
-const noteArrangements = [
+export const noteArrangements = [
     { id: "third", label: "Third" },
     { id: "fourth", label: "Fourth" },
     { id: "tritone", label: "Tritone" },
@@ -14,5 +14,3 @@ const noteArrangements = [
     { id: "guitar", label: "Guitar" },
     { id: "bass", label: "Bass Guitar" },
 ]
-
-module.exports = { noteArrangements }

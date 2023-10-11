@@ -1,7 +1,7 @@
-const { noteName, chordName } = require('./chord')
-const { MidiDevice } = require('./midi-device')
+import { noteName, chordName } from './chord'
+import { MidiDevice } from './midi-device'
 
-class ChordPrinter extends MidiDevice {
+export class ChordPrinter extends MidiDevice {
     /**
      * @param {number} [channel]
      * @param {object} [options]
@@ -91,5 +91,3 @@ class ChordPrinter extends MidiDevice {
         this.currentChord = chord
     }
 }
-
-module.exports = { ChordPrinter }

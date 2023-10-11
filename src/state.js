@@ -1,4 +1,4 @@
-const { EventEmitter } = require("events")
+import { EventEmitter } from "events"
 const storageKey = "midivisAppState"
 
 const emitter = new EventEmitter()
@@ -32,30 +32,30 @@ const state = /** @type {State} */ ({
  * @param {K} key
  * @returns {State[K]}
  */
-function getState(key) {
+export function getState(key) {
     // @ts-ignore
     return structuredClone(state[key])
 }
 
-function getStateAll() {
+export function getStateAll() {
     return Object.assign({}, state)
 }
 
 /**
  * @param {() => void} callback 
  */
-function subscribeState(callback) {
+export function subscribeState(callback) {
     emitter.on("change", callback)
 }
 
 /**
  * @param {() => void} callback 
  */
-function unsubscribeState(callback) {
+export function unsubscribeState(callback) {
     emitter.off("change", callback)
 }
 
-async function loadState() {
+export async function loadState() {
     const json = localStorage.getItem(storageKey)
     if (json) {
         try {
@@ -76,17 +76,8 @@ function saveState() {
  * 
  * @param {Partial<State>} newState 
  */
-function updateState(newState) {
+export function updateState(newState) {
     Object.assign(state, newState)
     emitter.emit("change")
     saveState()
-}
-
-module.exports = {
-    getState,
-    getStateAll,
-    subscribeState,
-    unsubscribeState,
-    updateState,
-    loadState,
 }

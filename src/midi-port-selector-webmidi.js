@@ -1,4 +1,4 @@
-const { EventEmitter } = require("events")
+import { EventEmitter } from "events"
 
 async function requestMIDIAccess() {
     if (!("requestMIDIAccess" in navigator)) {
@@ -12,7 +12,7 @@ async function requestMIDIAccess() {
     })
 }
 
-class MidiInputPortSelector extends EventEmitter {
+export class MidiInputPortSelector extends EventEmitter {
     /**
      * @param {*} [options] 
      */
@@ -68,5 +68,3 @@ class MidiInputPortSelector extends EventEmitter {
         }))
     }
 }
-
-module.exports = { MidiInputPortSelector }

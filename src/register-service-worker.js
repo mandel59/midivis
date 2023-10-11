@@ -4,4 +4,4 @@ if (location.hostname !== "localhost" && "serviceWorker" in navigator) {
     })
 }
 
-module.exports = {}
+export {}

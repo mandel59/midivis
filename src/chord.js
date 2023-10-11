@@ -217,7 +217,7 @@ const chordDegreeNames = [
  * @param {number} [options.scaleKey]
  * @returns {string}
  */
-function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
+export function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
     if (useDegree) {
         return chordDegreeNames[(key - scaleKey + 1200) % 12]
     }
@@ -233,8 +233,7 @@ function keyName(key, { sharp = false, useDegree = false, scaleKey = 0 } = {}) {
  * @param {boolean} [options.sharp] 
  * @returns {string}
  */
-
-function noteName(note, { sharp = false } = {}) {
+export function noteName(note, { sharp = false } = {}) {
     const key = keyOfNote(note)
     const octave = octaveOfNote(note)
     return `${keyName(key, { sharp })}${octave}`
@@ -244,7 +243,7 @@ function noteName(note, { sharp = false } = {}) {
  * @param {number[]} notes 
  * @returns 
  */
-function findRootNote(notes) {
+export function findRootNote(notes) {
     const noteList = [...notes]
     if (noteList.length === 0) return undefined
     const scoreMap = [0, 1, 2, -3, -4, 5, 0, -5, 4, 3, -2, -1]
@@ -280,7 +279,7 @@ function quality(keys, rootKey) {
  * @param {number} [options.scaleKey] 
  * @returns {string} 
  */
-function chordName(notes, {
+export function chordName(notes, {
     sharp = false,
     useDegree = false,
     scaleKey = 0,
@@ -308,11 +307,4 @@ function chordName(notes, {
         }
     }
     return `${keyName(baseKey, { sharp, useDegree, scaleKey })}{${degreesJoin}}`
-}
-
-module.exports = {
-    noteName,
-    keyName,
-    chordName,
-    findRootNote,
 }

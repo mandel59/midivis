@@ -1,9 +1,9 @@
-const { MidiInputPortSelector } = require("./midi-port-selector-webmidi")
+import { MidiInputPortSelector } from "./midi-port-selector-webmidi"
 const input = new MidiInputPortSelector()
 /**
  * @returns {Promise<Array<{name: string, selected: boolean}>>}
  */
-function getInputPortOptions() {
+export function getInputPortOptions() {
     return input.portOptions()
 }
 
@@ -11,7 +11,7 @@ function getInputPortOptions() {
  * 
  * @param {(deltaTime: number, message: [number, number, number]) => void} callback 
  */
-function subscribeMIDIMessage(callback) {
+export function subscribeMIDIMessage(callback) {
     input.on("message", callback)
 }
 
@@ -20,17 +20,10 @@ function subscribeMIDIMessage(callback) {
  * @param {string} midiInputPortName 
  * @returns {Promise<boolean>}
  */
-function openInputPortByName(midiInputPortName) {
+export function openInputPortByName(midiInputPortName) {
     return input.openPortByName(midiInputPortName)
 }
 
-function closeInputPort() {
+export function closeInputPort() {
     return input.closePort()
-}
-
-module.exports = {
-    getInputPortOptions,
-    subscribeMIDIMessage,
-    openInputPortByName,
-    closeInputPort,
 }
