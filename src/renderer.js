@@ -220,16 +220,13 @@ subscribeMIDIMessage((deltaTime, message) => {
     visualizer.midiMessageHandler(deltaTime, message)
 })
 
-const config = document.getElementById("config")
-if (config == null) {
-    throw new Error("#config not found")
-}
 const midiInputPortSelector = /** @type {HTMLSelectElement} */ (document.getElementById("config-midi-input-port"))
 if (midiInputPortSelector == null) {
     throw new Error("#config-midi-input-port not found")
 }
 
 async function showConfigDialog() {
+    const config = document.getElementById("config")
     if (config == null) {
         throw new Error("#config not found")
     }
@@ -275,6 +272,10 @@ if (closeConfigButton == null) {
     throw new Error("#config-close not found")
 }
 closeConfigButton.addEventListener("click", () => {
+    const config = document.getElementById("config")
+    if (config == null) {
+        throw new Error("#config not found")
+    }
     config.classList.remove("shown")
 })
 
