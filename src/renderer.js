@@ -314,7 +314,7 @@ closeOopsButton.addEventListener("click", () => {
  * @param {*} err 
  */
 function handleError(err) {
-    console.log(err)
+    console.error(err)
     if (err != null && "message" in err) {
         const message = err.message
         showOopsDialog(message)
