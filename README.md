@@ -8,6 +8,14 @@ Make sure to use browsers which support Web MIDI API, such as Google Chrome or M
 
 Mozilla Firefox is currently not supported. See: https://bugzilla.mozilla.org/show_bug.cgi?id=836897
 
+## Deployment
+
+Build output is deployed to Cloudflare Pages project `midivis`.
+
+```sh
+npm run deploy:cloudflare
+```
+
 ## Shortcuts
 
 - Alt+S: Toggle "use sharp notes"
