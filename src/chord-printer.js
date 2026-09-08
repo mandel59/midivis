@@ -48,13 +48,13 @@ export class ChordPrinter extends MidiDevice {
         })
     }
     /**
-     * @param {[number, number, number]} message 
+     * @param {ArrayLike<number>} message 
      */
     unknownMessage(message) {
         if (this.console && typeof this.console.log === "function") {
-            this.console.log(message.map(x => x.toString(16)))
+            this.console.log(Array.from(message).map(x => x.toString(16)))
         } else if (this.console === undefined) {
-            console.log(message.map(x => x.toString(16)))
+            console.log(Array.from(message).map(x => x.toString(16)))
         }
     }
     /**

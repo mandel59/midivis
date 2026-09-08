@@ -143,7 +143,6 @@ function reflectState() {
     const useDegree = getState("useDegree")
     const colorScheme = getState("colorScheme")
     const noteArrangement = getState("noteArrangement")
-    const midiInputPortName = getState("midiInputPortName")
     const showToolbar = getState("showToolbar")
     const noteOffsets = getState("noteOffsets")
     printer.sharp = sharp
@@ -179,13 +178,6 @@ function reflectState() {
     if (inputColorScheme) inputColorScheme.checked = true
     const inputNoteArrangement = /** @type {HTMLSelectElement} */ (document.getElementById(`state-noteArrangement`))
     if (inputNoteArrangement) inputNoteArrangement.value = noteArrangement
-    if (midiInputPortName) {
-        openInputPortByName(midiInputPortName).then(ok => {
-            if (!ok) {
-                return showConfigDialog()
-            }
-        }).catch(handleError)
-    }
     const inputShowToolbar = /** @type {HTMLInputElement} */ (document.getElementById("state-showToolbar"))
     if (inputShowToolbar) inputShowToolbar.checked = showToolbar
     if (showToolbar) {
@@ -198,22 +190,6 @@ function reflectState() {
 subscribeState(() => {
     reflectState()
 })
-
-loadState().then(() => {
-    reflectState()
-    const midiInputPortName = getState("midiInputPortName")
-    if (midiInputPortName) {
-        openInputPortByName(midiInputPortName).then(ok => {
-            if (!ok) {
-                return showConfigDialog()
-            }
-        }).catch(handleError)
-    }
-})
-
-if (!getState("midiInputPortName")) {
-    showConfigDialog().catch(handleError)
-}
 
 subscribeMIDIMessage((deltaTime, message) => {
     printer.midiMessageHandler(deltaTime, message)
@@ -236,10 +212,10 @@ async function showConfigDialog() {
     dummyOption.innerText = "Select MIDI input port"
     dummyOption.value = ""
     midiInputPortSelector.appendChild(dummyOption)
-    for (const { name, selected } of portOptions) {
+    for (const { id, name, selected } of portOptions) {
         const option = document.createElement("option")
         option.innerText = name
-        option.value = name
+        option.value = id
         midiInputPortSelector.appendChild(option)
         if (selected) {
             option.selected = true
@@ -252,19 +228,16 @@ document.getElementById("menu-settings")?.addEventListener("click", () => {
     showConfigDialog().catch(handleError)
 })
 
+let portSelection = 0
 midiInputPortSelector.addEventListener("change", () => {
+    const selection = ++portSelection
     const midiInputPortName = midiInputPortSelector.value
-    if (midiInputPortName) {
-        openInputPortByName(midiInputPortName)
-            .then(ok => {
-                if (ok) {
-                    updateState({ midiInputPortName })
-                }
-            })
-    } else {
-        closeInputPort()
-        updateState({ midiInputPortName: null })
-    }
+    const operation = midiInputPortName ? openInputPortByName(midiInputPortName) : closeInputPort().then(() => true)
+    operation.then(ok => {
+        if (selection !== portSelection) return
+        if (ok) updateState({ midiInputPortName: midiInputPortName || null })
+        else return showConfigDialog()
+    }).catch(handleError)
 })
 
 const closeConfigButton = document.getElementById("config-close")
@@ -332,3 +305,10 @@ window.addEventListener("keydown", (ev) => {
         }
     }
 })
+
+// Initialize only after every control and error handler is ready.
+loadState().then(async () => {
+    reflectState()
+    const name = getState("midiInputPortName")
+    if (!name || !await openInputPortByName(name)) await showConfigDialog()
+}).catch(handleError)

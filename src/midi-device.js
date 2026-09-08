@@ -128,10 +128,10 @@ export class MidiDevice {
         this.programs[channel - 1] = program
     }
     /**
-     * @param {[number, number, number]} message 
+     * @param {ArrayLike<number>} message 
      */
     unknownMessage(message) {
-        // console.log(message.map(x => x.toString(16)))
+        // console.log(Array.from(message).map(x => x.toString(16)))
     }
     /**
      * @param {number} offset 
@@ -149,10 +149,10 @@ export class MidiDevice {
     }
     /**
      * @param {unknown} deltaTime 
-     * @param {[number, number, number]} message 
+     * @param {ArrayLike<number>} message 
      */
     midiMessageHandler(deltaTime, message) {
-        const [m1, m2, m3] = message
+        const m1 = message[0], m2 = message[1], m3 = message[2]
         const channel = (m1 & 0x0F) + 1
         if (this.channel && this.channel !== channel) {
             return
