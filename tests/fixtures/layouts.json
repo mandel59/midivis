@@ -15,6 +15,14 @@
     "container": "overflow: clip; height: fit-content; width: fit-content;",
     "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
   },
+  "fourth-whole-tone": {
+    "count": 276,
+    "first": "D8",
+    "last": "B♭0",
+    "hash": "77c35ca14864480d07a2d7202b17b040b58d02573a06fb50d5dd9e893a691890",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
   "tritone": {
     "count": 308,
     "first": "E♭9",

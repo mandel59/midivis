@@ -3,6 +3,7 @@ type NoteArrangement =
   | "piano-vertical"
   | "third"
   | "fourth"
+  | "fourth-whole-tone"
   | "tritone"
   | "fifth"
   | "octave"

@@ -101,6 +101,8 @@ const messages = {
     "arrangementVariant.vertical": "Vertical",
     "layoutHelp.piano": "An 88-key piano (A0–C8). Octaves ascend to the right or upward, with one octave per row.",
     "layout.third": "Thirds layout",
+    "layout.fourth-whole-tone": "Perfect fourth–whole tone",
+    "layoutHelp.fourth-whole-tone": "Whole tones run horizontally, with a perfect fourth between rows.",
     "layout.fourth": "Perfect fourth",
     "layout.tritone": "Tritone",
     "layout.fifth": "Perfect fifth",

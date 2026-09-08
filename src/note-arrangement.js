@@ -18,6 +18,7 @@ export const noteArrangements = [
     { id: "piano-vertical", label: "Piano (Vertical octaves)", grid: "piano", columns: 7, rows: 9, stepX: 1, stepY: 12, base: 21 },
     { id: "third", label: "Third", grid: "hexagonal", columns: 12, rows: 23, stepX: 1, stepY: 4, base: 21 },
     { id: "fourth", label: "Fourth", grid: "square", columns: 12, rows: 23, stepX: 1, stepY: 5, base: 0 },
+    { id: "fourth-whole-tone", label: "Perfect fourth–whole tone", grid: "square", columns: 12, rows: 23, stepX: 2, stepY: 5, base: 0 },
     { id: "tritone", label: "Tritone", grid: "square", columns: 14, rows: 22, stepX: 1, stepY: 6, base: -3 },
     { id: "fifth", label: "Fifth", grid: "square", columns: 12, rows: 23, stepX: 1, stepY: 7, base: 0 },
     { id: "octave", label: "Octave", grid: "square", columns: 16, rows: 11, stepX: 1, stepY: 12, base: -3 },
@@ -73,6 +74,7 @@ export const arrangementGroups = [
     { id: 'interval', families: [
         { id: 'third', variants: ['third'] },
         { id: 'fourth', variants: ['fourth'] },
+        { id: 'fourth-whole-tone', variants: ['fourth-whole-tone'] },
         { id: 'tritone', variants: ['tritone'] },
         { id: 'fifth', variants: ['fifth'] },
         { id: 'octave', variants: ['octave'] },

@@ -102,6 +102,8 @@ const messages = {
     "arrangementVariant.vertical": "縦方向",
     "layoutHelp.piano": "88鍵のピアノ（A0〜C8）です。横方向は右ほど高く、縦方向は1段1オクターブで上ほど高くなります。",
     "layout.third": "三度配列",
+    "layout.fourth-whole-tone": "完全四度–全音",
+    "layoutHelp.fourth-whole-tone": "横方向に全音ずつ、縦方向に完全四度ずつ並びます。",
     "layout.fourth": "完全四度",
     "layout.tritone": "三全音",
     "layout.fifth": "完全五度",
