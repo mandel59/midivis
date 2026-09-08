@@ -54,6 +54,11 @@ export class ChordVisualizer {
         key,
         mode,
     }) {
+        if ((sharp == null || sharp === this._sharp)
+            && (colorScheme == null || colorScheme === this._colorScheme)
+            && (noteArrangement == null || noteArrangement === this._noteArrangement)
+            && (key == null || key === this._key)
+            && (mode == null || mode === this._mode)) return
         if (sharp != null) this._sharp = sharp
         if (colorScheme != null) this._colorScheme = colorScheme
         if (noteArrangement != null) this._noteArrangement = noteArrangement
@@ -68,6 +73,7 @@ export class ChordVisualizer {
         return this._colorScheme
     }
     prepareDOM() {
+        const document = this.element.ownerDocument
         const layout = getLayout(this._noteArrangement)
         const noteElement = (/** @type {ReturnType<typeof layoutCells>[number]} */ cell) => {
             const { note, x, y } = cell
