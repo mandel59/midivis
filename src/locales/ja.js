@@ -16,7 +16,7 @@ const messages = {
     "closeSettings": "設定を閉じる",
     "categories": "設定の分類",
     "connectionTab": "接続",
-    "visualizationTab": "ビジュアライズ",
+    "visualizationTab": "可視化",
     "uiTab": "UI",
     "chordsTab": "コード名",
     "transposeTab": "移調",

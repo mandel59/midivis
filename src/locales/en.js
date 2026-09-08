@@ -15,7 +15,7 @@ const messages = {
     "closeSettings": "Close settings",
     "categories": "Settings categories",
     "connectionTab": "Connection",
-    "visualizationTab": "Visualization",
+    "visualizationTab": "Visuals",
     "uiTab": "UI",
     "chordsTab": "Chords",
     "transposeTab": "Transpose",
