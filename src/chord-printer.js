@@ -1,5 +1,5 @@
-import { noteName, chordName } from './chord'
-import { MidiDevice } from './midi-device'
+import { noteName, chordName } from './chord.js'
+import { MidiDevice } from './midi-device.js'
 
 export class ChordPrinter extends MidiDevice {
     /**

@@ -1,12 +1,12 @@
-import "./assets"
-import "./register-service-worker"
+import "./assets.js"
+import "./register-service-worker.js"
 
-import { getInputPortOptions, subscribeMIDIMessage, openInputPortByName, closeInputPort } from "./midi-bridge"
-import { ChordPrinter } from "./chord-printer"
-import { ChordVisualizer } from "./chord-visualizer"
-import { getState, subscribeState, loadState, updateState } from "./state"
-import { colorSchemes } from "./color-scheme"
-import { noteArrangements } from "./note-arrangement"
+import { getInputPortOptions, subscribeMIDIMessage, openInputPortByName, closeInputPort } from "./midi-bridge.js"
+import { ChordPrinter } from "./chord-printer.js"
+import { ChordVisualizer } from "./chord-visualizer.js"
+import { getState, subscribeState, loadState, updateState } from "./state.js"
+import { colorSchemes } from "./color-scheme.js"
+import { noteArrangements } from "./note-arrangement.js"
 
 const indicator = document.getElementById("chordindicator")
 const element = document.getElementById("chordvis")

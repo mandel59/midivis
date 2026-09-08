@@ -5,10 +5,11 @@
   "homepage": "https://midivis.ryusei.dev/",
   "repository": "github:mandel59/midivis",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1",
+    "test": "node --test tests/unit/*.test.mjs",
     "build": "webpack",
     "deploy:cloudflare": "npm run build && npx wrangler pages deploy public --project-name midivis --branch main",
-    "start": "webpack serve"
+    "start": "webpack serve",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "Ryusei Yamaguchi",
@@ -19,13 +20,18 @@
     "workbox-strategies": "^7.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.63.0",
     "html-loader": "^4.2.0",
     "html-webpack-plugin": "^5.5.3",
+    "jsdom": "^30.0.1",
     "typescript": "^5.2.2",
     "upgradeps": "^2.0.6",
     "vercel": "^32.4.1",
     "webpack": "^5.88.2",
     "webpack-cli": "^5.1.4",
     "webpack-dev-server": "^4.15.1"
+  },
+  "engines": {
+    "node": ">=24"
   }
 }

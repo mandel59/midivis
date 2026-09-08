@@ -1,4 +1,4 @@
-import { MidiDevice } from './midi-device'
+import { MidiDevice } from './midi-device.js'
 
 const cellWidth = 40
 const cellHeight = 32

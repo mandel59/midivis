@@ -1,0 +1,122 @@
+{
+  "third": {
+    "count": 264,
+    "first": "D7",
+    "last": "G1",
+    "hash": "22794e863c2f44d735ea4d28a1234de96801ee218bf759e6e473ed9220a4da11",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(24, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "fourth": {
+    "count": 276,
+    "first": "D8",
+    "last": "B-1",
+    "hash": "4c9f90bc6529f783fc4dada251736c26e8623d07a2563c9f1f7ee4013ecb9c37",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "tritone": {
+    "count": 308,
+    "first": "E♭9",
+    "last": "B♭-1",
+    "hash": "be6f3c17cb1780f1d0a20ee771345030b84aa9f71df234bcf458e45b5dca7283",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(14, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "fifth": {
+    "count": 276,
+    "first": "B♭11",
+    "last": "B-1",
+    "hash": "bf0814de43f950c511de3b4a8fee6afa8297fd8e6ece31d01fcb3bae234f332c",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "octave": {
+    "count": 176,
+    "first": "A8",
+    "last": "C0",
+    "hash": "ea5c707bf18c3bda15e18a9a41198d87f547962526f531824845988e174532fb",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(16, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "wicki-hayden": {
+    "count": 209,
+    "first": "C♭9",
+    "last": "A♯-1",
+    "hash": "b8a30af6e95e8093c0d5ed781b65854ebddf5091fd33b9df05b8ef7f02db997d",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(20, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "wicki-hayden-wide": {
+    "count": 385,
+    "first": "F𝄫8",
+    "last": "E𝄪0",
+    "hash": "04393ae3d9ebe073a89c4bd030e62a1b7d2b7f3893bc8c3fdff1ddf28c9cf32f",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(36, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "tonnetz": {
+    "count": 292,
+    "first": "F-2",
+    "last": "G♭9",
+    "hash": "8afb743235e27ec400a3d17b8fb1b3323c7005d703331b94c3ce1fc4d7ce344a",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(40, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "janko": {
+    "count": 255,
+    "first": "A0",
+    "last": "A♭7",
+    "hash": "c57304f9f95a17992f4f4692b7b1cc1c5ea22470ac7a04d0c2f6a7936a848478",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(86, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "janko-tall": {
+    "count": 382,
+    "first": "B♭0",
+    "last": "A♭7",
+    "hash": "c30d392177a571e0412ad1a3bd2037db9806bfc2c8d6d98774f8b50cfe199cea",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(86, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "janko-slanted": {
+    "count": 1020,
+    "first": "A0",
+    "last": "A♭7",
+    "hash": "79f71eeb083ad1dd2c12b094b4a5d99ec5f5ba5081a9291fac49e965f1205da9",
+    "container": "overflow: clip; height: 384px; width: 1860.7831087415261px;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(86, 20px); grid-template-rows: repeat(auto-fill, 32px); transform-origin: top left; transform: translateY(64px) rotate(-0.26060239174734096rad);"
+  },
+  "c-system": {
+    "count": 162,
+    "first": "E0",
+    "last": "E♭8",
+    "hash": "8a6770124f30878f0deba00bb942ecbbf0de6760a640e85a1b865e4595d1be11",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(66, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "b-system": {
+    "count": 162,
+    "first": "G0",
+    "last": "D8",
+    "hash": "b943a881b9dd9e433225167598a25a655c790542afa453d34fb06a8c67658b9d",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(66, 20px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "guitar": {
+    "count": 150,
+    "first": "E4",
+    "last": "E4",
+    "hash": "83b4d82182a64b82a0ce409908f7659fdcba9dbf57f6159d5c2d010f59a0b957",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(25, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
+  "bass": {
+    "count": 100,
+    "first": "G2",
+    "last": "E3",
+    "hash": "ea498a5415680ca898848fec05b2081cdd3d4e46990b7962573063da77d72aa8",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(25, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  }
+}

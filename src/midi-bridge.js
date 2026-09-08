@@ -1,4 +1,4 @@
-import { MidiInputPortSelector } from "./midi-port-selector-webmidi"
+import { MidiInputPortSelector } from "./midi-port-selector-webmidi.js"
 const input = new MidiInputPortSelector()
 /**
  * @returns {Promise<Array<{name: string, selected: boolean}>>}
