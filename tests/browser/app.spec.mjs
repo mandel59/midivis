@@ -435,7 +435,7 @@ test('color categories, shortcuts, language and saved state stay synchronized', 
     await expect(page.locator('#color-detail-label')).toHaveText('配色方式')
     await expect(page.locator('#color-help')).toContainText('中心軸')
     await page.selectOption('#state-language', 'en')
-    await expect(page.locator('#state-colorScheme option:checked')).toHaveText('Central axis system')
+    await expect(page.locator('#state-colorScheme option:checked')).toHaveText('Axis system')
     await page.keyboard.press('Alt+6')
     await expect(page.locator('#state-colorCategory')).toHaveValue('interval')
     await expect(page.locator('#state-colorScheme')).toHaveValue('third-major')

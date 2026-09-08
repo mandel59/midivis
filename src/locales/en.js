@@ -1,5 +1,5 @@
 const messages = {
-    "colorAxisHelp": "Notes belonging to the same central axis on the circle of fifths share a color.",
+    "colorAxisHelp": "Notes belonging to the same axis on the circle of fifths share a color.",
     "colorCircleHelp": "Hue follows the circle of fifths. Notes with the same name have the same color in every octave.",
     "colorIntervalHelp": "Hue follows pitch and completes one cycle over the selected number of semitones.",
     "colorMonotoneHelp": "Use the same color for every note.",
@@ -65,7 +65,7 @@ const messages = {
     "color.monotone": "Single color",
     "color.chromatic": "12 semitones (octave)",
     "color.fifth": "Circle of fifths",
-    "color.axis": "Central axis system",
+    "color.axis": "Axis system",
     "color.quintave": "7 semitones (perfect fifth)",
     "color.third-major": "4 semitones (major third)",
     "layout.third": "Third",

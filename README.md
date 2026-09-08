@@ -22,7 +22,7 @@ npm run deploy:cloudflare
 - Alt+1: Change color scheme to "Single color"
 - Alt+2: Change color scheme to "Pitch interval / 12 semitones (octave)"
 - Alt+3: Change color scheme to "Circle of fifths / Circle of fifths"
-- Alt+4: Change color scheme to "Circle of fifths / Central axis system"
+- Alt+4: Change color scheme to "Circle of fifths / Axis system"
 - Alt+5: Change color scheme to "Pitch interval / 7 semitones (perfect fifth)"
 - Alt+6: Change color scheme to "Pitch interval / 4 semitones (major third)"
 - Ctrl+, / Cmd+,: Open Settings
