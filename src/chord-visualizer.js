@@ -8,6 +8,7 @@ export class ChordVisualizer {
      * @param {import('./midi-device.js').MidiDevice} device
      * @param {ChordVisualizerOptions} options
      * @typedef ChordVisualizerOptions
+     * @property {boolean} [ignoreOctave]
      * @property {boolean} [sharp]
      * @property {ColorScheme} [colorScheme]
      * @property {NoteArrangement} [noteArrangement]
@@ -18,6 +19,7 @@ export class ChordVisualizer {
         element,
         device,
         {
+            ignoreOctave = false,
             sharp = false,
             colorScheme = "monotone",
             noteArrangement = "fourth",
@@ -32,6 +34,7 @@ export class ChordVisualizer {
         this.element = element
         /** @type {boolean} */
         this._sharp = sharp
+        this._ignoreOctave = ignoreOctave
         /** @type {ColorScheme} */
         this._colorScheme = colorScheme
         /** @type {NoteArrangement} */
@@ -48,24 +51,30 @@ export class ChordVisualizer {
      * @param {ChordVisualizerOptions} param1
      */
     updateOptions({
+        ignoreOctave,
         sharp,
         colorScheme,
         noteArrangement,
         key,
         mode,
     }) {
-        if ((sharp == null || sharp === this._sharp)
+        if ((ignoreOctave == null || ignoreOctave === this._ignoreOctave)
+            && (sharp == null || sharp === this._sharp)
             && (colorScheme == null || colorScheme === this._colorScheme)
             && (noteArrangement == null || noteArrangement === this._noteArrangement)
             && (key == null || key === this._key)
             && (mode == null || mode === this._mode)) return
+        if (ignoreOctave != null) this._ignoreOctave = ignoreOctave
         if (sharp != null) this._sharp = sharp
         if (colorScheme != null) this._colorScheme = colorScheme
         if (noteArrangement != null) this._noteArrangement = noteArrangement
         if (key != null) this._key = key
         if (mode != null) this._mode = mode
         this.prepareDOM()
+        this.renderNotes()
     }
+    /** @param {number} note */
+    displayPitch(note) { return this._ignoreOctave ? ((note % 12) + 12) % 12 : note }
     get sharp() {
         return this._sharp
     }
@@ -77,7 +86,7 @@ export class ChordVisualizer {
         const layout = getLayout(this._noteArrangement)
         const noteElement = (/** @type {ReturnType<typeof layoutCells>[number]} */ cell) => {
             const { note, x, y } = cell
-            const noteName = cellNoteName(note, { sharp: this._sharp, arrangement: layout.id, x, y, base: layout.base })
+            const noteName = cellNoteName(note, { sharp: this._sharp, arrangement: layout.id, x, y, base: layout.base, ignoreOctave: this._ignoreOctave })
             const inscale = inScale(this._key, this._mode, note)
             const istonic = isTonicNote(this._key, note)
             const noteBgDiv = document.createElement("div")
@@ -97,9 +106,9 @@ export class ChordVisualizer {
             div.style.height = "100%"
             div.style.fontSize = `${Math.min(cellWidth / 2.5, cellHeight / 2)}px`
             div.style.textAlign = "center"
-            const maxVelocity = `var(--v-max-${note}, 0)`
+            const maxVelocity = `var(--v-max-${this.displayPitch(note)}, 0)`
             div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
-            div.style.backgroundColor = noteColor(note, this._colorScheme, maxVelocity)
+            div.style.backgroundColor = noteColor(this.displayPitch(note), this._colorScheme, maxVelocity)
             div.style.boxSizing = "border-box"
             if (istonic) {
                 div.style.border = "solid 4px hsl(0deg, 0%, 90%)"
@@ -152,7 +161,7 @@ export class ChordVisualizer {
         this.element.appendChild(keyboard)
     }
     renderNotes() {
-        const notes = new Set(this.device.notes())
+        const notes = new Set(this.device.notes().map(note => this.displayPitch(note)))
         for (const note of new Set([...this.litNotes, ...notes])) {
             this.element.style.setProperty(`--v-max-${note}`, notes.has(note) ? "1" : "0")
         }

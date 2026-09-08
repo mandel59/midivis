@@ -52,3 +52,13 @@ test('failed saves still update and notify; stores are independent', () => {
     assert.equal(errors.length, 1)
     assert.equal(createStateStore({ storage: memoryStorage() }).getState('sharp'), false)
 })
+
+test('octave folding defaults off and persists only boolean preferences', async () => {
+    assert.equal(normalizeState({}).ignoreOctave, false)
+    assert.equal(normalizeState({ ignoreOctave: 'true' }).ignoreOctave, false)
+    const storage = memoryStorage()
+    createStateStore({ storage }).updateState({ ignoreOctave: true })
+    const restored = createStateStore({ storage })
+    await restored.loadState()
+    assert.equal(restored.getState('ignoreOctave'), true)
+})

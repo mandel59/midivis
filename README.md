@@ -34,6 +34,12 @@ Note arrangements are grouped into interval grids, harmonic layouts, keyboard an
 button layouts, and string instrument fretboards. Wicki–Hayden and Jankó expose
 shape and range variants separately. Existing saved layouts are retained.
 
+Visuals also offers "Ignore octave differences" (off by default). This lights all
+cells of the same pitch class, hides octave numbers and uses pitch-class colors.
+Overlapping octaves and channels remain lit until the last matching note is
+released. Input transposition still applies; chord recognition keeps its original
+note information. The preference is saved and can be toggled while playing.
+
 The Settings button stays available even when the toolbar is hidden. Settings
 open in a non-modal side panel; its Close button remains visible while the
 contents scroll. Closing returns keyboard focus to the opener.

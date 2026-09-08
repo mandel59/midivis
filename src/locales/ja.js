@@ -28,6 +28,8 @@ const messages = {
     "inputDevice": "入力機器",
     "notConnected": "未接続",
     "refresh": "入力機器を再検索",
+    "ignoreOctave": "オクターブの違いを無視",
+    "ignoreOctaveHelp": "同じ音名のすべてのセルが反応し、オクターブ番号を非表示にします。",
     "arrangementMethod": "配置方式",
     "toolbarHeading": "ツールバー",
     "arrangement": "音の配置",

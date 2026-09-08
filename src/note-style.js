@@ -31,8 +31,8 @@ function accidental(acc) {
 }
 
 
-/** @param {number} note @param {{sharp: boolean, arrangement: NoteArrangement, x: number, y: number, base: number}} options */
-export function cellNoteName(note, { sharp, arrangement, x, y, base }) {
+/** @param {number} note @param {{ignoreOctave?: boolean, sharp: boolean, arrangement: NoteArrangement, x: number, y: number, base: number}} options */
+export function cellNoteName(note, { sharp, arrangement, x, y, base, ignoreOctave = false }) {
     let k
     if (arrangement === 'wicki-hayden' || arrangement === 'wicki-hayden-wide') {
         k = 2 * x + y + ((7 * base) % 12)
@@ -44,7 +44,7 @@ export function cellNoteName(note, { sharp, arrangement, x, y, base }) {
     const n = "CGDAEBF"[(700 + k) % 7]
     const acc = Math.floor((k + 1) / 7)
     const octave = Math.floor((note - acc) / 12) - 1
-    return `${n}${accidental(acc)}<sub>${octave}</sub>`
+    return `${n}${accidental(acc)}${ignoreOctave ? "" : `<sub>${octave}</sub>`}`
 }
 
 /** @param {number} note @param {ColorScheme} scheme @param {string} alpha */

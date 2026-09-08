@@ -27,6 +27,8 @@ const messages = {
     "inputDevice": "Input device",
     "notConnected": "Not connected",
     "refresh": "Refresh inputs",
+    "ignoreOctave": "Ignore octave differences",
+    "ignoreOctaveHelp": "Light up every cell of the same pitch class and hide octave numbers.",
     "arrangementMethod": "Layout",
     "toolbarHeading": "Toolbar",
     "arrangement": "Note arrangement",

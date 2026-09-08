@@ -5,6 +5,7 @@ export const storageKey = "midivisAppState"
 /**
  * @typedef {object} State
  * @property {import('./i18n.js').LanguagePreference} language
+ * @property {boolean} ignoreOctave
  * @property {boolean} sharp
  * @property {ColorScheme} colorScheme
  * @property {string | null} midiInputPortName Legacy names are accepted; new selections save IDs.
@@ -17,7 +18,7 @@ export const storageKey = "midivisAppState"
  */
 /** @returns {State} */
 export function defaultState() {
-    return { language: 'auto', sharp: false, colorScheme: 'monotone', midiInputPortName: null,
+    return { language: 'auto', ignoreOctave: false, sharp: false, colorScheme: 'monotone', midiInputPortName: null,
         showToolbar: true, noteArrangement: 'fourth', key: 0, mode: 2741,
         useDegree: false, noteOffsets: [] }
 }
@@ -30,6 +31,7 @@ export function normalizeState(value) {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return state
     const data = /** @type {Record<string, unknown>} */ (value)
     if (data.language === 'en' || data.language === 'ja') state.language = data.language
+    if (typeof data.ignoreOctave === 'boolean') state.ignoreOctave = data.ignoreOctave
     if (typeof data.sharp === 'boolean') state.sharp = data.sharp
     if (typeof data.showToolbar === 'boolean') state.showToolbar = data.showToolbar
     if (typeof data.useDegree === 'boolean') state.useDegree = data.useDegree

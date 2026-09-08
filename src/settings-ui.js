@@ -100,7 +100,7 @@ export function createSettingsUI(document, store, ports) {
         const variant = family?.variants.find(id => id === arrangementVariant.value)
         if (variant) store.updateState({ noteArrangement: variant })
     })
-    for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar'])) {
+    for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar', 'ignoreOctave'])) {
         const checkbox = input(`state-${key}`)
         on(checkbox, 'change', () => store.updateState({ [key]: checkbox.checked }))
     }
@@ -280,7 +280,7 @@ export function createSettingsUI(document, store, ports) {
             renderedLocale = locale
         }
         select('state-language').value = state.language
-        for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar'])) input(`state-${key}`).checked = state[key]
+        for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar', 'ignoreOctave'])) input(`state-${key}`).checked = state[key]
         select('state-key').value = String(state.key)
         select('state-mode').value = String(state.mode)
         const activeColor = colorSchemes.find(({ id }) => id === state.colorScheme)
