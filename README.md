@@ -33,6 +33,9 @@ npm run deploy:cloudflare
 Note arrangements are grouped into interval grids, harmonic layouts, keyboard and
 button layouts, and string instrument fretboards. Wicki–Hayden and Jankó expose
 shape and range variants separately. Existing saved layouts are retained.
+Piano provides 88 keys (A0–C8), with octaves arranged horizontally to the right
+or vertically upward in separate rows. Choose the direction under Visuals
+→ Note arrangement → Piano. Both directions support octave-independent display.
 
 Visuals also offers "Ignore octave differences" (off by default). This lights all
 cells of the same pitch class, hides octave numbers and uses pitch-class colors.

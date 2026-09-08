@@ -1,4 +1,6 @@
 type NoteArrangement =
+  | "piano"
+  | "piano-vertical"
   | "third"
   | "fourth"
   | "tritone"

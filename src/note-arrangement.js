@@ -2,7 +2,7 @@
  * @typedef {object} LayoutDefinition
  * @property {NoteArrangement} id
  * @property {string} label
- * @property {'square' | 'hexagonal'} grid
+ * @property {'square' | 'hexagonal' | 'piano'} grid
  * @property {number} columns
  * @property {number} rows
  * @property {number} stepX
@@ -14,6 +14,8 @@ export const cellHeight = 32
 
 /** @type {LayoutDefinition[]} */
 export const noteArrangements = [
+    { id: "piano", label: "Piano", grid: "piano", columns: 52, rows: 1, stepX: 1, stepY: 12, base: 21 },
+    { id: "piano-vertical", label: "Piano (Vertical octaves)", grid: "piano", columns: 7, rows: 9, stepX: 1, stepY: 12, base: 21 },
     { id: "third", label: "Third", grid: "hexagonal", columns: 12, rows: 23, stepX: 1, stepY: 4, base: 21 },
     { id: "fourth", label: "Fourth", grid: "square", columns: 12, rows: 23, stepX: 1, stepY: 5, base: 0 },
     { id: "tritone", label: "Tritone", grid: "square", columns: 14, rows: 22, stepX: 1, stepY: 6, base: -3 },
@@ -45,6 +47,7 @@ export function getLayout(id) {
  */
 export function layoutCells(id) {
     const layout = getLayout(id)
+    if (layout.grid === 'piano') return pianoCells(id === 'piano-vertical')
     const cells = []
     for (let y = layout.rows - 1; y >= 0; y--) {
         const padded = layout.grid === 'hexagonal' && y % 2 === 0
@@ -76,6 +79,7 @@ export const arrangementGroups = [
     ] },
     { id: 'harmony', families: [{ id: 'tonnetz', variants: ['tonnetz'] }] },
     { id: 'keyboard', families: [
+        { id: 'piano', variants: ['piano', 'piano-vertical'] },
         { id: 'wicki-hayden', variants: ['wicki-hayden', 'wicki-hayden-wide'] },
         { id: 'janko', variants: ['janko', 'janko-tall', 'janko-slanted'] },
         { id: 'c-system', variants: ['c-system'] },
@@ -86,3 +90,23 @@ export const arrangementGroups = [
         { id: 'bass', variants: ['bass'] },
     ] },
 ]
+
+/** Pixel geometry for an 88-key piano (A0–C8). Vertical rows ascend by octave.
+ * @param {boolean} vertical
+ */
+export function pianoCells(vertical) {
+    const positions = [0, 0.7, 1, 1.7, 2, 3, 3.7, 4, 4.7, 5, 5.7, 6]
+    const cells = []
+    for (let note = 21; note <= 108; note++) {
+        const pitch = note % 12
+        const octave = Math.floor(note / 12) - 1
+        const black = [1, 3, 6, 8, 10].includes(pitch)
+        const x = positions[pitch] + (vertical ? 0 : octave * 7 - 5)
+        const row = vertical ? 8 - octave : 0
+        cells.push({ note, x, y: row, column: x, row, visible: true,
+            paddingBefore: false, paddingAfter: false,
+            piano: { left: x * cellWidth, top: row * 112, width: cellWidth * (black ? 0.6 : 1), height: black ? 60 : 96, black },
+        })
+    }
+    return cells.sort((a, b) => a.row - b.row || a.note - b.note)
+}

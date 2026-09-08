@@ -119,6 +119,23 @@ export class ChordVisualizer {
             }
             div.style.transitionTimingFunction = `cubic-bezier(0, 1, 0.5, 1)`
             div.style.transitionDuration = `calc((1 - ${maxVelocity}) * 1s)`
+            if ('piano' in cell) {
+                const key = cell.piano
+                noteBgDiv.classList.add(key.black ? 'piano-black' : 'piano-white')
+                noteBgDiv.dataset.note = String(note)
+                Object.assign(noteBgDiv.style, {
+                    position: 'absolute', left: `${key.left}px`, top: `${key.top}px`,
+                    width: `${key.width}px`, height: `${key.height}px`, zIndex: key.black ? '1' : '0',
+                    background: key.black ? '#222' : '#fff',
+                })
+                div.style.display = 'flex'
+                div.style.alignItems = 'flex-end'
+                div.style.justifyContent = 'center'
+                div.style.paddingBottom = '6px'
+                div.style.fontSize = key.black ? '11px' : '14px'
+                div.style.border = `1px solid ${istonic ? '#7199c5' : '#777'}`
+                if (key.black) div.style.color = `hsl(0, 0%, calc((1 - ${maxVelocity}) * 100%))`
+            }
             if (!cell.visible) noteBgDiv.style.visibility = "hidden"
             return noteBgDiv
         }
@@ -128,6 +145,12 @@ export class ChordVisualizer {
         keyboard.style.display = "grid"
         keyboard.style.gridTemplateColumns = `repeat(${layout.columns * (hexagonal ? 2 : 1)}, ${cellWidth / (hexagonal ? 2 : 1)}px)`
         keyboard.style.gridTemplateRows = `repeat(auto-fill, ${cellHeight}px)`
+        if (layout.grid === 'piano') {
+            keyboard.style.display = 'block'
+            keyboard.style.position = 'relative'
+            keyboard.style.width = `${layout.columns * cellWidth}px`
+            keyboard.style.height = `${layout.rows * 112 - 16}px`
+        }
         const insertPadding = () => {
             const padding = document.createElement("div")
             padding.innerHTML = "&nbsp;"

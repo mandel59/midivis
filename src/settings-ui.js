@@ -323,9 +323,10 @@ export function createSettingsUI(document, store, ports) {
                 arrangementVariant.dataset.family = family.id
             }
             for (const option of arrangementVariant.options) {
-                const variant = option.value === family.id ? 'standard' : option.value.endsWith('-wide') ? 'wide' : option.value.endsWith('-tall') ? 'tall' : 'slanted'
+                const variant = family.id === 'piano' ? (option.value === 'piano' ? 'horizontal' : 'vertical') : option.value === family.id ? 'standard' : option.value.endsWith('-wide') ? 'wide' : option.value.endsWith('-tall') ? 'tall' : 'slanted'
                 option.textContent = t(`arrangementVariant.${variant}`)
             }
+            required('arrangement-variant-label').textContent = t(family.id === 'piano' ? 'octaveDirection' : 'arrangementVariant')
             arrangementVariant.value = state.noteArrangement
             required('arrangement-detail').hidden = family.variants.length === 1
             required('arrangement-help').textContent = t(/** @type {import('./i18n.js').MessageKey} */ (`layoutHelp.${family.id}`))

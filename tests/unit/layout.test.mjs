@@ -46,3 +46,23 @@ test('settings families expose every saved layout exactly once', () => {
     assert.deepEqual([...variants].sort(), noteArrangements.map(layout => layout.id).sort())
     assert.ok(families.every(family => family.variants[0] === family.id))
 })
+
+for (const id of ['piano', 'piano-vertical']) test(`${id} has 88 correctly spaced piano keys`, () => {
+    const cells = layoutCells(id)
+    assert.deepEqual(cells.map(cell => cell.note).sort((a, b) => a - b), Array.from({ length: 88 }, (_, i) => i + 21))
+    assert.equal(cells.filter(cell => cell.piano.black).length, 36)
+    const at = note => cells.find(cell => cell.note === note).piano
+    assert.equal(at(61).black, true)
+    assert.equal(at(64).black, false)
+    assert.equal(at(65).left - at(64).left, 40)
+    assert.ok(at(61).left > at(60).left)
+    assert.ok(at(61).left < at(62).left)
+    assert.ok(at(61).height < at(60).height)
+    if (id === 'piano') {
+        assert.equal(at(72).left - at(60).left, 280)
+        assert.equal(at(72).top, at(60).top)
+    } else {
+        assert.equal(at(72).left, at(60).left)
+        assert.equal(at(60).top - at(72).top, 112)
+    }
+})
