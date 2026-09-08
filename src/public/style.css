@@ -204,3 +204,5 @@ menu>li>a {
     #config .check { flex-wrap: wrap; }
     #toolbar h1 { font-size: 1.5rem; margin-left: 0.75rem; }
 }
+
+#config-close { display: inline-flex; align-items: center; gap: 0.4em; }

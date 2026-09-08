@@ -1,3 +1,4 @@
+import { UIError } from './i18n.js'
 import { MidiDevice } from './midi-device.js'
 import { ChordPrinter } from './chord-printer.js'
 import { ChordVisualizer } from './chord-visualizer.js'
@@ -28,7 +29,7 @@ export async function startApplication({ document, midi, store }) {
             const ok = id ? await midi.openPortByName(id) : (await midi.closePort(), true)
             if (current !== selection) return
             if (ok) store.updateState({ midiInputPortName: id || null })
-            else throw new Error('This MIDI input is no longer available. Choose another input or refresh the list.')
+            else throw new UIError('errorMissingInput')
         },
     })
     function reflectPerformanceOptions() {

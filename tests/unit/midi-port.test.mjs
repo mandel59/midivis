@@ -65,7 +65,7 @@ test('missing ports preserve the active port, failed opens do not poison the que
     assert.equal(await selector.openPortByName('missing'), false)
     assert.equal((await selector.portOptions()).find(p => p.selected).id, 'a')
     b.open = async () => { throw new Error('open failed') }
-    await assert.rejects(selector.openPortByName('b'), /open failed/)
+    await assert.rejects(selector.openPortByName('b'), error => error.key === 'errorDevice' && error.cause.message === 'open failed')
     assert.equal(await selector.openPortByName('a'), true)
 })
 test('unplugging the selected input detaches it and notifies once', async () => {

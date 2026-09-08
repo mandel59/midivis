@@ -43,6 +43,28 @@ semitones; invalid values leave the previous setting applied and show an inline
 explanation. The device list updates when inputs are added or removed, reports
 connection progress, and offers a manual refresh for permission/device recovery.
 
+## UI languages
+
+English and Japanese are supported. Display → Language offers Automatic,
+English and 日本語. Automatic uses the first supported entry in the browser's
+language preferences (including regional tags such as `ja-JP`), falling back to
+English. Explicit choices are saved with the other settings. Existing settings
+without a language preference default to Automatic.
+
+Language changes update labels, accessible names, input options, connection
+status and visible errors without reconnecting MIDI or rebuilding the keyboard.
+The About page uses the same preference. Device names, note/chord notation,
+proper names and legal license bodies are not translated.
+
+To add a language, add a catalog in `src/locales` with the keys and placeholders
+from `en.js`, register it in `src/i18n.js`, extend the preference validation in
+`src/state.js`, and add its native language name to `state-language` in the HTML.
+Static UI text uses `data-i18n` (or `data-i18n-title` / `data-i18n-aria-label`);
+dynamic messages use typed translation keys and named placeholders. Application
+errors carry stable keys, while original browser/device errors remain available
+in the console for diagnostics. Catalog and browser tests cover translation
+completeness, detection, persistence and switching while connected.
+
 ## Development and tests
 
 Use Node.js 24 or later and Bun 1.3.12 (the committed `bun.lockb` is the

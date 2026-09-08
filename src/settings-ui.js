@@ -1,3 +1,4 @@
+import { createTranslator, resolveLocale, translateDocument, errorMessageKey } from './i18n.js'
 import { colorSchemes } from './color-scheme.js'
 import { noteArrangements } from './note-arrangement.js'
 import { isSharpKey } from './note-style.js'
@@ -25,6 +26,15 @@ export function createSettingsUI(document, store, ports) {
         element.addEventListener(type, handler)
         disposers.push(() => element.removeEventListener(type, handler))
     }
+    const browserLanguages = () => document.defaultView?.navigator.languages ?? ['en']
+    let locale = resolveLocale(store.getState('language'), browserLanguages())
+    let t = createTranslator(locale)
+    /** @type {import('./i18n.js').Locale | undefined} */
+    let renderedLocale
+    on(select('state-language'), 'change', () => {
+        const language = select('state-language').value
+        if (language === 'auto' || language === 'en' || language === 'ja') store.updateState({ language })
+    })
     const config = required('config')
     const tabs = [...config.querySelectorAll('button[role="tab"]')]
     /** @param {number} index @param {boolean} [focus] */
@@ -65,7 +75,10 @@ export function createSettingsUI(document, store, ports) {
         on(radio, 'change', () => store.updateState({ colorScheme: id }))
         const text = document.createElement('label')
         text.title = `Alt+${key}`
-        text.append(radio, document.createTextNode(label))
+        const name = document.createElement('span')
+        name.dataset.i18n = `color.${id}`
+        name.textContent = label
+        text.append(radio, name)
         colorContainer.append(text)
     }
     const arrangement = document.createElement('select')
@@ -73,6 +86,7 @@ export function createSettingsUI(document, store, ports) {
     for (const { id, label } of noteArrangements) {
         const option = document.createElement('option')
         option.value = id
+        option.dataset.i18n = `layout.${id}`
         option.textContent = label
         arrangement.append(option)
     }
@@ -105,7 +119,7 @@ export function createSettingsUI(document, store, ports) {
         const value = offset.valueAsNumber
         if (!Number.isInteger(value) || value < -24 || value > 24) {
             offset.setAttribute('aria-invalid', 'true')
-            offsetError.textContent = 'Enter a whole number from −24 to +24. The previous setting is still applied.'
+            offsetError.textContent = t('offsetError')
             offsetError.hidden = false
             return
         }
@@ -118,6 +132,18 @@ export function createSettingsUI(document, store, ports) {
     const settingsButton = required('menu-settings')
     const closeButton = required('config-close')
     const status = required('midi-status')
+    /** @type {import('./i18n.js').MessageKey} */
+    let statusKey = 'notConnected'
+    /** @type {Record<string, string>} */
+    let statusParams = {}
+    /** @type {import('./i18n.js').MessageKey | undefined} */
+    let currentErrorKey
+    /** @param {import('./i18n.js').MessageKey} key @param {Record<string, string>} [params] */
+    function setStatus(key, params = {}) {
+        statusKey = key
+        statusParams = params
+        status.textContent = t(key, params)
+    }
     const refreshButton = /** @type {HTMLButtonElement} */ (required('midi-refresh'))
     let request = 0
     let connecting = false
@@ -145,19 +171,21 @@ export function createSettingsUI(document, store, ports) {
         if (disposed) return
         console.error(error)
         openPanel()
-        required('oops-message').textContent = error instanceof Error ? error.message : String(error)
+        currentErrorKey = errorMessageKey(error)
+        required('oops-message').textContent = t(currentErrorKey)
         required('oops').hidden = false
         required('oops').classList.add('shown')
         required('oops').scrollIntoView?.({ block: 'nearest' })
     }
     function dismissError() {
+        currentErrorKey = undefined
         required('oops').hidden = true
         required('oops').classList.remove('shown')
         if (required('oops').contains(document.activeElement)) closeButton.focus()
     }
     async function refreshPorts() {
         const current = ++request
-        if (!connecting) status.textContent = 'Checking MIDI inputs…'
+        if (!connecting) setStatus('checking')
         portSelect.disabled = true
         refreshButton.disabled = true
         try {
@@ -166,7 +194,8 @@ export function createSettingsUI(document, store, ports) {
             portSelect.replaceChildren()
             const placeholder = document.createElement('option')
             placeholder.value = ''
-            placeholder.textContent = 'Not connected'
+            placeholder.dataset.i18n = 'notConnected'
+            placeholder.textContent = t('notConnected')
             portSelect.append(placeholder)
             for (const { id, name, selected } of options) {
                 const option = document.createElement('option')
@@ -176,12 +205,11 @@ export function createSettingsUI(document, store, ports) {
                 portSelect.append(option)
             }
             const active = options.find(port => port.selected)
-            if (!connecting) status.textContent = active ? `Connected: ${active.name}` :
-                options.length ? 'Not connected. Choose an input device.' : 'No MIDI inputs found. Connect a device, then refresh.'
+            if (!connecting) setStatus(active ? 'connected' : options.length ? 'chooseInput' : 'noInputs', active ? { name: active.name } : {})
             portSelect.title = portSelect.selectedOptions[0]?.textContent ?? ''
         } catch (error) {
             if (disposed || current !== request) return
-            status.textContent = 'MIDI inputs unavailable. Check permissions and try Refresh inputs.'
+            setStatus('unavailable')
             throw error
         } finally {
             if (!disposed && current === request) {
@@ -204,7 +232,7 @@ export function createSettingsUI(document, store, ports) {
         connecting = true
         portSelect.disabled = true
         refreshButton.disabled = true
-        status.textContent = id ? 'Connecting…' : 'Disconnecting…'
+        setStatus(id ? 'connecting' : 'disconnecting')
         dismissError()
         try { await ports.selectPort(id) }
         catch (error) { handleError(error) }
@@ -236,6 +264,17 @@ export function createSettingsUI(document, store, ports) {
     })
     function render() {
         const state = store.getStateAll()
+        locale = resolveLocale(state.language, browserLanguages())
+        if (locale !== renderedLocale) {
+            t = createTranslator(locale)
+            translateDocument(document, locale)
+            status.textContent = t(statusKey, statusParams)
+            if (currentErrorKey) required('oops-message').textContent = t(currentErrorKey)
+            if (offset.hasAttribute('aria-invalid')) offsetError.textContent = t('offsetError')
+            portSelect.title = portSelect.selectedOptions[0]?.textContent ?? ''
+            renderedLocale = locale
+        }
+        select('state-language').value = state.language
         for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar'])) input(`state-${key}`).checked = state[key]
         select('state-key').value = String(state.key)
         select('state-mode').value = String(state.mode)
@@ -244,6 +283,7 @@ export function createSettingsUI(document, store, ports) {
         if (document.activeElement !== offset && !offset.hasAttribute('aria-invalid')) resetOffset()
         required('toolbar').classList.toggle('shown', state.showToolbar)
     }
+    if (document.defaultView) on(document.defaultView, 'languagechange', render)
     render()
     disposers.push(store.subscribeState(render))
     return { render, showConfigDialog, refreshPorts, handleError, dispose() { disposed = true; request++; disposers.forEach(dispose => dispose()) } }

@@ -1,23 +1,34 @@
 // @ts-nocheck
 import appLicense from "../LICENSE"
 import eventsLicense from "events/LICENSE"
-const licenses = `All of the source code to this application is available under licenses
-which are both free and open source. The source code can be found on the
-git repository <https://github.com/mandel59/midivis>.
+import { createStateStore, storageKey } from './state.js'
+import { resolveLocale, createTranslator, translateDocument } from './i18n.js'
 
-### Midivis License
+async function render() {
+    const store = createStateStore()
+    await store.loadState()
+    const locale = resolveLocale(store.getState('language'), navigator.languages)
+    const t = createTranslator(locale)
+    translateDocument(document, locale)
+    // Legal license bodies stay verbatim; only the surrounding UI is translated.
+    document.getElementById('licenses').textContent = `${t('licenseIntro')}
+
+### ${t('appLicense')}
 
 ${appLicense}
 
 ---
 
-This application contains code available under the licenses listed here.
+${t('thirdParty')}
 
-### Node.js License
+### ${t('eventsLicense')}
 
-This license applies to the module \`events\`.
+${t('eventsNotice')}
 
-${eventsLicense}
-`
-
-document.getElementById("licenses").innerText = licenses
+${eventsLicense}`
+}
+render().catch(console.error)
+window.addEventListener('storage', event => {
+    if (event.key === storageKey || event.key === null) render().catch(console.error)
+})
+window.addEventListener('languagechange', () => { render().catch(console.error) })

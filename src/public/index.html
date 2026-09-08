@@ -1,10 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
-    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';" />
-    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Security-Policy" content="script-src 'self' 'unsafe-inline';">
+    <meta name="viewport" content="width=device-width">
     <link rel="stylesheet" href="style.css">
     <link rel="icon" href="icons/icon-32.png">
     <link rel="manifest" href="midivis.webmanifest">
@@ -15,56 +14,62 @@
     <header id="toolbar">
         <h1>Midivis</h1>
         <menu>
-            <li><a href="about.html" target="_blank">About</a></li>
+            <li><a href="about.html" target="_blank" data-i18n="about">About</a></li>
         </menu>
     </header>
     <main>
         <div id="chordvis"></div>
         <div id="chordindicator">&nbsp;</div>
     </main>
-    <button id="menu-settings" aria-controls="config" aria-expanded="false" title="Settings (Ctrl+, or ⌘+,)">Settings</button>
+    <button id="menu-settings" aria-controls="config" aria-expanded="false" title="Settings (Ctrl+, or ⌘+,)" data-i18n="settings" data-i18n-title="settingsTitle">Settings</button>
     <section id="config" hidden aria-labelledby="config-title">
         <div class="config-header">
-            <h2 id="config-title">Settings</h2>
-            <button id="config-close" aria-label="Close settings">Close <span aria-hidden="true">×</span></button>
+            <h2 id="config-title" data-i18n="settings">Settings</h2>
+            <button id="config-close" aria-label="Close settings" data-i18n-aria-label="closeSettings"><span data-i18n="close">Close</span><span aria-hidden="true">×</span></button>
         </div>
         <div class="config-body">
-            <div class="settings-tabs" role="tablist" aria-label="Settings categories" aria-orientation="vertical">
-                <button type="button" id="settings-tab-connection" role="tab" aria-controls="settings-panel-connection" aria-selected="true" tabindex="0">Connection</button>
-                <button type="button" id="settings-tab-display" role="tab" aria-controls="settings-panel-display" aria-selected="false" tabindex="-1">Display</button>
-                <button type="button" id="settings-tab-chords" role="tab" aria-controls="settings-panel-chords" aria-selected="false" tabindex="-1">Chords</button>
-                <button type="button" id="settings-tab-transpose" role="tab" aria-controls="settings-panel-transpose" aria-selected="false" tabindex="-1">Transpose</button>
+            <div class="settings-tabs" role="tablist" aria-label="Settings categories" aria-orientation="vertical" data-i18n-aria-label="categories">
+                <button type="button" id="settings-tab-connection" role="tab" aria-controls="settings-panel-connection" aria-selected="true" tabindex="0" data-i18n="connectionTab">Connection</button>
+                <button type="button" id="settings-tab-display" role="tab" aria-controls="settings-panel-display" aria-selected="false" tabindex="-1" data-i18n="displayTab">Display</button>
+                <button type="button" id="settings-tab-chords" role="tab" aria-controls="settings-panel-chords" aria-selected="false" tabindex="-1" data-i18n="chordsTab">Chords</button>
+                <button type="button" id="settings-tab-transpose" role="tab" aria-controls="settings-panel-transpose" aria-selected="false" tabindex="-1" data-i18n="transposeTab">Transpose</button>
             </div>
             <div class="settings-content">
 
-            <p class="hint">Changes apply and save immediately.</p>
+            <p class="hint" data-i18n="immediate">Changes apply and save immediately.</p>
             <section id="oops" hidden aria-labelledby="oops-title">
-                <h3 id="oops-title">Could not complete the action</h3>
+                <h3 id="oops-title" data-i18n="errorTitle">Could not complete the action</h3>
                 <p id="oops-message" role="alert"></p>
-                <p>Check your device connection and browser MIDI permissions, then try again.</p>
-                <button id="oops-close">Dismiss</button>
+                <p data-i18n="recovery">Check your device connection and browser MIDI permissions, then try again.</p>
+                <button id="oops-close" data-i18n="dismiss">Dismiss</button>
             </section>
             <section id="settings-panel-connection" role="tabpanel" aria-labelledby="settings-tab-connection">
-                <h3>MIDI connection</h3>
-                <label for="config-midi-input-port">Input device</label>
+                <h3 data-i18n="connection">MIDI connection</h3>
+                <label for="config-midi-input-port" data-i18n="inputDevice">Input device</label>
                 <select id="config-midi-input-port" aria-describedby="midi-status"></select>
-                <p id="midi-status" class="hint" role="status">Not connected</p>
-                <button id="midi-refresh">Refresh inputs</button>
+                <p id="midi-status" class="hint" role="status" data-i18n="notConnected">Not connected</p>
+                <button id="midi-refresh" data-i18n="refresh">Refresh inputs</button>
             </section>
             <section id="settings-panel-display" role="tabpanel" aria-labelledby="settings-tab-display" hidden>
-                <h3>Display</h3>
-                <label for="state-noteArrangement">Note arrangement</label>
+                <h3 data-i18n="displayTab">Display</h3>
+                <label for="state-language" data-i18n="language">Language</label>
+                <select id="state-language">
+                    <option value="auto" data-i18n="automatic">Automatic (browser language)</option>
+                    <option value="en">English</option>
+                    <option value="ja">日本語</option>
+                </select>
+                <label for="state-noteArrangement" data-i18n="arrangement">Note arrangement</label>
                 <div id="config-noteArrangement"></div>
                 <fieldset class="color-options">
-                    <legend>Color scheme</legend>
+                    <legend data-i18n="color">Color scheme</legend>
                     <div id="config-colorScheme"></div>
                 </fieldset>
-                <label class="check"><input id="state-showToolbar" type="checkbox">Show toolbar</label>
-                <p class="hint">The Settings button always remains available.</p>
+                <label class="check"><input id="state-showToolbar" type="checkbox"><span data-i18n="toolbar">Show toolbar</span></label>
+                <p class="hint" data-i18n="toolbarHelp">The Settings button always remains available.</p>
             </section>
             <section id="settings-panel-chords" role="tabpanel" aria-labelledby="settings-tab-chords" hidden>
-                <h3>Key and chord names</h3>
-                <div class="field-row"><label for="state-key">Key</label><select id="state-key">
+                <h3 data-i18n="chords">Key and chord names</h3>
+                <div class="field-row"><label for="state-key" data-i18n="key">Key</label><select id="state-key">
                 <option value="0">C</option>
                 <option value="1">C♯/D♭</option>
                 <option value="2">D</option>
@@ -78,24 +83,24 @@
                 <option value="10">A♯/B♭</option>
                 <option value="11">B</option>
             </select></div>
-                <label for="state-mode">Scale / mode</label>
+                <label for="state-mode" data-i18n="mode">Scale / mode</label>
                 <select id="state-mode">
-                <option value="2741">Major (Ionian)</option>
-                <option value="1453">Natural Minor (Aeolian)</option>
-                <option value="2225">Ionian Pentatonic</option>
-                <option value="661">Major Pentatonic</option>
-                <option value="1189">Suspended Pentatonic</option>
-                <option value="1193">Minor Pentatonic</option>
-                <option value="397">Aeolian Pentatonic</option>
-                <option value="4095">Chromatic</option>
+                <option value="2741" data-i18n="mode.2741">Major (Ionian)</option>
+                <option value="1453" data-i18n="mode.1453">Natural Minor (Aeolian)</option>
+                <option value="2225" data-i18n="mode.2225">Ionian Pentatonic</option>
+                <option value="661" data-i18n="mode.661">Major Pentatonic</option>
+                <option value="1189" data-i18n="mode.1189">Suspended Pentatonic</option>
+                <option value="1193" data-i18n="mode.1193">Minor Pentatonic</option>
+                <option value="397" data-i18n="mode.397">Aeolian Pentatonic</option>
+                <option value="4095" data-i18n="mode.4095">Chromatic</option>
             </select>
-                <label class="check"><input id="state-sharp" type="checkbox">Use sharp notes <span class="shortcut">Alt+S</span></label>
-                <label class="check"><input id="state-useDegree" type="checkbox">Show chord names as degrees</label>
+                <label class="check"><input id="state-sharp" type="checkbox"><span data-i18n="sharp">Use sharp notes</span><span class="shortcut">Alt+S</span></label>
+                <label class="check"><input id="state-useDegree" type="checkbox"><span data-i18n="degrees">Show chord names as degrees</span></label>
             </section>
             <section id="settings-panel-transpose" role="tabpanel" aria-labelledby="settings-tab-transpose" hidden>
-                <h3>Transpose input</h3>
-                <p id="channel-help" class="hint">Choose the channel to transpose. Other channels remain visible. Channel 10 is percussion and is excluded.</p>
-                <div class="field-row"><label for="state-channel">Edit channel</label><select id="state-channel" aria-describedby="channel-help">
+                <h3 data-i18n="transpose">Transpose input</h3>
+                <p id="channel-help" class="hint" data-i18n="channelHelp">Choose the channel to transpose. Other channels remain visible. Channel 10 is percussion and is excluded.</p>
+                <div class="field-row"><label for="state-channel" data-i18n="channel">Edit channel</label><select id="state-channel" aria-describedby="channel-help">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -105,7 +110,7 @@
                 <option value="7">7</option>
                 <option value="8">8</option>
                 <option value="9">9</option>
-                <option value="10" disabled>10</option>
+                <option value="10" disabled="">10</option>
                 <option value="11">11</option>
                 <option value="12">12</option>
                 <option value="13">13</option>
@@ -113,14 +118,15 @@
                 <option value="15">15</option>
                 <option value="16">16</option>
             </select></div>
-                <label for="state-noteOffset">Transpose (semitones)</label>
+                <label for="state-noteOffset" data-i18n="offset">Transpose (semitones)</label>
                 <input id="state-noteOffset" type="number" value="0" min="-24" max="24" step="1" aria-describedby="offset-help offset-error">
-                <p id="offset-help" class="hint">−24 to +24 semitones. 12 semitones = one octave.</p>
+                <p id="offset-help" class="hint" data-i18n="offsetHelp">−24 to +24 semitones. 12 semitones = one octave.</p>
                 <p id="offset-error" class="field-error" role="alert" hidden></p>
             </section>
             </div>
         </div>
     </section>
-</body>
 
+
+</body>
 </html>

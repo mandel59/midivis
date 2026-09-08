@@ -1,3 +1,4 @@
+import { UIError } from './i18n.js'
 import { EventEmitter } from "events"
 
 /**
@@ -18,8 +19,8 @@ import { EventEmitter } from "events"
 
 /** @returns {Promise<MidiAccessSource>} */
 async function requestMIDIAccess() {
-    if (!("requestMIDIAccess" in navigator)) {
-        throw new Error("Web MIDI API is not available. See https://caniuse.com/midi for browsers supporting Web MIDI.")
+    if (typeof navigator.requestMIDIAccess !== "function") {
+        throw new UIError('errorUnsupported')
     }
     const request = /** @type {(options: object) => Promise<MidiAccessSource>} */ (navigator.requestMIDIAccess)
     return request.call(navigator, { sysex: false, software: false })
@@ -69,7 +70,8 @@ export class MidiInputPortSelector extends EventEmitter {
         this._input = undefined
         input.removeEventListener("midimessage", this._emitMessage)
         this.emit("disconnect")
-        await input.close()
+        try { await input.close() }
+        catch (error) { throw new UIError('errorDevice', error) }
     }
     /** Accept an ID, or a legacy saved name. @param {string} name */
     openPortByName(name) {
@@ -80,7 +82,8 @@ export class MidiInputPortSelector extends EventEmitter {
             if (!input) return false
             if (input === this._input) return true
             await this._disconnect()
-            await input.open()
+            try { await input.open() }
+            catch (error) { throw new UIError('errorDevice', error) }
             if (input.state === "disconnected") {
                 await input.close()
                 return false

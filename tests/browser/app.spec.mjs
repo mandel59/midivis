@@ -14,7 +14,7 @@ async function setup(page, saved = null, denied = false) {
         let requests = 0
         Object.defineProperty(navigator, 'requestMIDIAccess', { value: async () => {
             requests++
-            if (denied) throw new Error('MIDI permission denied')
+            if (denied) throw new DOMException('MIDI permission denied', 'NotAllowedError')
             return access
         } })
         window.fakeMIDI = {
@@ -95,7 +95,7 @@ test('permission errors are visible while settings remain usable', async ({ page
     await setup(page, null, true)
     await page.goto('/')
     await expect(page.locator('#oops')).toHaveClass(/shown/)
-    await expect(page.locator('#oops-message')).toContainText('MIDI permission denied')
+    await expect(page.locator('#oops-message')).toContainText('MIDI access was denied')
     await page.click('#oops-close')
     await page.click('#settings-tab-display')
     await page.selectOption('#state-noteArrangement', 'tonnetz')
@@ -199,7 +199,7 @@ test('port discovery, unplugging and failed selection show actual connection sta
     await page.evaluate(() => window.fakeMIDI.fail('b'))
     await page.click('#settings-tab-connection')
     await page.selectOption('#config-midi-input-port', 'b')
-    await expect(page.locator('#oops-message')).toHaveText('Device connection failed')
+    await expect(page.locator('#oops-message')).toContainText('The MIDI device could not be opened or closed')
     await expect(page.locator('#config-midi-input-port')).toHaveValue('')
     await expect(page.locator('#midi-status')).toContainText('Not connected')
     await expect(page.locator('#oops')).not.toContainText('Firefox 98')
@@ -291,7 +291,7 @@ test('vertical tabs expose one category and support arrow, Home, End and Tab key
     await expect(page.getByLabel('Note arrangement', { exact: true })).toBeVisible()
     await expect(page.locator('#config-midi-input-port')).toBeHidden()
     await page.keyboard.press('Tab')
-    await expect(page.locator('#state-noteArrangement')).toBeFocused()
+    await expect(page.locator('#state-language')).toBeFocused()
     await page.selectOption('#state-noteArrangement', 'guitar')
     await page.getByRole('tab', { name: 'Display', exact: true }).focus()
     await page.keyboard.press('End')
@@ -326,3 +326,79 @@ for (const width of [1280, 375]) {
         }
     })
 }
+
+test.describe('Japanese UI', () => {
+    test.use({ locale: 'ja-JP' })
+
+    test('detects browser language, switches live and persists the explicit choice', async ({ page, context }) => {
+        await setup(page)
+        await page.goto('/')
+        await expect(page.locator('html')).toHaveAttribute('lang', 'ja')
+        await expect(page.getByRole('button', { name: '設定を閉じる', exact: true })).toBeVisible()
+        await expect(page.getByRole('tab', { name: '接続', exact: true })).toBeVisible()
+        await page.selectOption('#config-midi-input-port', 'a')
+        await expect(page.locator('#midi-status')).toHaveText('接続中：Keyboard')
+        await page.click('#settings-tab-transpose')
+        await page.fill('#state-noteOffset', '25')
+        await page.locator('#state-noteOffset').dispatchEvent('change')
+        await expect(page.locator('#offset-error')).toContainText('整数を入力')
+        await page.click('#settings-tab-display')
+        await expect(page.locator('#state-noteArrangement option[value="guitar"]')).toHaveText('ギター')
+        await page.evaluate(() => { window.keyboardBeforeLanguage = document.querySelector('#chordvis > div') })
+        await page.locator('#state-language').focus()
+        await page.selectOption('#state-language', 'en')
+        await expect(page.locator('#state-language')).toBeFocused()
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+        await expect(page.getByRole('tab', { name: 'Display', exact: true })).toHaveAttribute('aria-selected', 'true')
+        await expect(page.locator('#midi-status')).toHaveText('Connected: Keyboard')
+        expect(await page.evaluate(() => window.fakeMIDI.log)).toEqual(['open:a'])
+        expect(await page.evaluate(() => document.querySelector('#chordvis > div') === window.keyboardBeforeLanguage)).toBe(true)
+        await page.click('#settings-tab-transpose')
+        await expect(page.locator('#state-noteOffset')).toHaveValue('25')
+        await expect(page.locator('#offset-error')).toContainText('Enter a whole number')
+        await page.reload()
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+        const about = await context.newPage()
+        await about.goto('/about.html')
+        await expect(about).toHaveTitle('About Midivis')
+        await page.click('#menu-settings')
+        await page.click('#settings-tab-display')
+        await page.selectOption('#state-language', 'auto')
+        await expect(page.locator('html')).toHaveAttribute('lang', 'ja')
+        await expect(about).toHaveTitle('Midivisについて')
+        await expect(about.locator('#licenses')).toContainText('Permission is hereby granted')
+        await about.close()
+    })
+
+    test('translates errors again when the language changes', async ({ page }) => {
+        await setup(page, null, true)
+        await page.goto('/')
+        await expect(page.locator('#oops-message')).toContainText('アクセスが拒否されました')
+        await page.click('#settings-tab-display')
+        await page.selectOption('#state-language', 'en')
+        await expect(page.locator('#oops-message')).toContainText('MIDI access was denied')
+        await expect(page.locator('#midi-status')).toContainText('MIDI inputs unavailable')
+    })
+
+    test('translated categories fit a narrow screen', async ({ page }, testInfo) => {
+        await page.setViewportSize({ width: 375, height: 667 })
+        await setup(page)
+        await page.goto('/')
+        for (const id of ['connection', 'display', 'chords', 'transpose']) {
+            await page.click(`#settings-tab-${id}`)
+            expect(await page.locator('.settings-content').evaluate(element => element.scrollWidth > element.clientWidth)).toBe(false)
+            await expect(page.locator('#config-close')).toBeInViewport()
+            await page.screenshot({ path: testInfo.outputPath(`${id}-ja.png`) })
+        }
+    })
+})
+
+test.describe('Unsupported browser locale', () => {
+    test.use({ locale: 'de-DE' })
+    test('falls back to English', async ({ page }) => {
+        await setup(page)
+        await page.goto('/')
+        await expect(page.locator('html')).toHaveAttribute('lang', 'en')
+        await expect(page.locator('#config-title')).toHaveText('Settings')
+    })
+})
