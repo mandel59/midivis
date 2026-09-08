@@ -28,3 +28,9 @@ export function openInputPortByName(midiInputPortName) {
 export function closeInputPort() {
     return input.closePort()
 }
+
+/** @param {() => void} callback */
+export function subscribeMIDIDisconnect(callback) {
+    input.on("disconnect", callback)
+    return () => { input.off("disconnect", callback) }
+}

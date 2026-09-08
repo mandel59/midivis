@@ -1,7 +1,8 @@
+import { MidiDevice } from "./midi-device.js"
 import "./assets.js"
 import "./register-service-worker.js"
 
-import { getInputPortOptions, subscribeMIDIMessage, openInputPortByName, closeInputPort } from "./midi-bridge.js"
+import { getInputPortOptions, subscribeMIDIMessage, openInputPortByName, closeInputPort, subscribeMIDIDisconnect } from "./midi-bridge.js"
 import { ChordPrinter } from "./chord-printer.js"
 import { ChordVisualizer } from "./chord-visualizer.js"
 import { getState, subscribeState, loadState, updateState } from "./state.js"
@@ -17,7 +18,8 @@ if (element == null) {
     throw new Error("#chordvis not found")
 }
 
-const printer = new ChordPrinter(0, {
+const device = new MidiDevice()
+const printer = new ChordPrinter(device, {
     onChordChange: (chord) => {
         if (chord) {
             indicator.innerText = chord
@@ -28,7 +30,7 @@ const printer = new ChordPrinter(0, {
     scaleKey: getState("key"),
 })
 
-const visualizer = new ChordVisualizer(element, {
+const visualizer = new ChordVisualizer(element, device, {
     sharp: getState("sharp"),
     key: getState("key"),
 })
@@ -157,8 +159,7 @@ function reflectState() {
     })
     for (let i = 0; i < 16; i++) {
         const offset = noteOffsets[i] ?? 0
-        printer.setNoteOffset(offset, i + 1)
-        visualizer.setNoteOffset(offset, i + 1)
+        device.setNoteOffset(offset, i + 1)
     }
     const selectChannel = /** @type {HTMLSelectElement} */ (document.getElementById("state-channel"))
     const inputNoteOffset = /** @type {HTMLSelectElement} */ (document.getElementById("state-noteOffset"))
@@ -191,9 +192,9 @@ subscribeState(() => {
     reflectState()
 })
 
+subscribeMIDIDisconnect(() => device.clear())
 subscribeMIDIMessage((deltaTime, message) => {
-    printer.midiMessageHandler(deltaTime, message)
-    visualizer.midiMessageHandler(deltaTime, message)
+    device.midiMessageHandler(deltaTime, message)
 })
 
 const midiInputPortSelector = /** @type {HTMLSelectElement} */ (document.getElementById("config-midi-input-port"))

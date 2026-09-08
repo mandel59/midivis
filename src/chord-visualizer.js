@@ -1,4 +1,3 @@
-import { MidiDevice } from './midi-device.js'
 
 const cellWidth = 40
 const cellHeight = 32
@@ -85,10 +84,11 @@ function accidental(acc) {
     return s
 }
 
-export class ChordVisualizer extends MidiDevice {
+export class ChordVisualizer {
     /**
      * 
      * @param {HTMLElement} element 
+     * @param {import('./midi-device.js').MidiDevice} device
      * @param {ChordVisualizerOptions} options
      * @typedef ChordVisualizerOptions
      * @property {boolean} [sharp]
@@ -99,6 +99,7 @@ export class ChordVisualizer extends MidiDevice {
      */
     constructor(
         element,
+        device,
         {
             sharp = false,
             colorScheme = "monotone",
@@ -107,7 +108,9 @@ export class ChordVisualizer extends MidiDevice {
             mode = 2741,
         } = {}
     ) {
-        super()
+        this.device = device
+        /** @type {Set<number>} */
+        this.litNotes = new Set()
         /** @type {HTMLElement} */
         this.element = element
         /** @type {boolean} */
@@ -121,6 +124,8 @@ export class ChordVisualizer extends MidiDevice {
         /** @type {number} */
         this._mode = mode
         this.prepareDOM()
+        this.unsubscribe = device.subscribe(() => this.renderNotes())
+        this.renderNotes()
     }
     /**
      * @param {ChordVisualizerOptions} param1
@@ -287,33 +292,12 @@ export class ChordVisualizer extends MidiDevice {
         }
         this.element.appendChild(keyboard)
     }
-    /**
-     * @param {number} note 
-     * @param {number} velocity 
-     * @param {number} channel 
-     */
-    setVariable(note, velocity, channel) {
-        // this.element.style.setProperty(`--v-${channel}-${note}`, String(velocity / 127))
-        const vs = this.velocities(note)
-        const vMax = Math.max(0, ...vs) / 127
-        this.element.style.setProperty(`--v-max-${note}`, String(vMax > 0 ? 1 : 0))
+    renderNotes() {
+        const notes = new Set(this.device.notes())
+        for (const note of new Set([...this.litNotes, ...notes])) {
+            this.element.style.setProperty(`--v-max-${note}`, notes.has(note) ? "1" : "0")
+        }
+        this.litNotes = notes
     }
-    /**
-     * @param {number} note 
-     * @param {number} velocity 
-     * @param {number} channel 
-     */
-    noteOn(note, velocity, channel) {
-        super.noteOn(note, velocity, channel)
-        this.setVariable(note, velocity, channel)
-    }
-    /**
-     * @param {number} note 
-     * @param {number} velocity 
-     * @param {number} channel 
-     */
-    noteOff(note, velocity, channel) {
-        super.noteOff(note, velocity, channel)
-        this.setVariable(note, 0, channel)
-    }
+    dispose() { this.unsubscribe() }
 }

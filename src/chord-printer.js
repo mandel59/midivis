@@ -1,9 +1,8 @@
 import { noteName, chordName } from './chord.js'
-import { MidiDevice } from './midi-device.js'
 
-export class ChordPrinter extends MidiDevice {
+export class ChordPrinter {
     /**
-     * @param {number} [channel]
+     * @param {import('./midi-device.js').MidiDevice} device
      * @param {object} [options]
      * @param {Console} [options.console]
      * @param {(chord: string) => void} [options.onChordChange]
@@ -11,14 +10,17 @@ export class ChordPrinter extends MidiDevice {
      * @param {boolean} [options.useDegree]
      * @param {number} [options.scaleKey]
      */
-    constructor(channel, {
+    constructor(device, {
         console = undefined,
         onChordChange = undefined,
         sharp = false,
         useDegree = false,
         scaleKey = 0,
     } = {}) {
-        super(channel)
+        this.device = device
+        this.unsubscribe = device.subscribe(kind => {
+            if (kind === "noteOn") this.updateChord()
+        })
         this.console = console
         this.onChordChange = onChordChange
         /** @type {string | undefined} */
@@ -47,35 +49,9 @@ export class ChordPrinter extends MidiDevice {
             scaleKey: this.scaleKey,
         })
     }
-    /**
-     * @param {ArrayLike<number>} message 
-     */
-    unknownMessage(message) {
-        if (this.console && typeof this.console.log === "function") {
-            this.console.log(Array.from(message).map(x => x.toString(16)))
-        } else if (this.console === undefined) {
-            console.log(Array.from(message).map(x => x.toString(16)))
-        }
-    }
-    /**
-     * @param {number} note 
-     * @param {number} velocity 
-     * @param {number} channel 
-     */
-    noteOn(note, velocity, channel) {
-        super.noteOn(note, velocity, channel)
-        this.updateChord()
-    }
-    /**
-     * @param {number} note 
-     * @param {number} velocity 
-     * @param {number} channel 
-     */
-    noteOff(note, velocity, channel) {
-        super.noteOff(note, velocity, channel)
-    }
+    dispose() { this.unsubscribe() }
     updateChord() {
-        const noteNumbers = this.reverbNotes(200)
+        const noteNumbers = this.device.reverbNotes(200)
         const notes = this.showNotes(noteNumbers)
         const chord = this.showChord(noteNumbers)
         if (this.console && typeof this.console.log === "function") {
