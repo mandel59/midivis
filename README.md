@@ -38,7 +38,7 @@ The Settings button stays available even when the toolbar is hidden. Settings
 open in a non-modal side panel; its Close button remains visible while the
 contents scroll. Closing returns keyboard focus to the opener.
 
-Vertical tabs separate Connection, Display, Chords and Transpose. Use Up/Down
+Vertical tabs separate Connection, Visualization, UI, Chords and Transpose. Use Up/Down
 arrows or Home/End on the tab list, then Tab to enter the selected category.
 The last selected tab is retained when reopening settings during the session.
 
@@ -50,7 +50,7 @@ connection progress, and offers a manual refresh for permission/device recovery.
 
 ## UI languages
 
-English and Japanese are supported. Display → Language offers Automatic,
+English and Japanese are supported. UI → Language offers Automatic,
 English and 日本語. Automatic uses the first supported entry in the browser's
 language preferences (including regional tags such as `ja-JP`), falling back to
 English. Explicit choices are saved with the other settings. Existing settings

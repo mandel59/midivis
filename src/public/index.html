@@ -30,7 +30,8 @@
         <div class="config-body">
             <div class="settings-tabs" role="tablist" aria-label="Settings categories" aria-orientation="vertical" data-i18n-aria-label="categories">
                 <button type="button" id="settings-tab-connection" role="tab" aria-controls="settings-panel-connection" aria-selected="true" tabindex="0" data-i18n="connectionTab">Connection</button>
-                <button type="button" id="settings-tab-display" role="tab" aria-controls="settings-panel-display" aria-selected="false" tabindex="-1" data-i18n="displayTab">Display</button>
+                <button type="button" id="settings-tab-visualization" role="tab" aria-controls="settings-panel-visualization" aria-selected="false" tabindex="-1" data-i18n="visualizationTab">Visualization</button>
+                <button type="button" id="settings-tab-ui" role="tab" aria-controls="settings-panel-ui" aria-selected="false" tabindex="-1" data-i18n="uiTab">UI</button>
                 <button type="button" id="settings-tab-chords" role="tab" aria-controls="settings-panel-chords" aria-selected="false" tabindex="-1" data-i18n="chordsTab">Chords</button>
                 <button type="button" id="settings-tab-transpose" role="tab" aria-controls="settings-panel-transpose" aria-selected="false" tabindex="-1" data-i18n="transposeTab">Transpose</button>
             </div>
@@ -50,23 +51,19 @@
                 <p id="midi-status" class="hint" role="status" data-i18n="notConnected">Not connected</p>
                 <button id="midi-refresh" data-i18n="refresh">Refresh inputs</button>
             </section>
-            <section id="settings-panel-display" role="tabpanel" aria-labelledby="settings-tab-display" hidden>
-                <h3 data-i18n="displayTab">Display</h3>
-                <label for="state-language" data-i18n="language">Language</label>
-                <select id="state-language">
-                    <option value="auto" data-i18n="automatic">Automatic (browser language)</option>
-                    <option value="en">English</option>
-                    <option value="ja">日本語</option>
-                </select>
-                <label for="state-noteArrangement" data-i18n="arrangement">Note arrangement</label>
-                <div id="config-noteArrangement"></div>
-                <div id="arrangement-detail" hidden>
-                    <label for="state-arrangementVariant" data-i18n="arrangementVariant">Shape and range</label>
-                    <select id="state-arrangementVariant" aria-describedby="arrangement-help"></select>
-                </div>
-                <p id="arrangement-help" class="hint"></p>
-                <fieldset class="color-options">
-                    <legend data-i18n="color">Color scheme</legend>
+            <section id="settings-panel-visualization" role="tabpanel" aria-labelledby="settings-tab-visualization" hidden>
+                <section class="settings-group" aria-labelledby="arrangement-heading">
+                    <h3 id="arrangement-heading" data-i18n="arrangement">Note arrangement</h3>
+                    <label for="state-noteArrangement" data-i18n="arrangementMethod">Layout</label>
+                    <div id="config-noteArrangement"></div>
+                    <div id="arrangement-detail" hidden>
+                        <label for="state-arrangementVariant" data-i18n="arrangementVariant">Shape and range</label>
+                        <select id="state-arrangementVariant" aria-describedby="arrangement-help"></select>
+                    </div>
+                    <p id="arrangement-help" class="hint"></p>
+                </section>
+                <section class="settings-group" aria-labelledby="color-heading">
+                    <h3 id="color-heading" data-i18n="color">Color scheme</h3>
                     <label for="state-colorCategory" data-i18n="colorBasis">Color by</label>
                     <select id="state-colorCategory" aria-describedby="color-help">
                         <option value="monotone" data-i18n="color.monotone">Single color</option>
@@ -78,9 +75,22 @@
                         <select id="state-colorScheme" aria-describedby="color-help"></select>
                     </div>
                     <p id="color-help" class="hint"></p>
-                </fieldset>
-                <label class="check"><input id="state-showToolbar" type="checkbox"><span data-i18n="toolbar">Show toolbar</span></label>
-                <p class="hint" data-i18n="toolbarHelp">The Settings button always remains available.</p>
+                </section>
+            </section>
+            <section id="settings-panel-ui" role="tabpanel" aria-labelledby="settings-tab-ui" hidden>
+                <section class="settings-group" aria-labelledby="language-heading">
+                    <h3 id="language-heading" data-i18n="language">Language</h3>
+                    <select id="state-language" aria-labelledby="language-heading">
+                        <option value="auto" data-i18n="automatic">Automatic (browser language)</option>
+                        <option value="en">English</option>
+                        <option value="ja">日本語</option>
+                    </select>
+                </section>
+                <section class="settings-group" aria-labelledby="toolbar-heading">
+                    <h3 id="toolbar-heading" data-i18n="toolbarHeading">Toolbar</h3>
+                    <label class="check"><input id="state-showToolbar" type="checkbox"><span data-i18n="toolbar">Show toolbar</span></label>
+                    <p class="hint" data-i18n="toolbarHelp">The Settings button always remains available.</p>
+                </section>
             </section>
             <section id="settings-panel-chords" role="tabpanel" aria-labelledby="settings-tab-chords" hidden>
                 <h3 data-i18n="chords">Key and chord names</h3>

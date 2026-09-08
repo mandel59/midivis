@@ -126,6 +126,7 @@ menu>li>a {
 }
 #config .settings-tabs button {
     text-align: left;
+    overflow-wrap: anywhere;
     border-color: transparent;
     background: transparent;
     padding: 0.65rem 0.5rem;
@@ -180,8 +181,8 @@ menu>li>a {
 #config .field-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
 #config .check { display: flex; gap: 0.5rem; align-items: center; min-height: 2rem; }
 #config input[type="checkbox"], #config input[type="radio"] { flex-shrink: 0; accent-color: #9ac5ff; }
-#config .color-options { margin-top: 0.75rem; }
-#config .color-options legend { font-weight: normal; font-size: 0.9rem; }
+#config .settings-group + .settings-group { margin-top: 1.25rem; padding-top: 0.25rem; border-top: 1px solid #50545c; }
+#config .settings-group h3 { font-size: 1rem; font-weight: 650; }
 #config .shortcut { color: #bdc3cd; font-size: 0.8rem; }
 #config .field-error { color: #ffb5ad; margin: 0.5rem 0; font-size: 0.85rem; }
 #config [aria-invalid="true"] { border-color: #ffb5ad; }
