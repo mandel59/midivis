@@ -1,3 +1,6 @@
 /public
 node_modules
 .vercel
+
+/test-results
+/playwright-report

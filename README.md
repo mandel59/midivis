@@ -25,3 +25,61 @@ npm run deploy:cloudflare
 - Alt+4: Change color scheme to "Axis system"
 - Alt+5: Change color scheme to "Quintave"
 - Ctrl+,: Open Settings
+
+## Development and tests
+
+Use Node.js 24 or later and Bun 1.3.12 (the committed `bun.lockb` is the
+source of dependency versions). The application remains JavaScript with JSDoc;
+TypeScript checks `src` without emitting code. Webpack configuration remains
+CommonJS, while `src/package.json` declares application modules as ESM.
+
+```sh
+bun install --frozen-lockfile
+npm test                 # Node unit and jsdom integration tests
+npm run typecheck        # Check application JavaScript/JSDoc
+npm run check            # Unit tests, typecheck and production build
+bun x playwright install chromium
+npm run test:browser     # Build, serve locally, and test in Chromium
+```
+
+Browser tests use fake Web MIDI ports, require no MIDI hardware or permission
+prompts, and bind `127.0.0.1:4173`. Service workers are disabled in that test
+context so cached deployments cannot mask changes. Screenshots of square,
+hexagonal and slanted layouts are saved under `test-results/`; failed runs also
+retain traces. GitHub Actions runs these checks on pushes and pull requests.
+Actual device permissions and hardware behavior still need a manual smoke test.
+
+## Code organization
+
+- `src/midi-port-selector-webmidi.js`: Web MIDI access and serialized connection
+  lifecycle. Inputs are selected by ID, with legacy saved names accepted.
+- `src/midi-message.js`: decode bytes into typed events; timestamps use
+  milliseconds on the `performance.now()` time origin, not elapsed deltas.
+- `src/midi-device.js`: the shared performance state, independent of the DOM.
+  Raw note numbers identify held notes; per-channel offsets are applied on read.
+  A clock can be injected for deterministic tests. Consumers subscribe and
+  explicitly unsubscribe when disposed.
+- `src/chord.js` and `src/chord-printer.js`: chord recognition and presentation.
+- `src/note-arrangement.js`: the single layout registry and pure `layoutCells()`
+  calculation. Cells expose pitch, lattice coordinates, displayed row/column,
+  padding and visibility. Repeated pitches are retained as distinct cells.
+- `src/note-style.js` and `src/chord-visualizer.js`: pure note presentation rules
+  and the DOM view of shared performance state.
+- `src/state.js`: isolated settings stores, validation and persistence. Storage
+  and error handling can be injected; snapshots do not share mutable arrays.
+- `src/settings-ui.js`, `src/app.js`, `src/renderer.js`: settings controls,
+  application composition and the browser entry point, respectively.
+
+To add a layout, add its ID to `src/typedef.d.ts` and its definition to the layout
+registry, then test representative coordinates and rendering. To add MIDI
+expression, extend decoded event types and state transitions before adding view
+behavior. History and layout comparison can consume performance events and pure
+layout cells without reading DOM elements.
+
+Regression tests intentionally retain the existing 200ms **note-on** window,
+chord-name retention on release, binary highlighting and the current
+CC120/121/123 release policy. Changing these musical/display policies belongs in
+separate feature changes. The existing Jankó Slanted viewport-width approximation
+is preserved, with its FIXME still present. Layout fixture hashes capture the
+pre-refactor labels and styles of every cell; do not regenerate them simply to
+make a failing refactor pass.
