@@ -62,3 +62,27 @@ export function layoutCells(id) {
     }
     return cells
 }
+
+/** Settings families group existing layouts without changing their geometry or saved IDs.
+ * @type {{id: 'interval' | 'harmony' | 'keyboard' | 'strings', families: {id: NoteArrangement, variants: NoteArrangement[]}[]}[]}
+ */
+export const arrangementGroups = [
+    { id: 'interval', families: [
+        { id: 'third', variants: ['third'] },
+        { id: 'fourth', variants: ['fourth'] },
+        { id: 'tritone', variants: ['tritone'] },
+        { id: 'fifth', variants: ['fifth'] },
+        { id: 'octave', variants: ['octave'] },
+    ] },
+    { id: 'harmony', families: [{ id: 'tonnetz', variants: ['tonnetz'] }] },
+    { id: 'keyboard', families: [
+        { id: 'wicki-hayden', variants: ['wicki-hayden', 'wicki-hayden-wide'] },
+        { id: 'janko', variants: ['janko', 'janko-tall', 'janko-slanted'] },
+        { id: 'c-system', variants: ['c-system'] },
+        { id: 'b-system', variants: ['b-system'] },
+    ] },
+    { id: 'strings', families: [
+        { id: 'guitar', variants: ['guitar'] },
+        { id: 'bass', variants: ['bass'] },
+    ] },
+]

@@ -1,6 +1,6 @@
 import { createTranslator, resolveLocale, translateDocument, errorMessageKey } from './i18n.js'
 import { colorSchemes } from './color-scheme.js'
-import { noteArrangements } from './note-arrangement.js'
+import { arrangementGroups } from './note-arrangement.js'
 import { isSharpKey } from './note-style.js'
 
 /**
@@ -76,17 +76,29 @@ export function createSettingsUI(document, store, ports) {
     })
     const arrangement = document.createElement('select')
     arrangement.id = 'state-noteArrangement'
-    for (const { id, label } of noteArrangements) {
-        const option = document.createElement('option')
-        option.value = id
-        option.dataset.i18n = `layout.${id}`
-        option.textContent = label
-        arrangement.append(option)
+    arrangement.setAttribute('aria-describedby', 'arrangement-help')
+    const families = arrangementGroups.flatMap(group => group.families)
+    for (const group of arrangementGroups) {
+        const optgroup = document.createElement('optgroup')
+        optgroup.dataset.group = group.id
+        for (const { id } of group.families) {
+            const option = document.createElement('option')
+            option.value = id
+            option.dataset.i18n = `layout.${id}`
+            optgroup.append(option)
+        }
+        arrangement.append(optgroup)
     }
     required('config-noteArrangement').replaceChildren(arrangement)
+    const arrangementVariant = select('state-arrangementVariant')
     on(arrangement, 'change', () => {
-        const layout = noteArrangements.find(({ id }) => id === arrangement.value)
-        if (layout) store.updateState({ noteArrangement: layout.id })
+        const family = families.find(({ id }) => id === arrangement.value)
+        if (family) store.updateState({ noteArrangement: family.id })
+    })
+    on(arrangementVariant, 'change', () => {
+        const family = families.find(({ id }) => id === arrangement.value)
+        const variant = family?.variants.find(id => id === arrangementVariant.value)
+        if (variant) store.updateState({ noteArrangement: variant })
     })
     for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar'])) {
         const checkbox = input(`state-${key}`)
@@ -293,7 +305,31 @@ export function createSettingsUI(document, store, ports) {
             required('color-detail-label').textContent = t(activeColor.category === 'interval' ? 'colorPeriod' : 'colorMethod')
             required('color-help').textContent = t(activeColor.category === 'interval' ? 'colorIntervalHelp' : activeColor.id === 'axis' ? 'colorAxisHelp' : activeColor.id === 'fifth' ? 'colorCircleHelp' : 'colorMonotoneHelp')
         }
-        arrangement.value = state.noteArrangement
+        const family = families.find(({ variants }) => variants.includes(state.noteArrangement))
+        if (family) {
+            for (const group of arrangement.querySelectorAll('optgroup')) {
+                const definition = arrangementGroups.find(({ id }) => id === group.dataset.group)
+                if (definition) group.label = t(`arrangementGroup.${definition.id}`)
+            }
+            arrangement.value = family.id
+            arrangement.title = t(`layout.${family.id}`)
+            if (arrangementVariant.dataset.family !== family.id) {
+                arrangementVariant.replaceChildren()
+                for (const id of family.variants) {
+                    const option = document.createElement('option')
+                    option.value = id
+                    arrangementVariant.append(option)
+                }
+                arrangementVariant.dataset.family = family.id
+            }
+            for (const option of arrangementVariant.options) {
+                const variant = option.value === family.id ? 'standard' : option.value.endsWith('-wide') ? 'wide' : option.value.endsWith('-tall') ? 'tall' : 'slanted'
+                option.textContent = t(`arrangementVariant.${variant}`)
+            }
+            arrangementVariant.value = state.noteArrangement
+            required('arrangement-detail').hidden = family.variants.length === 1
+            required('arrangement-help').textContent = t(/** @type {import('./i18n.js').MessageKey} */ (`layoutHelp.${family.id}`))
+        }
         if (document.activeElement !== offset && !offset.hasAttribute('aria-invalid')) resetOffset()
         required('toolbar').classList.toggle('shown', state.showToolbar)
     }

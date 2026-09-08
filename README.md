@@ -30,6 +30,10 @@ npm run deploy:cloudflare
 
 ## Settings
 
+Note arrangements are grouped into interval grids, harmonic layouts, keyboard and
+button layouts, and string instrument fretboards. Wicki–Hayden and Jankó expose
+shape and range variants separately. Existing saved layouts are retained.
+
 The Settings button stays available even when the toolbar is hidden. Settings
 open in a non-modal side panel; its Close button remains visible while the
 contents scroll. Closing returns keyboard focus to the opener.

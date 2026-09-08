@@ -64,3 +64,16 @@ test('no saved input opens settings with port IDs and keyboard shortcuts work', 
     await app.dispose()
     dom.window.close()
 })
+
+for (const [saved, family] of [
+    ['wicki-hayden-wide', 'wicki-hayden'], ['janko-tall', 'janko'], ['janko-slanted', 'janko'],
+]) test(`restores saved layout variant ${saved}`, async () => {
+    const { dom, store, app } = await mount({ noteArrangement: saved })
+    const document = dom.window.document
+    assert.equal(document.getElementById('state-noteArrangement').value, family)
+    assert.equal(document.getElementById('state-arrangementVariant').value, saved)
+    assert.equal(document.getElementById('arrangement-detail').hidden, false)
+    assert.equal(store.getState('noteArrangement'), saved)
+    await app.dispose()
+    dom.window.close()
+})

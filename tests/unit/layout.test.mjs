@@ -1,6 +1,6 @@
 import { test } from 'node:test'
 import assert from 'node:assert/strict'
-import { getLayout, layoutCells, noteArrangements } from '../../src/note-arrangement.js'
+import { getLayout, layoutCells, noteArrangements, arrangementGroups } from '../../src/note-arrangement.js'
 import { cellNoteName, inScale, isTonicNote, noteColor, isSharpKey } from '../../src/note-style.js'
 
 for (const { id } of noteArrangements) test(`${id} exposes finite, distinct lattice cells without DOM`, () => {
@@ -38,4 +38,11 @@ test('note spelling, scale membership and color mapping are pure', () => {
     assert.equal(noteColor(1, 'chromatic', '0.5'), 'hsla(30deg, 70%, 75%, 0.5)')
     assert.equal(isSharpKey(7, 2741), true)
     assert.equal(isSharpKey(5, 2741), false)
+})
+
+test('settings families expose every saved layout exactly once', () => {
+    const families = arrangementGroups.flatMap(group => group.families)
+    const variants = families.flatMap(family => family.variants)
+    assert.deepEqual([...variants].sort(), noteArrangements.map(layout => layout.id).sort())
+    assert.ok(families.every(family => family.variants[0] === family.id))
 })
