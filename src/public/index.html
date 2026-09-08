@@ -29,6 +29,14 @@
             <button id="config-close" aria-label="Close settings">Close <span aria-hidden="true">×</span></button>
         </div>
         <div class="config-body">
+            <div class="settings-tabs" role="tablist" aria-label="Settings categories" aria-orientation="vertical">
+                <button type="button" id="settings-tab-connection" role="tab" aria-controls="settings-panel-connection" aria-selected="true" tabindex="0">Connection</button>
+                <button type="button" id="settings-tab-display" role="tab" aria-controls="settings-panel-display" aria-selected="false" tabindex="-1">Display</button>
+                <button type="button" id="settings-tab-chords" role="tab" aria-controls="settings-panel-chords" aria-selected="false" tabindex="-1">Chords</button>
+                <button type="button" id="settings-tab-transpose" role="tab" aria-controls="settings-panel-transpose" aria-selected="false" tabindex="-1">Transpose</button>
+            </div>
+            <div class="settings-content">
+
             <p class="hint">Changes apply and save immediately.</p>
             <section id="oops" hidden aria-labelledby="oops-title">
                 <h3 id="oops-title">Could not complete the action</h3>
@@ -36,15 +44,15 @@
                 <p>Check your device connection and browser MIDI permissions, then try again.</p>
                 <button id="oops-close">Dismiss</button>
             </section>
-            <fieldset>
-                <legend>MIDI connection</legend>
+            <section id="settings-panel-connection" role="tabpanel" aria-labelledby="settings-tab-connection">
+                <h3>MIDI connection</h3>
                 <label for="config-midi-input-port">Input device</label>
                 <select id="config-midi-input-port" aria-describedby="midi-status"></select>
                 <p id="midi-status" class="hint" role="status">Not connected</p>
                 <button id="midi-refresh">Refresh inputs</button>
-            </fieldset>
-            <fieldset>
-                <legend>Display</legend>
+            </section>
+            <section id="settings-panel-display" role="tabpanel" aria-labelledby="settings-tab-display" hidden>
+                <h3>Display</h3>
                 <label for="state-noteArrangement">Note arrangement</label>
                 <div id="config-noteArrangement"></div>
                 <fieldset class="color-options">
@@ -53,9 +61,9 @@
                 </fieldset>
                 <label class="check"><input id="state-showToolbar" type="checkbox">Show toolbar</label>
                 <p class="hint">The Settings button always remains available.</p>
-            </fieldset>
-            <fieldset>
-                <legend>Key and chord names</legend>
+            </section>
+            <section id="settings-panel-chords" role="tabpanel" aria-labelledby="settings-tab-chords" hidden>
+                <h3>Key and chord names</h3>
                 <div class="field-row"><label for="state-key">Key</label><select id="state-key">
                 <option value="0">C</option>
                 <option value="1">C♯/D♭</option>
@@ -83,9 +91,9 @@
             </select>
                 <label class="check"><input id="state-sharp" type="checkbox">Use sharp notes <span class="shortcut">Alt+S</span></label>
                 <label class="check"><input id="state-useDegree" type="checkbox">Show chord names as degrees</label>
-            </fieldset>
-            <fieldset>
-                <legend>Transpose input</legend>
+            </section>
+            <section id="settings-panel-transpose" role="tabpanel" aria-labelledby="settings-tab-transpose" hidden>
+                <h3>Transpose input</h3>
                 <p id="channel-help" class="hint">Choose the channel to transpose. Other channels remain visible. Channel 10 is percussion and is excluded.</p>
                 <div class="field-row"><label for="state-channel">Edit channel</label><select id="state-channel" aria-describedby="channel-help">
                 <option value="1">1</option>
@@ -109,7 +117,8 @@
                 <input id="state-noteOffset" type="number" value="0" min="-24" max="24" step="1" aria-describedby="offset-help offset-error">
                 <p id="offset-help" class="hint">−24 to +24 semitones. 12 semitones = one octave.</p>
                 <p id="offset-error" class="field-error" role="alert" hidden></p>
-            </fieldset>
+            </section>
+            </div>
         </div>
     </section>
 </body>

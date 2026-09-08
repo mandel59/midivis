@@ -90,7 +90,7 @@ menu>li>a {
     top: 4rem;
     right: 0.75rem;
     bottom: 0.75rem;
-    width: min(26rem, calc(100% - 1.5rem));
+    width: min(34rem, calc(100% - 1.5rem));
     box-sizing: border-box;
     display: flex;
     flex-direction: column;
@@ -113,11 +113,44 @@ menu>li>a {
 }
 #config h2 { font-size: 1.25rem; margin: 0; }
 .config-body {
-    padding: 0 1rem 1rem;
-    overflow-y: auto;
+    display: flex;
+    flex: 1;
     min-height: 0;
-    overscroll-behavior: contain;
+    overflow: hidden;
 }
+.settings-tabs {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    flex: 0 0 8rem;
+    padding: 0.75rem 0.5rem;
+    box-sizing: border-box;
+    border-right: 1px solid #50545c;
+    overflow-y: auto;
+}
+#config .settings-tabs button {
+    text-align: left;
+    border-color: transparent;
+    background: transparent;
+    padding: 0.65rem 0.5rem;
+    font-size: 0.9rem;
+    flex-shrink: 0;
+}
+#config .settings-tabs button[aria-selected="true"] {
+    color: #c6dfff;
+    background: #344457;
+    border-left: 3px solid #9ac5ff;
+    font-weight: 650;
+}
+#config .settings-tabs button:hover { background: #363b43; }
+.settings-content {
+    flex: 1;
+    min-width: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 0 1rem 1rem;
+}
+#config [role="tabpanel"] h3 { font-size: 1rem; margin: 1.25rem 0 0.75rem; }
 #config fieldset {
     min-width: 0;
     border: 0;
@@ -163,6 +196,11 @@ menu>li>a {
 #oops p { font-size: 0.85rem; }
 @media (max-width: 420px) {
     #config { right: 0.5rem; bottom: 0.5rem; width: calc(100% - 1rem); }
-    .config-body { padding-inline: 0.75rem; }
+    .settings-tabs { flex-basis: 6rem; padding-inline: 0.3rem; }
+    #config .settings-tabs button { font-size: 0.8rem; padding-inline: 0.3rem; }
+    .settings-content { padding-inline: 0.75rem; }
+    #config-colorScheme { grid-template-columns: 1fr; }
+    #config .field-row { grid-template-columns: 1fr; }
+    #config .check { flex-wrap: wrap; }
     #toolbar h1 { font-size: 1.5rem; margin-left: 0.75rem; }
 }

@@ -26,6 +26,33 @@ export function createSettingsUI(document, store, ports) {
         disposers.push(() => element.removeEventListener(type, handler))
     }
     const config = required('config')
+    const tabs = [...config.querySelectorAll('button[role="tab"]')]
+    /** @param {number} index @param {boolean} [focus] */
+    function selectTab(index, focus = false) {
+        tabs.forEach((tab, i) => {
+            const selected = i === index
+            tab.setAttribute('aria-selected', String(selected))
+            const button = /** @type {HTMLButtonElement} */ (tab)
+            button.tabIndex = selected ? 0 : -1
+            required(button.getAttribute('aria-controls') ?? '').hidden = !selected
+            if (selected && focus) button.focus()
+        })
+        const content = config.querySelector('.settings-content')
+        if (content) content.scrollTop = 0
+    }
+    tabs.forEach((tab, index) => {
+        on(tab, 'click', () => selectTab(index))
+        on(tab, 'keydown', (/** @type {KeyboardEvent} */ event) => {
+            let next
+            if (event.key === 'ArrowDown') next = (index + 1) % tabs.length
+            else if (event.key === 'ArrowUp') next = (index - 1 + tabs.length) % tabs.length
+            else if (event.key === 'Home') next = 0
+            else if (event.key === 'End') next = tabs.length - 1
+            else return
+            event.preventDefault()
+            selectTab(next, true)
+        })
+    })
     const portSelect = select('config-midi-input-port')
     const colorContainer = required('config-colorScheme')
     colorContainer.replaceChildren()
