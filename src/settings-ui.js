@@ -64,23 +64,16 @@ export function createSettingsUI(document, store, ports) {
         })
     })
     const portSelect = select('config-midi-input-port')
-    const colorContainer = required('config-colorScheme')
-    colorContainer.replaceChildren()
-    for (const { id, label, key } of colorSchemes) {
-        const radio = document.createElement('input')
-        radio.type = 'radio'
-        radio.id = `state-colorScheme-${id}`
-        radio.name = 'state-colorScheme'
-        radio.value = id
-        on(radio, 'change', () => store.updateState({ colorScheme: id }))
-        const text = document.createElement('label')
-        text.title = `Alt+${key}`
-        const name = document.createElement('span')
-        name.dataset.i18n = `color.${id}`
-        name.textContent = label
-        text.append(radio, name)
-        colorContainer.append(text)
-    }
+    const colorCategory = select('state-colorCategory')
+    const colorScheme = select('state-colorScheme')
+    on(colorCategory, 'change', () => {
+        const scheme = colorSchemes.find(({ category }) => category === colorCategory.value)
+        if (scheme) store.updateState({ colorScheme: scheme.id })
+    })
+    on(colorScheme, 'change', () => {
+        const scheme = colorSchemes.find(({ id, category }) => id === colorScheme.value && category === colorCategory.value)
+        if (scheme) store.updateState({ colorScheme: scheme.id })
+    })
     const arrangement = document.createElement('select')
     arrangement.id = 'state-noteArrangement'
     for (const { id, label } of noteArrangements) {
@@ -278,7 +271,28 @@ export function createSettingsUI(document, store, ports) {
         for (const key of /** @type {const} */ (['sharp', 'useDegree', 'showToolbar'])) input(`state-${key}`).checked = state[key]
         select('state-key').value = String(state.key)
         select('state-mode').value = String(state.mode)
-        input(`state-colorScheme-${state.colorScheme}`).checked = true
+        const activeColor = colorSchemes.find(({ id }) => id === state.colorScheme)
+        if (activeColor) {
+            if (colorScheme.dataset.category !== activeColor.category) {
+                colorScheme.replaceChildren()
+                for (const scheme of colorSchemes.filter(({ category }) => category === activeColor.category)) {
+                    const option = document.createElement('option')
+                    option.value = scheme.id
+                    colorScheme.append(option)
+                }
+                colorScheme.dataset.category = activeColor.category
+            }
+            for (const option of colorScheme.options) {
+                const scheme = colorSchemes.find(({ id }) => id === option.value)
+                if (scheme) option.textContent = t(`color.${scheme.id}`)
+            }
+            colorCategory.value = activeColor.category
+            colorScheme.value = activeColor.id
+            colorScheme.title = `${t(`color.${activeColor.id}`)} (Alt+${activeColor.key})`
+            required('color-detail').hidden = activeColor.category === 'monotone'
+            required('color-detail-label').textContent = t(activeColor.category === 'interval' ? 'colorPeriod' : 'colorMethod')
+            required('color-help').textContent = t(activeColor.category === 'interval' ? 'colorIntervalHelp' : activeColor.id === 'axis' ? 'colorAxisHelp' : activeColor.id === 'fifth' ? 'colorCircleHelp' : 'colorMonotoneHelp')
+        }
         arrangement.value = state.noteArrangement
         if (document.activeElement !== offset && !offset.hasAttribute('aria-invalid')) resetOffset()
         required('toolbar').classList.toggle('shown', state.showToolbar)

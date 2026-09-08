@@ -1,9 +1,9 @@
-/** @type {{ id: ColorScheme; label: string; key: string; code: string; }[]} */
+/** @type {{ id: ColorScheme; label: string; category: "monotone" | "interval" | "circle"; key: string; code: string; }[]} */
 export const colorSchemes = [
-    { id: "monotone", label: "Monotone", key: "1", code: "Digit1" },
-    { id: "chromatic", label: "Chromatic", key: "2", code: "Digit2" },
-    { id: "fifth", label: "Circle of fifth", key: "3", code: "Digit3" },
-    { id: "axis", label: "Axis system", key: "4", code: "Digit4" },
-    { id: "quintave", label: "Quintave", key: "5", code: "Digit5" },
-    { id: "third-major", label: "Third major", key: "6", code: "Digit6" }
+    { id: "monotone", category: "monotone", label: "Single color", key: "1", code: "Digit1" },
+    { id: "chromatic", category: "interval", label: "12 semitones (octave)", key: "2", code: "Digit2" },
+    { id: "fifth", category: "circle", label: "Circle of fifths", key: "3", code: "Digit3" },
+    { id: "axis", category: "circle", label: "Central axis system", key: "4", code: "Digit4" },
+    { id: "quintave", category: "interval", label: "7 semitones (perfect fifth)", key: "5", code: "Digit5" },
+    { id: "third-major", category: "interval", label: "4 semitones (major third)", key: "6", code: "Digit6" }
 ]

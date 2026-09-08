@@ -62,7 +62,17 @@
                 <div id="config-noteArrangement"></div>
                 <fieldset class="color-options">
                     <legend data-i18n="color">Color scheme</legend>
-                    <div id="config-colorScheme"></div>
+                    <label for="state-colorCategory" data-i18n="colorBasis">Color by</label>
+                    <select id="state-colorCategory" aria-describedby="color-help">
+                        <option value="monotone" data-i18n="color.monotone">Single color</option>
+                        <option value="interval" data-i18n="colorInterval">Pitch interval</option>
+                        <option value="circle" data-i18n="colorCircle">Circle of fifths</option>
+                    </select>
+                    <div id="color-detail" hidden>
+                        <label for="state-colorScheme" id="color-detail-label">Hue cycle</label>
+                        <select id="state-colorScheme" aria-describedby="color-help"></select>
+                    </div>
+                    <p id="color-help" class="hint"></p>
                 </fieldset>
                 <label class="check"><input id="state-showToolbar" type="checkbox"><span data-i18n="toolbar">Show toolbar</span></label>
                 <p class="hint" data-i18n="toolbarHelp">The Settings button always remains available.</p>

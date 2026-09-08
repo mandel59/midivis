@@ -72,10 +72,6 @@ menu>li>a {
     font-size: 120%;
 }
 
-#config-colorScheme>label {
-    display: block;
-}
-
 /* Non-modal settings panel: the performance remains visible and interactive. */
 [hidden] { display: none !important; }
 #menu-settings {
@@ -182,12 +178,10 @@ menu>li>a {
 #config :disabled { opacity: 0.6; cursor: wait; }
 #config .hint { color: #bdc3cd; font-size: 0.85rem; margin: 0.5rem 0; overflow-wrap: anywhere; }
 #config .field-row { display: grid; grid-template-columns: 1fr 1fr; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
-#config .check, #config-colorScheme > label { display: flex; gap: 0.5rem; align-items: center; min-height: 2rem; }
+#config .check { display: flex; gap: 0.5rem; align-items: center; min-height: 2rem; }
 #config input[type="checkbox"], #config input[type="radio"] { flex-shrink: 0; accent-color: #9ac5ff; }
 #config .color-options { margin-top: 0.75rem; }
 #config .color-options legend { font-weight: normal; font-size: 0.9rem; }
-#config-colorScheme { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.25rem 0.5rem; }
-#config-colorScheme > label { font-size: 0.85rem; margin: 0; }
 #config .shortcut { color: #bdc3cd; font-size: 0.8rem; }
 #config .field-error { color: #ffb5ad; margin: 0.5rem 0; font-size: 0.85rem; }
 #config [aria-invalid="true"] { border-color: #ffb5ad; }
@@ -199,7 +193,6 @@ menu>li>a {
     .settings-tabs { flex-basis: 6rem; padding-inline: 0.3rem; }
     #config .settings-tabs button { font-size: 0.8rem; padding-inline: 0.3rem; }
     .settings-content { padding-inline: 0.75rem; }
-    #config-colorScheme { grid-template-columns: 1fr; }
     #config .field-row { grid-template-columns: 1fr; }
     #config .check { flex-wrap: wrap; }
     #toolbar h1 { font-size: 1.5rem; margin-left: 0.75rem; }

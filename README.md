@@ -19,11 +19,12 @@ npm run deploy:cloudflare
 ## Shortcuts
 
 - Alt+S: Toggle "use sharp notes"
-- Alt+1: Change color scheme to "Monotone"
-- Alt+2: Change color scheme to "Chromatic"
-- Alt+3: Change color scheme to "Circle of fifth"
-- Alt+4: Change color scheme to "Axis system"
-- Alt+5: Change color scheme to "Quintave"
+- Alt+1: Change color scheme to "Single color"
+- Alt+2: Change color scheme to "Pitch interval / 12 semitones (octave)"
+- Alt+3: Change color scheme to "Circle of fifths / Circle of fifths"
+- Alt+4: Change color scheme to "Circle of fifths / Central axis system"
+- Alt+5: Change color scheme to "Pitch interval / 7 semitones (perfect fifth)"
+- Alt+6: Change color scheme to "Pitch interval / 4 semitones (major third)"
 - Ctrl+, / Cmd+,: Open Settings
 - Escape: Dismiss an error or close Settings
 
