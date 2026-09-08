@@ -6,6 +6,7 @@ type NoteArrangement =
   | "fourth-whole-tone"
   | "tritone"
   | "fifth"
+  | "fifth-whole-tone"
   | "octave"
   | "c-system"
   | "b-system"

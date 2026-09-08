@@ -466,7 +466,7 @@ test('grouped layouts and variants persist and translate without reconnecting MI
     await page.selectOption('#config-midi-input-port', 'a')
     await page.click('#settings-tab-visualization')
     await expect(page.locator('#state-noteArrangement optgroup')).toHaveCount(4)
-    await expect(page.locator('#state-noteArrangement option')).toHaveCount(14)
+    await expect(page.locator('#state-noteArrangement option')).toHaveCount(15)
     await page.selectOption('#state-noteArrangement', 'wicki-hayden')
     await expect(page.locator('#state-arrangementVariant option')).toHaveCount(2)
     await page.selectOption('#state-arrangementVariant', 'wicki-hayden-wide')
@@ -567,13 +567,13 @@ test('piano octave directions, black keys, folding and persistence', async ({ pa
     await page.screenshot({ path: test.info().outputPath('piano-horizontal.png') })
 })
 
-test('perfect fourth–whole tone grid plays and restores its saved selection', async ({ page }) => {
+for (const [layout, interval] of [['fourth-whole-tone', 'fourth'], ['fifth-whole-tone', 'fifth']]) test(`${layout} plays and restores its saved selection`, async ({ page }) => {
     await setup(page)
     await page.goto('/')
     await page.selectOption('#config-midi-input-port', 'a')
     await page.click('#settings-tab-visualization')
-    await page.selectOption('#state-noteArrangement', 'fourth-whole-tone')
-    await expect(page.locator('#arrangement-help')).toHaveText('Whole tones run horizontally, with a perfect fourth between rows.')
+    await page.selectOption('#state-noteArrangement', layout)
+    await expect(page.locator('#arrangement-help')).toHaveText(`Whole tones run horizontally, with a perfect ${interval} between rows.`)
     await expect(page.locator('#arrangement-detail')).toBeHidden()
     await expect(page.locator('.note-fg')).toHaveCount(276)
     await send(page, [60, 62, 65])
@@ -583,5 +583,5 @@ test('perfect fourth–whole tone grid plays and restores its saved selection', 
     await page.reload()
     await page.click('#menu-settings')
     await page.click('#settings-tab-visualization')
-    await expect(page.locator('#state-noteArrangement')).toHaveValue('fourth-whole-tone')
+    await expect(page.locator('#state-noteArrangement')).toHaveValue(layout)
 })

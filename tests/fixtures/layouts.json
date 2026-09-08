@@ -39,6 +39,14 @@
     "container": "overflow: clip; height: fit-content; width: fit-content;",
     "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
   },
+  "fifth-whole-tone": {
+    "count": 276,
+    "first": "B♭11",
+    "last": "B♭0",
+    "hash": "76c427405020f7b0108d6d480769383684da4f2c2d3edbe80a515b336bec04bb",
+    "container": "overflow: clip; height: fit-content; width: fit-content;",
+    "grid": "user-select: none; display: grid; grid-template-columns: repeat(12, 40px); grid-template-rows: repeat(auto-fill, 32px);"
+  },
   "octave": {
     "count": 176,
     "first": "A8",

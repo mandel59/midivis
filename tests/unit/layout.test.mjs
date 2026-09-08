@@ -67,12 +67,12 @@ for (const id of ['piano', 'piano-vertical']) test(`${id} has 88 correctly space
     }
 })
 
-test('perfect fourth–whole tone grid has the specified intervals on both axes', () => {
-    const cells = layoutCells('fourth-whole-tone')
+for (const [id, verticalStep] of [['fourth-whole-tone', 5], ['fifth-whole-tone', 7]]) test(`${id} has the specified intervals on both axes`, () => {
+    const cells = layoutCells(id)
     const at = (x, y) => cells.find(cell => cell.x === x && cell.y === y).note
     assert.equal(at(0, 0), 0)
     for (const cell of cells) {
         if (cell.x < 11) assert.equal(at(cell.x + 1, cell.y) - cell.note, 2)
-        if (cell.y < 22) assert.equal(at(cell.x, cell.y + 1) - cell.note, 5)
+        if (cell.y < 22) assert.equal(at(cell.x, cell.y + 1) - cell.note, verticalStep)
     }
 })

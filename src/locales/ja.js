@@ -106,6 +106,8 @@ const messages = {
     "layoutHelp.fourth-whole-tone": "横方向に全音ずつ、縦方向に完全四度ずつ並びます。",
     "layout.fourth": "完全四度",
     "layout.tritone": "三全音",
+    "layout.fifth-whole-tone": "完全五度–全音",
+    "layoutHelp.fifth-whole-tone": "横方向に全音ずつ、縦方向に完全五度ずつ並びます。",
     "layout.fifth": "完全五度",
     "layout.octave": "オクターブ",
     "layout.wicki-hayden": "Wicki–Hayden",

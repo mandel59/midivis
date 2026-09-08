@@ -105,6 +105,8 @@ const messages = {
     "layoutHelp.fourth-whole-tone": "Whole tones run horizontally, with a perfect fourth between rows.",
     "layout.fourth": "Perfect fourth",
     "layout.tritone": "Tritone",
+    "layout.fifth-whole-tone": "Perfect fifth–whole tone",
+    "layoutHelp.fifth-whole-tone": "Whole tones run horizontally, with a perfect fifth between rows.",
     "layout.fifth": "Perfect fifth",
     "layout.octave": "Octave",
     "layout.wicki-hayden": "Wicki–Hayden",
