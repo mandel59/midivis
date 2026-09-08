@@ -38,7 +38,7 @@ The Settings button stays available even when the toolbar is hidden. Settings
 open in a non-modal side panel; its Close button remains visible while the
 contents scroll. Closing returns keyboard focus to the opener.
 
-Vertical tabs separate Connection, Visuals, UI, Chords and Transpose. Use Up/Down
+Vertical tabs separate UI, Connection, Transpose, Visuals and Chords. Use Up/Down
 arrows or Home/End on the tab list, then Tab to enter the selected category.
 The last selected tab is retained when reopening settings during the session.
 
