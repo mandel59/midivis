@@ -101,3 +101,20 @@ test('subscriptions can be disposed without affecting other consumers', () => {
     device.noteOff(60, 0, 1)
     assert.equal(calls, 1)
 })
+test('printer reformats retained chords immediately when naming options change', () => {
+    let now = 1000
+    const device = new MidiDevice(undefined, { now: () => now })
+    const changes = []
+    const printer = new ChordPrinter(device, { console: { log() {} }, onChordChange: chord => changes.push(chord) })
+    for (const note of [61, 65, 68]) device.noteOn(note, 100, 1)
+    assert.equal(printer.currentChord, 'Db')
+    for (const note of [61, 65, 68]) device.noteOff(note, 0, 1)
+    now += 1000
+    printer.updateOptions({ sharp: true, useDegree: false, scaleKey: 0 })
+    assert.equal(printer.currentChord, 'C#')
+    printer.updateOptions({ sharp: true, useDegree: true, scaleKey: 1 })
+    assert.equal(printer.currentChord, 'I')
+    const count = changes.length
+    printer.updateOptions({ sharp: true, useDegree: true, scaleKey: 1 })
+    assert.equal(changes.length, count)
+})

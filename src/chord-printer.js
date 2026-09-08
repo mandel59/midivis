@@ -19,12 +19,14 @@ export class ChordPrinter {
     } = {}) {
         this.device = device
         this.unsubscribe = device.subscribe(kind => {
-            if (kind === "noteOn") this.updateChord()
+            if (kind === "noteOn" || (kind === "offset" && device.notes().length > 0)) this.updateChord()
         })
         this.console = console
         this.onChordChange = onChordChange
         /** @type {string | undefined} */
         this.currentChord = undefined
+        /** @type {number[]} */
+        this.displayedNotes = []
         this.sharp = sharp
         this.useDegree = useDegree
         this.scaleKey = scaleKey
@@ -50,8 +52,20 @@ export class ChordPrinter {
         })
     }
     dispose() { this.unsubscribe() }
+    /** @param {{sharp: boolean, useDegree: boolean, scaleKey: number}} options */
+    updateOptions({ sharp, useDegree, scaleKey }) {
+        if (this.sharp === sharp && this.useDegree === useDegree && this.scaleKey === scaleKey) return
+        this.sharp = sharp
+        this.useDegree = useDegree
+        this.scaleKey = scaleKey
+        this.publishChord(this.displayedNotes)
+    }
     updateChord() {
-        const noteNumbers = this.device.reverbNotes(200)
+        this.publishChord(this.device.reverbNotes(200))
+    }
+    /** @param {number[]} noteNumbers */
+    publishChord(noteNumbers) {
+        this.displayedNotes = [...noteNumbers]
         const notes = this.showNotes(noteNumbers)
         const chord = this.showChord(noteNumbers)
         if (this.console && typeof this.console.log === "function") {

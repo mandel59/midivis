@@ -24,7 +24,20 @@ npm run deploy:cloudflare
 - Alt+3: Change color scheme to "Circle of fifth"
 - Alt+4: Change color scheme to "Axis system"
 - Alt+5: Change color scheme to "Quintave"
-- Ctrl+,: Open Settings
+- Ctrl+, / Cmd+,: Open Settings
+- Escape: Dismiss an error or close Settings
+
+## Settings
+
+The Settings button stays available even when the toolbar is hidden. Settings
+open in a non-modal side panel; its Close button remains visible while the
+contents scroll. Closing returns keyboard focus to the opener.
+
+Changes apply and save immediately. Chord naming options reformat the displayed
+chord without waiting for another note. Transposition is edited per channel in
+semitones; invalid values leave the previous setting applied and show an inline
+explanation. The device list updates when inputs are added or removed, reports
+connection progress, and offers a manual refresh for permission/device recovery.
 
 ## Development and tests
 

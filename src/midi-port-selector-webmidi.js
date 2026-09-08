@@ -42,7 +42,7 @@ export class MidiInputPortSelector extends EventEmitter {
         this._stateChange = () => {
             this._enqueue(async () => {
                 if (this._input?.state === "disconnected") await this._disconnect()
-            }).catch(error => this.emit("connectionError", error))
+            }).finally(() => this.emit("portschange")).catch(error => this.emit("connectionError", error))
         }
     }
     async _access() {
@@ -88,10 +88,13 @@ export class MidiInputPortSelector extends EventEmitter {
             this._input = input
             input.addEventListener("midimessage", this._emitMessage)
             return true
+        }).finally(() => {
+            // A rejected permission request must be retried only by the user.
+            if (this._accessPromise) this.emit("portschange")
         })
     }
     closePort() {
-        return this._enqueue(() => this._disconnect())
+        return this._enqueue(() => this._disconnect()).finally(() => this.emit("portschange"))
     }
     async portOptions() {
         const access = await this._access()

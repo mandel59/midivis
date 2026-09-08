@@ -28,14 +28,12 @@ export async function startApplication({ document, midi, store }) {
             const ok = id ? await midi.openPortByName(id) : (await midi.closePort(), true)
             if (current !== selection) return
             if (ok) store.updateState({ midiInputPortName: id || null })
-            else await ui.showConfigDialog()
+            else throw new Error('This MIDI input is no longer available. Choose another input or refresh the list.')
         },
     })
     function reflectPerformanceOptions() {
         const state = store.getStateAll()
-        printer.sharp = state.sharp
-        printer.useDegree = state.useDegree
-        printer.scaleKey = state.key
+        printer.updateOptions({ sharp: state.sharp, useDegree: state.useDegree, scaleKey: state.key })
         visualizer.updateOptions(state)
         for (let i = 0; i < 16; i++) device.setNoteOffset(state.noteOffsets[i] ?? 0, i + 1)
     }
@@ -44,6 +42,8 @@ export async function startApplication({ document, midi, store }) {
     /** @param {number} timestamp @param {Uint8Array} data */
     const onMessage = (timestamp, data) => device.midiMessageHandler(timestamp, data)
     const onDisconnect = () => device.clear()
+    const onPortsChange = () => { ui.refreshPorts().catch(ui.handleError) }
+    midi.on('portschange', onPortsChange)
     midi.on('message', onMessage)
     midi.on('disconnect', onDisconnect)
     midi.on('connectionError', ui.handleError)
@@ -59,6 +59,7 @@ export async function startApplication({ document, midi, store }) {
             ui.dispose()
             printer.dispose()
             visualizer.dispose()
+            midi.off('portschange', onPortsChange)
             midi.off('message', onMessage)
             midi.off('disconnect', onDisconnect)
             midi.off('connectionError', ui.handleError)

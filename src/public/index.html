@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
     <meta charset="utf-8">
@@ -15,7 +15,6 @@
     <header id="toolbar">
         <h1>Midivis</h1>
         <menu>
-            <li><button id="menu-settings">Settings (Ctrl+,)</button></li>
             <li><a href="about.html" target="_blank">About</a></li>
         </menu>
     </header>
@@ -23,12 +22,72 @@
         <div id="chordvis"></div>
         <div id="chordindicator">&nbsp;</div>
     </main>
-    <section id="config">
-        <h2>Settings</h2>
-        <label>MIDI input port: <select id="config-midi-input-port"></select></label>
-        <hr>
-        <label>Channel
-            <select id="state-channel">
+    <button id="menu-settings" aria-controls="config" aria-expanded="false" title="Settings (Ctrl+, or ⌘+,)">Settings</button>
+    <section id="config" hidden aria-labelledby="config-title">
+        <div class="config-header">
+            <h2 id="config-title">Settings</h2>
+            <button id="config-close" aria-label="Close settings">Close <span aria-hidden="true">×</span></button>
+        </div>
+        <div class="config-body">
+            <p class="hint">Changes apply and save immediately.</p>
+            <section id="oops" hidden aria-labelledby="oops-title">
+                <h3 id="oops-title">Could not complete the action</h3>
+                <p id="oops-message" role="alert"></p>
+                <p>Check your device connection and browser MIDI permissions, then try again.</p>
+                <button id="oops-close">Dismiss</button>
+            </section>
+            <fieldset>
+                <legend>MIDI connection</legend>
+                <label for="config-midi-input-port">Input device</label>
+                <select id="config-midi-input-port" aria-describedby="midi-status"></select>
+                <p id="midi-status" class="hint" role="status">Not connected</p>
+                <button id="midi-refresh">Refresh inputs</button>
+            </fieldset>
+            <fieldset>
+                <legend>Display</legend>
+                <label for="state-noteArrangement">Note arrangement</label>
+                <div id="config-noteArrangement"></div>
+                <fieldset class="color-options">
+                    <legend>Color scheme</legend>
+                    <div id="config-colorScheme"></div>
+                </fieldset>
+                <label class="check"><input id="state-showToolbar" type="checkbox">Show toolbar</label>
+                <p class="hint">The Settings button always remains available.</p>
+            </fieldset>
+            <fieldset>
+                <legend>Key and chord names</legend>
+                <div class="field-row"><label for="state-key">Key</label><select id="state-key">
+                <option value="0">C</option>
+                <option value="1">C♯/D♭</option>
+                <option value="2">D</option>
+                <option value="3">D♯/E♭</option>
+                <option value="4">E</option>
+                <option value="5">F</option>
+                <option value="6">F♯/G♭</option>
+                <option value="7">G</option>
+                <option value="8">G♯/A♭</option>
+                <option value="9">A</option>
+                <option value="10">A♯/B♭</option>
+                <option value="11">B</option>
+            </select></div>
+                <label for="state-mode">Scale / mode</label>
+                <select id="state-mode">
+                <option value="2741">Major (Ionian)</option>
+                <option value="1453">Natural Minor (Aeolian)</option>
+                <option value="2225">Ionian Pentatonic</option>
+                <option value="661">Major Pentatonic</option>
+                <option value="1189">Suspended Pentatonic</option>
+                <option value="1193">Minor Pentatonic</option>
+                <option value="397">Aeolian Pentatonic</option>
+                <option value="4095">Chromatic</option>
+            </select>
+                <label class="check"><input id="state-sharp" type="checkbox">Use sharp notes <span class="shortcut">Alt+S</span></label>
+                <label class="check"><input id="state-useDegree" type="checkbox">Show chord names as degrees</label>
+            </fieldset>
+            <fieldset>
+                <legend>Transpose input</legend>
+                <p id="channel-help" class="hint">Choose the channel to transpose. Other channels remain visible. Channel 10 is percussion and is excluded.</p>
+                <div class="field-row"><label for="state-channel">Edit channel</label><select id="state-channel" aria-describedby="channel-help">
                 <option value="1">1</option>
                 <option value="2">2</option>
                 <option value="3">3</option>
@@ -45,61 +104,13 @@
                 <option value="14">14</option>
                 <option value="15">15</option>
                 <option value="16">16</option>
-            </select>
-        </label><br>
-        <label>Note offset
-            <input id="state-noteOffset" type="number" value="0" min="-24" max="24">
-        </label>
-        <hr>
-        <label>Key
-            <select id="state-key">
-                <option value="0">C</option>
-                <option value="1">C♯/D♭</option>
-                <option value="2">D</option>
-                <option value="3">D♯/E♭</option>
-                <option value="4">E</option>
-                <option value="5">F</option>
-                <option value="6">F♯/G♭</option>
-                <option value="7">G</option>
-                <option value="8">G♯/A♭</option>
-                <option value="9">A</option>
-                <option value="10">A♯/B♭</option>
-                <option value="11">B</option>
-            </select>
-        </label><br>
-        <label>Scale/Mode
-            <select id="state-mode">
-                <option value="2741">Major (Ionian)</option>
-                <option value="1453">Natural Minor (Aeolian)</option>
-                <option value="2225">Ionian Pentatonic</option>
-                <option value="661">Major Pentatonic</option>
-                <option value="1189">Suspended Pentatonic</option>
-                <option value="1193">Minor Pentatonic</option>
-                <option value="397">Aeolian Pentatonic</option>
-                <option value="4095">Chromatic</option>
-            </select>
-        </label>
-        <hr>
-        <label><input id="state-sharp" type="checkbox">Use sharp notes (Alt+S)</label><br>
-        <label><input id="state-useDegree" type="checkbox">Use degree for chord</label>
-        <hr>
-        <h3>Color scheme</h3>
-        <div id="config-colorScheme"></div>
-        <hr>
-        <h3>Note arrangement</h3>
-        <div id="config-noteArrangement"></div>
-        <hr>
-        <label><input id="state-showToolbar" type="checkbox">Show toolbar</label>
-        <hr>
-        <button id="config-close">Close</button>
-    </section>
-    <section id="oops">
-        <h2>Oops!</h2>
-        <div id="oops-message"></div>
-        <p>If you are using Firefox 98, set dom.webmidi.enabled true via about:config, install the site permission
-            add-on, and reload this page.<br><a href="/site_permissions_for_midivisryuseidev-1.0-an-fx.xpi">Install site
-                permission add-on for midivis.ryusei.dev</a></p>
-        <button id="oops-close">Close</button>
+            </select></div>
+                <label for="state-noteOffset">Transpose (semitones)</label>
+                <input id="state-noteOffset" type="number" value="0" min="-24" max="24" step="1" aria-describedby="offset-help offset-error">
+                <p id="offset-help" class="hint">−24 to +24 semitones. 12 semitones = one octave.</p>
+                <p id="offset-error" class="field-error" role="alert" hidden></p>
+            </fieldset>
+        </div>
     </section>
 </body>
 
