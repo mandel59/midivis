@@ -1,3 +1,4 @@
+import { isSharpKey } from "./note-style.js"
 import { MidiDevice } from "./midi-device.js"
 import "./assets.js"
 import "./register-service-worker.js"
@@ -34,23 +35,6 @@ const visualizer = new ChordVisualizer(element, device, {
     sharp: getState("sharp"),
     key: getState("key"),
 })
-
-// Gb Db Ab Eb Bb F C G D A E B
-const modeShapeCode = [6, 1, 8, 3, 10, 5, 0, 7, 2, 9, 4, 11]
-const modeShapeBase = modeShapeCode.indexOf(0)
-
-/**
- * @param {number} key 
- * @param {number} mode 
- * @param {boolean} [sharp]
- * @returns {boolean}
- */
-function isSharpKey(key, mode, sharp = false) {
-    const offset = modeShapeCode.indexOf(key) - modeShapeBase
-    const left = modeShapeCode.findIndex(key => (mode >> key) & 1) - modeShapeBase
-    sharp = left + offset === -7 ? sharp : (left + offset < -7 || left + offset >= 0)
-    return sharp
-}
 
 document.getElementById("state-key")?.addEventListener("change", (ev) => {
     // @ts-ignore
