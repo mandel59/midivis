@@ -1,6 +1,7 @@
-/** @type {{ id: ColorScheme; label: string; category: "monotone" | "interval" | "circle"; key: string; code: string; }[]} */
+/** @type {{ id: ColorScheme; label: string; category: "monotone" | "channel" | "interval" | "circle"; key: string; code: string; }[]} */
 export const colorSchemes = [
     { id: "monotone", category: "monotone", label: "Single color", key: "1", code: "Digit1" },
+    { id: "channel", category: "channel", label: "MIDI channel", key: "7", code: "Digit7" },
     { id: "chromatic", category: "interval", label: "12 semitones (octave)", key: "2", code: "Digit2" },
     { id: "fifth", category: "circle", label: "Circle of fifths", key: "3", code: "Digit3" },
     { id: "axis", category: "circle", label: "Axis system", key: "4", code: "Digit4" },

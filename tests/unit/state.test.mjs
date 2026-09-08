@@ -62,3 +62,7 @@ test('octave folding defaults off and persists only boolean preferences', async 
     await restored.loadState()
     assert.equal(restored.getState('ignoreOctave'), true)
 })
+
+test('channel color scheme survives saved-state normalization', () => {
+    assert.equal(normalizeState({ colorScheme: 'channel' }).colorScheme, 'channel')
+})

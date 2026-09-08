@@ -29,6 +29,11 @@ export class MidiDevice {
     notify(kind) {
         for (const listener of this.listeners) listener(kind)
     }
+    /** Held notes with channel identity and input transposition applied. */
+    activeNotes() {
+        return this.noteVelocityMaps.flatMap((map, i) => i + 1 === PERCUSSION_CHANNEL ? [] :
+            [...map].map(([note, velocity]) => ({ note: this.offsetNote(note, i + 1), channel: i + 1, velocity })))
+    }
     notes() {
         return uniqueSorted(this.noteVelocityMaps.flatMap((map, i) =>
             i + 1 === PERCUSSION_CHANNEL ? [] : [...map.keys()].map(note => this.offsetNote(note, i + 1))))

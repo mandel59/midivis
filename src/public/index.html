@@ -69,6 +69,7 @@
                     <label for="state-colorCategory" data-i18n="colorBasis">Color by</label>
                     <select id="state-colorCategory" aria-describedby="color-help">
                         <option value="monotone" data-i18n="color.monotone">Single color</option>
+                        <option value="channel" data-i18n="color.channel">MIDI channel</option>
                         <option value="interval" data-i18n="colorInterval">Pitch interval</option>
                         <option value="circle" data-i18n="colorCircle">Circle of fifths</option>
                     </select>
@@ -77,6 +78,7 @@
                         <select id="state-colorScheme" aria-describedby="color-help"></select>
                     </div>
                     <p id="color-help" class="hint"></p>
+                    <ul id="channel-colors" class="channel-colors" hidden></ul>
                 </section>
             </section>
             <section id="settings-panel-ui" role="tabpanel" aria-labelledby="settings-tab-ui" hidden>

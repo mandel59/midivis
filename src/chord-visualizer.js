@@ -1,5 +1,5 @@
 import { cellWidth, cellHeight, getLayout, layoutCells } from './note-arrangement.js'
-import { inScale, isTonicNote, cellNoteName, noteColor } from './note-style.js'
+import { inScale, isTonicNote, cellNoteName, noteColor, channelFill } from './note-style.js'
 
 export class ChordVisualizer {
     /**
@@ -108,7 +108,11 @@ export class ChordVisualizer {
             div.style.textAlign = "center"
             const maxVelocity = `var(--v-max-${this.displayPitch(note)}, 0)`
             div.style.color = `hsla(0, 0%, 0%, calc(${maxVelocity} * 0.8 + 0.2))`
-            div.style.backgroundColor = noteColor(this.displayPitch(note), this._colorScheme, maxVelocity)
+            if (this._colorScheme === 'channel') {
+                div.style.backgroundImage = `var(--channel-fill-${this.displayPitch(note)}, none)`
+            } else {
+                div.style.backgroundColor = noteColor(this.displayPitch(note), this._colorScheme, maxVelocity)
+            }
             div.style.boxSizing = "border-box"
             if (istonic) {
                 div.style.border = "solid 4px hsl(0deg, 0%, 90%)"
@@ -187,6 +191,19 @@ export class ChordVisualizer {
         const notes = new Set(this.device.notes().map(note => this.displayPitch(note)))
         for (const note of new Set([...this.litNotes, ...notes])) {
             this.element.style.setProperty(`--v-max-${note}`, notes.has(note) ? "1" : "0")
+        }
+        if (this._colorScheme === 'channel') {
+            /** @type {Map<number, number[]>} */
+            const channels = new Map()
+            for (const voice of this.device.activeNotes()) {
+                const pitch = this.displayPitch(voice.note)
+                const active = channels.get(pitch) ?? []
+                active.push(voice.channel)
+                channels.set(pitch, active)
+            }
+            for (const note of new Set([...this.litNotes, ...notes])) {
+                this.element.style.setProperty(`--channel-fill-${note}`, channelFill(channels.get(note) ?? [], `var(--v-max-${note}, 0)`))
+            }
         }
         this.litNotes = notes
     }

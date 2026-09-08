@@ -68,6 +68,8 @@ const messages = {
     "thirdParty": "サードパーティーのライセンス",
     "eventsLicense": "Node.jsのライセンス",
     "eventsNotice": "このライセンスはeventsモジュールに適用されます。",
+    "color.channel": "MIDIチャンネル",
+    "colorChannelHelp": "入力チャンネルごとに固定色で表示します。同じ音が重なると色の帯で表示します。チャンネル10（打楽器）は対象外です。",
     "color.monotone": "単色",
     "color.chromatic": "12半音（1オクターブ）",
     "color.fifth": "五度圏",

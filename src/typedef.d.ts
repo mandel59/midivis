@@ -20,6 +20,7 @@ type NoteArrangement =
   | "bass"
 
 type ColorScheme =
+  | "channel"
   | "monotone"
   | "chromatic"
   | "fifth"

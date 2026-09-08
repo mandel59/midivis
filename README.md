@@ -25,6 +25,7 @@ npm run deploy:cloudflare
 - Alt+4: Change color scheme to "Circle of fifths / Axis system"
 - Alt+5: Change color scheme to "Pitch interval / 7 semitones (perfect fifth)"
 - Alt+6: Change color scheme to "Pitch interval / 4 semitones (major third)"
+- Alt+7: Change color scheme to "MIDI channel"
 - Ctrl+, / Cmd+,: Open Settings
 - Escape: Dismiss an error or close Settings
 
@@ -56,6 +57,10 @@ chord without waiting for another note. Transposition is edited per channel in
 semitones; invalid values leave the previous setting applied and show an inline
 explanation. The device list updates when inputs are added or removed, reports
 connection progress, and offers a manual refresh for permission/device recovery.
+
+Channel coloring assigns fixed colors to input channels. When several channels
+play the same displayed pitch, equal-width bands show each channel. This also
+works with octave folding and input transposition. Channel 10 remains excluded.
 
 ## UI languages
 

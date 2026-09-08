@@ -67,6 +67,8 @@ const messages = {
     "thirdParty": "Third-party licenses",
     "eventsLicense": "Node.js License",
     "eventsNotice": "This license applies to the events module.",
+    "color.channel": "MIDI channel",
+    "colorChannelHelp": "Each input channel has a fixed color. Overlapping channels appear as bands. Channel 10 (percussion) is excluded.",
     "color.monotone": "Single color",
     "color.chromatic": "12 semitones (octave)",
     "color.fifth": "Circle of fifths",

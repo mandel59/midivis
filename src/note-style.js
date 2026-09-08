@@ -74,3 +74,17 @@ export function isSharpKey(key, mode, sharp = false) {
     return sharp
 }
 
+
+/** Fixed channel colors, shared by the visualization and legend. @param {number} channel @param {string} [alpha] */
+export function channelColor(channel, alpha = '1') {
+    return `hsla(${((channel - 1) * 137.5) % 360}deg, 70%, 75%, ${alpha})`
+}
+
+/** Equal-width bands preserve every active channel, independent of note-on order.
+ * @param {number[]} channels @param {string} alpha
+ */
+export function channelFill(channels, alpha) {
+    const unique = [...new Set(channels)].sort((a, b) => a - b)
+    if (!unique.length) return 'none'
+    return `linear-gradient(to right, ${unique.map((channel, i) => `${channelColor(channel, alpha)} ${i * 100 / unique.length}% ${(i + 1) * 100 / unique.length}%`).join(', ')})`
+}

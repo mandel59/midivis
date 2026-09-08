@@ -1,7 +1,7 @@
 import { createTranslator, resolveLocale, translateDocument, errorMessageKey } from './i18n.js'
 import { colorSchemes } from './color-scheme.js'
 import { arrangementGroups } from './note-arrangement.js'
-import { isSharpKey } from './note-style.js'
+import { isSharpKey, channelColor } from './note-style.js'
 
 /**
  * @param {Document} document
@@ -66,6 +66,17 @@ export function createSettingsUI(document, store, ports) {
     const portSelect = select('config-midi-input-port')
     const colorCategory = select('state-colorCategory')
     const colorScheme = select('state-colorScheme')
+    const channelLegend = required('channel-colors')
+    for (let channel = 1; channel <= 16; channel++) {
+        if (channel === 10) continue
+        const item = document.createElement('li')
+        const swatch = document.createElement('span')
+        swatch.className = 'channel-swatch'
+        swatch.style.backgroundColor = channelColor(channel)
+        swatch.setAttribute('aria-hidden', 'true')
+        item.append(swatch, `Ch ${channel}`)
+        channelLegend.append(item)
+    }
     on(colorCategory, 'change', () => {
         const scheme = colorSchemes.find(({ category }) => category === colorCategory.value)
         if (scheme) store.updateState({ colorScheme: scheme.id })
@@ -301,9 +312,10 @@ export function createSettingsUI(document, store, ports) {
             colorCategory.value = activeColor.category
             colorScheme.value = activeColor.id
             colorScheme.title = `${t(`color.${activeColor.id}`)} (Alt+${activeColor.key})`
-            required('color-detail').hidden = activeColor.category === 'monotone'
+            required('color-detail').hidden = activeColor.category === 'monotone' || activeColor.category === 'channel'
+            channelLegend.hidden = activeColor.category !== 'channel'
             required('color-detail-label').textContent = t(activeColor.category === 'interval' ? 'colorPeriod' : 'colorMethod')
-            required('color-help').textContent = t(activeColor.category === 'interval' ? 'colorIntervalHelp' : activeColor.id === 'axis' ? 'colorAxisHelp' : activeColor.id === 'fifth' ? 'colorCircleHelp' : 'colorMonotoneHelp')
+            required('color-help').textContent = t(activeColor.category === 'channel' ? 'colorChannelHelp' : activeColor.category === 'interval' ? 'colorIntervalHelp' : activeColor.id === 'axis' ? 'colorAxisHelp' : activeColor.id === 'fifth' ? 'colorCircleHelp' : 'colorMonotoneHelp')
         }
         const family = families.find(({ variants }) => variants.includes(state.noteArrangement))
         if (family) {
